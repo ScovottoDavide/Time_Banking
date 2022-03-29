@@ -7,190 +7,176 @@
     tools:context=".ShowProfileActivity">
 
     <LinearLayout
+        android:id="@+id/LinearLayoutShow"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:layout_editor_absoluteX="16dp">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar2"
+        <ImageButton
+            android:id="@+id/imageButtonShow"
+            style="@style/Widget.AppCompat.ImageButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/colorPrimary"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme" />
+            android:layout_weight="2"
+            android:adjustViewBounds="false"
+            android:background="@color/white"
+            android:baselineAligned="false"
+            android:contentDescription="@string/picutureTest"
+            app:srcCompat="@drawable/user" />
 
-        <LinearLayout
-            android:id="@+id/LinearLayoutShow"
+        <ScrollView
+            android:id="@+id/scrollViewShow"
+            style="@android:style/Widget.ScrollView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5sp"
+            android:layout_marginEnd="5sp"
+            android:layout_weight="1">
 
-            <ImageButton
-                android:id="@+id/imageButtonShow"
-                style="@style/Widget.AppCompat.ImageButton"
-                android:layout_width="match_parent"
-                android:layout_weight="2"
-                android:adjustViewBounds="false"
-                android:background="@color/white"
-                android:baselineAligned="false"
-                android:contentDescription="@string/picutureTest"
-                app:srcCompat="@drawable/user" />
-
-            <ScrollView
-                android:id="@+id/scrollViewShow"
-                style="@android:style/Widget.ScrollView"
+            <LinearLayout
+                android:id="@+id/LinearLayout2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5sp"
-                android:layout_marginEnd="5sp"
-                android:layout_weight="1">
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/fullName"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/fullName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textNickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/nickname"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/nickName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/email"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/location"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-light"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/textSkills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/skills"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
 
                 <LinearLayout
-                    android:id="@+id/LinearLayout2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/textView"
+                    <com.github.florent37.expansionpanel.ExpansionHeader
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:text="@string/fullName"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        android:textSize="20sp"
-                        android:textStyle="italic" />
+                        app:expansion_headerIndicator="@drawable/ic_expansion_header_indicator_grey_24dp"
+                        app:expansion_layout="@string/email"
+                        app:expansion_toggleOnClick="true">
 
-                    <TextView
-                        android:id="@+id/fullName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/textNickname"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:text="@string/nickname"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        android:textSize="20sp"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:id="@+id/nickName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/textEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:text="@string/email"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        android:textSize="20sp"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:id="@+id/email"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/textLocation"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:text="@string/location"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        android:textSize="20sp"
-                        android:textStyle="italic" />
-
-                    <TextView
-                        android:id="@+id/location"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-light"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/textSkills"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="sans-serif-medium"
-                        android:text="@string/skills"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                        android:textSize="20sp"
-                        android:textStyle="italic" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <com.github.florent37.expansionpanel.ExpansionHeader
+                        <!-- HEADER -->
+                        <TextView
+                            android:id="@+id/skillsHeader1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:expansion_headerIndicator="@drawable/ic_expansion_header_indicator_grey_24dp"
-                            app:expansion_layout="@string/email"
-                            app:expansion_toggleOnClick="true">
+                            android:fontFamily="sans-serif-light"
+                            android:text="Skill #1"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:textSize="20sp" />
 
-                            <!-- HEADER -->
-                            <TextView
-                                android:id="@+id/skillsHeader1"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-light"
-                                android:text="Skill #1"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textSize="20sp" />
-
-                            <!-- HEADER INDICATOR -->
-                            <ImageView
-                                android:id="@+id/headerIndicator"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical|right"
-                                android:layout_marginStart="16dp"
-                                android:adjustViewBounds="true"
-                                app:expansion_expanded="true"
-                                app:srcCompat="@drawable/ic_expansion_header_indicator_grey_24dp" />
+                        <!-- HEADER INDICATOR -->
+                        <ImageView
+                            android:id="@+id/headerIndicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:layout_marginStart="16dp"
+                            android:adjustViewBounds="true"
+                            app:expansion_expanded="true"
+                            app:srcCompat="@drawable/ic_expansion_header_indicator_grey_24dp" />
 
 
-                        </com.github.florent37.expansionpanel.ExpansionHeader>
+                    </com.github.florent37.expansionpanel.ExpansionHeader>
 
-                        <com.github.florent37.expansionpanel.ExpansionLayout
-                            android:id="@+id/expansionLayout"
+                    <com.github.florent37.expansionpanel.ExpansionLayout
+                        android:id="@+id/expansionLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:id="@id/expansionLayout"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            android:layout_height="wrap_content"
+                            android:fontFamily="sans-serif-light"
+                            android:text="descrizione della skill lunghissimaaaaaaaaa aaaaaaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaa! bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:textSize="20sp" />
 
-                            <TextView
-                                android:id="@id/expansionLayout"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="sans-serif-light"
-                                android:text="descrizione della skill lunghissimaaaaaaaaa aaaaaaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaa!"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textSize="20sp" />
-
-                        </com.github.florent37.expansionpanel.ExpansionLayout>
-                    </LinearLayout>
+                    </com.github.florent37.expansionpanel.ExpansionLayout>
                 </LinearLayout>
-            </ScrollView>
+            </LinearLayout>
+        </ScrollView>
 
-        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
