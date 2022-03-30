@@ -112,17 +112,8 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textSize="20sp" />
 
-                <TextView
-                    android:id="@+id/textSkills"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:text="@string/skills"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    android:textSize="20sp"
-                    android:textStyle="italic" />
-
                 <LinearLayout
+                    android:id="@+id/lastLinear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -136,20 +127,21 @@
 
                         <!-- HEADER -->
                         <TextView
-                            android:id="@+id/skillsHeader1"
+                            android:id="@+id/textSkills"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-light"
-                            android:text="Skill #1"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textSize="20sp" />
+                            android:fontFamily="sans-serif-medium"
+                            android:text="@string/skills"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                            android:textSize="20sp"
+                            android:textStyle="italic" />
 
                         <!-- HEADER INDICATOR -->
                         <ImageView
                             android:id="@+id/headerIndicator"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center_vertical|right"
+                            android:layout_gravity="right|center_horizontal"
                             android:layout_marginStart="16dp"
                             android:adjustViewBounds="true"
                             app:expansion_expanded="true"
@@ -163,15 +155,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TextView
-                            android:id="@id/expansionLayout"
+                        <LinearLayout
+                            android:id="@+id/expansionLinear"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-light"
-                            android:text="descrizione della skill lunghissimaaaaaaaaa aaaaaaaaaaaaa aaaaaaaaaaaaaaaaa aaaaaaaaaaaa! bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textSize="20sp" />
-
+                            android:orientation="vertical"></LinearLayout>
                     </com.github.florent37.expansionpanel.ExpansionLayout>
                 </LinearLayout>
             </LinearLayout>
