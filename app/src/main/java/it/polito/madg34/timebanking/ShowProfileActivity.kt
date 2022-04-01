@@ -4,6 +4,8 @@ import android.app.ActionBar
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.text.TextWatcher
 import android.util.TypedValue
 import android.view.*
 import android.widget.ImageView
@@ -31,6 +33,11 @@ class ShowProfileActivity : AppCompatActivity() {
     private var skills: MutableList<String> = mutableListOf("Dog Sitter", "Chef")
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
+    lateinit var fullNameView: TextView;
+    lateinit var nicknameView:  TextView;
+    lateinit var emailView: TextView;
+    lateinit var myLocationView: TextView;
+
 
 
 
@@ -41,10 +48,10 @@ class ShowProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_profile)
 
-        var fullNameView = findViewById<TextView>(R.id.fullName)
-        var nicknameView = findViewById<TextView>(R.id.nickName)
-        var emailView = findViewById<TextView>(R.id.email)
-        var myLocationView = findViewById<TextView>(R.id.location)
+        fullNameView = findViewById<TextView>(R.id.fullName)
+        nicknameView = findViewById<TextView>(R.id.nickName)
+        emailView = findViewById<TextView>(R.id.email)
+        myLocationView = findViewById<TextView>(R.id.location)
 
         fullNameView.text = fullName
 
@@ -167,4 +174,30 @@ class ShowProfileActivity : AppCompatActivity() {
 
         }
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("fullName", fullName)
+        outState.putString("nickname", nickname)
+        outState.putString("email", email)
+        outState.putString("location", location)
+
+
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        fullName = savedInstanceState.getString("fullName","")
+        nickname = savedInstanceState.getString("nickname","")
+        email = savedInstanceState.getString("email","")
+        location = savedInstanceState.getString("location","")
+
+        fullNameView.text = fullName
+        nicknameView.text = nickname
+        emailView.text = email
+        myLocationView.text = location
+
+    }
+
+
 }
