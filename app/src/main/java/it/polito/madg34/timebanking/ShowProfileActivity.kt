@@ -3,11 +3,11 @@ package it.polito.madg34.timebanking
 import android.app.ActionBar
 import android.os.Bundle
 import android.util.TypedValue
-import android.view.Gravity
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
@@ -88,6 +88,23 @@ class ShowProfileActivity : AppCompatActivity() {
             if(layout.isExpanded)
                 arrow.rotation = 90F
             else arrow.rotation = 0F
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.pencil_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.pencil ->{
+                Toast.makeText(this, "Pencil Premuto", Toast.LENGTH_SHORT).show()
+                true
+            }
+            else ->  super.onOptionsItemSelected(item)
+
         }
     }
 }
