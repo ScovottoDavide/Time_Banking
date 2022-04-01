@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id= "@+id/select"
+        android:title="Select an image from the phone gallery"
+        />
+    <item android:id= "@+id/camera"
+        android:title="Use the camera to take a picture"
+        />
+
+</menu>
