@@ -1,6 +1,8 @@
 package it.polito.madg34.timebanking
 
 import android.app.ActionBar
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
@@ -8,34 +10,48 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
+import java.io.Serializable
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class ShowProfileActivity : AppCompatActivity() {
 
-    val fullName = "Mario Rossi"
-    val nickname = "Draco123"
-    val email = "mariorossi@general.it"
-    val location = "Corso Castelfidardo, 39, Torio TO"
-    val skills: Array<String> = arrayOf("Dog Sitter", "Chef")
+    private var fullName = "Mario Rossi"
+    private var nickname = "Draco123"
+    private var email = "mariorossi@general.it"
+    private var location = "Corso Castelfidardo, 39, Torino TO"
+    private var skills: MutableList<String> = mutableListOf("Dog Sitter", "Chef")
+    private lateinit var resultLauncher: ActivityResultLauncher<Intent>
+
+
+
+
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_profile)
 
-        val fullNameView = findViewById<TextView>(R.id.fullName)
+        var fullNameView = findViewById<TextView>(R.id.fullName)
+        var nicknameView = findViewById<TextView>(R.id.nickName)
+        var emailView = findViewById<TextView>(R.id.email)
+        var myLocationView = findViewById<TextView>(R.id.location)
+
         fullNameView.text = fullName
 
-        val nicknameView = findViewById<TextView>(R.id.nickName)
         nicknameView.text = nickname
 
-        val emailView = findViewById<TextView>(R.id.email)
         emailView.text = email
 
-        val myLocationView = findViewById<TextView>(R.id.location)
         myLocationView.text = location
 
         /** Expand Skill to get description **/
@@ -89,6 +105,49 @@ class ShowProfileActivity : AppCompatActivity() {
                 arrow.rotation = 90F
             else arrow.rotation = 0F
         }
+
+
+
+        // RICEVUTO IL RISULTATO SOVRASCRIVO
+        resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()
+        ){ result : ActivityResult ->
+            if(result.resultCode == Activity.RESULT_OK){
+                fullName = if (result.data?.getStringExtra("fullName")?.length.toString() != "0") result.data?.getStringExtra("fullName").toString() else fullName
+                nickname = if (result.data?.getStringExtra("nickname")?.length.toString() != "0") result.data?.getStringExtra("nickname").toString() else nickname
+                email = if (result.data?.getStringExtra("email")?.length.toString() != "0") result.data?.getStringExtra("email").toString() else email
+                location = if (result.data?.getStringExtra("location")?.length.toString() != "0") result.data?.getStringExtra("location").toString() else location
+
+
+                fullNameView.text = fullName
+
+                nicknameView.text = nickname
+
+                emailView.text = email
+
+                myLocationView.text = location
+
+            }
+
+        }
+
+
+    }
+
+    private fun editProfile(){
+
+        val intent = Intent(this, EditProfileActivity::class.java)
+        intent.putExtra("fullName",fullName)
+        intent.putExtra("nickname",nickname)
+        intent.putExtra("email", email)
+        intent.putExtra("location",location)
+        // intent.putStringArrayListExtra("List", ArrayList<String>(skills))
+
+        resultLauncher.launch(intent)
+
+
+
+
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -100,7 +159,8 @@ class ShowProfileActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
             R.id.pencil ->{
-                Toast.makeText(this, "Pencil Premuto", Toast.LENGTH_SHORT).show()
+                editProfile()
+                //Toast.makeText(this, "Pencil Premuto", Toast.LENGTH_SHORT).show()
                 true
             }
             else ->  super.onOptionsItemSelected(item)
