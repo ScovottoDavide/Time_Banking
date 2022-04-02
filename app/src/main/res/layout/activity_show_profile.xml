@@ -32,7 +32,7 @@
                 android:background="@color/white"
                 android:baselineAligned="false"
                 android:contentDescription="@string/picutureTest"
-                app:srcCompat="@drawable/user" />
+                app:srcCompat="@drawable/user_icon" />
 
             <LinearLayout
                 android:id="@+id/LinearLayoutShow"

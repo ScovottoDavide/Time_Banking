@@ -2,6 +2,7 @@ package it.polito.madg34.timebanking
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.*
@@ -11,9 +12,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
+import java.io.File
 
 class ShowProfileActivity : AppCompatActivity() {
-
+    private var img: Uri = Uri.parse("android.resource://it.polito.madg34.timebanking/"+R.drawable.user_icon)
     private var fullName = "Mario Rossi"
     private var nickname = "Draco123"
     private var email = "mariorossi@general.it"
@@ -26,6 +28,7 @@ class ShowProfileActivity : AppCompatActivity() {
     lateinit var nicknameView:  TextView;
     lateinit var emailView: TextView;
     lateinit var myLocationView: TextView;
+    lateinit var img_view: ImageButton;
 
     private var h : Int = 0
     private var w : Int = 0
@@ -38,6 +41,7 @@ class ShowProfileActivity : AppCompatActivity() {
         nicknameView = findViewById(R.id.nickName)
         emailView = findViewById(R.id.email)
         myLocationView = findViewById(R.id.location)
+        img_view = findViewById(R.id.imageButtonShow)
 
         fullNameView.text = fullName
 
@@ -46,6 +50,8 @@ class ShowProfileActivity : AppCompatActivity() {
         emailView.text = email
 
         myLocationView.text = location
+
+        img_view.setImageURI(img)
 
         skills.forEach{
             setSkills(it.key, it.value)
@@ -61,11 +67,19 @@ class ShowProfileActivity : AppCompatActivity() {
                 nickname = if (result.data?.getStringExtra("nickname")?.length.toString() != "0") result.data?.getStringExtra("nickname").toString() else nickname
                 email = if (result.data?.getStringExtra("email")?.length.toString() != "0") result.data?.getStringExtra("email").toString() else email
                 location = if (result.data?.getStringExtra("location")?.length.toString() != "0") result.data?.getStringExtra("location").toString() else location
+                img = if (result.data?.getStringExtra("picture")?.length.toString() != "0") {
+                    var s = result.data?.getStringExtra("picture").toString()
+                    Uri.parse(s)
+                } else {
+                    img
+                }
+
 
                 fullNameView.text = fullName
                 nicknameView.text = nickname
                 emailView.text = email
                 myLocationView.text = location
+                img_view.setImageURI(img)
             }
         }
     }
@@ -170,6 +184,8 @@ class ShowProfileActivity : AppCompatActivity() {
         intent.putExtra("email", email)
         intent.putExtra("location",location)
         // intent.putStringArrayListExtra("List", ArrayList<String>(skills))
+        intent.putExtra("picture", img.toString())
+
         resultLauncher.launch(intent)
     }
 
@@ -196,6 +212,7 @@ class ShowProfileActivity : AppCompatActivity() {
         outState.putString("nickname", nickname)
         outState.putString("email", email)
         outState.putString("location", location)
+        outState.putString("img", img.toString())
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -204,11 +221,15 @@ class ShowProfileActivity : AppCompatActivity() {
         nickname = savedInstanceState.getString("nickname","")
         email = savedInstanceState.getString("email","")
         location = savedInstanceState.getString("location","")
+        val s = savedInstanceState.getString("img")
+        img = Uri.parse(s)
+
 
         fullNameView.text = fullName
         nicknameView.text = nickname
         emailView.text = email
         myLocationView.text = location
+        img_view.setImageURI(img)
     }
 
 
