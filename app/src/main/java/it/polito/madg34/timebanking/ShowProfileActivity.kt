@@ -160,7 +160,7 @@ class ShowProfileActivity : AppCompatActivity() {
         /** Add the Text and the Arrow to build the header of each skill **/
         expH.addView(arrow, arrowLayoutParams)
         expH.addView(tv)
-        expH.addView(arrow)
+        //expH.addView(arrow)
 
         /** Prepare the layout for the description **/
         val layout = ExpansionLayout(this)
