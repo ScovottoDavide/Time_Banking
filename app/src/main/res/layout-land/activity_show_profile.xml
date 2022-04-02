@@ -131,54 +131,22 @@
                                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                                 android:textSize="20sp" />
 
+                            <TextView
+                                android:id="@+id/skills"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="sans-serif-medium"
+                                android:text="@string/skills"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                                android:textSize="20sp"
+                                android:textStyle="italic" />
+
                             <LinearLayout
+                                android:id="@+id/lastLinear"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
                                 android:orientation="vertical">
 
-                                <com.github.florent37.expansionpanel.ExpansionHeader
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    app:expansion_headerIndicator="@drawable/ic_expansion_header_indicator_grey_24dp"
-                                    app:expansion_layout="@string/email"
-                                    app:expansion_toggleOnClick="true">
-
-                                    <!-- HEADER -->
-                                    <TextView
-                                        android:id="@+id/textSkills"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="sans-serif-medium"
-                                        android:text="@string/skills"
-                                        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                                        android:textSize="20sp"
-                                        android:textStyle="italic" />
-
-                                    <!-- HEADER INDICATOR -->
-                                    <ImageView
-                                        android:id="@+id/headerIndicator"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center_vertical|right"
-                                        android:layout_marginStart="16sp"
-                                        android:adjustViewBounds="true"
-                                        app:expansion_expanded="true"
-                                        app:srcCompat="@drawable/ic_expansion_header_indicator_grey_24dp" />
-
-
-                                </com.github.florent37.expansionpanel.ExpansionHeader>
-
-                                <com.github.florent37.expansionpanel.ExpansionLayout
-                                    android:id="@+id/expansionLayout"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <LinearLayout
-                                        android:id="@+id/expansionLinear"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="vertical"></LinearLayout>
-                                </com.github.florent37.expansionpanel.ExpansionLayout>
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>

@@ -3,41 +3,42 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     tools:context=".ShowProfileActivity">
 
-    <LinearLayout
-        android:id="@+id/LinearLayoutShow"
+    <ScrollView
+        android:id="@+id/scrollViewShow"
+        style="@android:style/Widget.Holo.ScrollView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:layout_editor_absoluteX="16dp">
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-            android:id="@+id/imageButtonShow"
-            style="@style/Widget.AppCompat.ImageButton"
+        <LinearLayout
+            android:id="@+id/LinearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:adjustViewBounds="false"
-            android:background="@color/white"
-            android:baselineAligned="false"
-            android:contentDescription="@string/picutureTest"
-            app:srcCompat="@drawable/user" />
+            android:orientation="vertical">
 
-        <ScrollView
-            android:id="@+id/scrollViewShow"
-            style="@android:style/Widget.ScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5sp"
-            android:layout_marginEnd="5sp"
-            android:layout_weight="1">
+            <ImageButton
+                android:id="@+id/imageButtonShow"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="match_parent"
+                android:layout_height="400dp"
+                android:layout_weight="1"
+                android:adjustViewBounds="false"
+                android:background="@color/white"
+                android:baselineAligned="false"
+                android:contentDescription="@string/picutureTest"
+                app:srcCompat="@drawable/user" />
 
             <LinearLayout
-                android:id="@+id/LinearLayout2"
+                android:id="@+id/LinearLayoutShow"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
                 android:orientation="vertical">
 
                 <TextView
@@ -112,59 +113,25 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                     android:textSize="20sp" />
 
+                <TextView
+                    android:id="@+id/skills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/skills"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
+
                 <LinearLayout
                     android:id="@+id/lastLinear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:orientation="vertical" />
 
-                    <com.github.florent37.expansionpanel.ExpansionHeader
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:expansion_headerIndicator="@drawable/ic_expansion_header_indicator_grey_24dp"
-                        app:expansion_layout="@string/email"
-                        app:expansion_toggleOnClick="true">
-
-                        <!-- HEADER -->
-                        <TextView
-                            android:id="@+id/textSkills"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:fontFamily="sans-serif-medium"
-                            android:text="@string/skills"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                            android:textSize="20sp"
-                            android:textStyle="italic" />
-
-                        <!-- HEADER INDICATOR -->
-                        <ImageView
-                            android:id="@+id/headerIndicator"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right|center_horizontal"
-                            android:layout_marginStart="16dp"
-                            android:adjustViewBounds="true"
-                            app:expansion_expanded="true"
-                            app:srcCompat="@drawable/ic_expansion_header_indicator_grey_24dp" />
-
-
-                    </com.github.florent37.expansionpanel.ExpansionHeader>
-
-                    <com.github.florent37.expansionpanel.ExpansionLayout
-                        android:id="@+id/expansionLayout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                        <LinearLayout
-                            android:id="@+id/expansionLinear"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"></LinearLayout>
-                    </com.github.florent37.expansionpanel.ExpansionLayout>
-                </LinearLayout>
             </LinearLayout>
-        </ScrollView>
 
-    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

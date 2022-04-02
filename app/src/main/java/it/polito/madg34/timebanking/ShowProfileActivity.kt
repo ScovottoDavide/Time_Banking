@@ -1,28 +1,16 @@
 package it.polito.madg34.timebanking
 
-import android.app.ActionBar
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.text.TextWatcher
-import android.util.TypedValue
 import android.view.*
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
-import java.io.Serializable
-import java.util.*
-import kotlin.collections.ArrayList
-
 
 class ShowProfileActivity : AppCompatActivity() {
 
@@ -30,7 +18,8 @@ class ShowProfileActivity : AppCompatActivity() {
     private var nickname = "Draco123"
     private var email = "mariorossi@general.it"
     private var location = "Corso Castelfidardo, 39, Torino TO"
-    private var skills: MutableList<String> = mutableListOf("Dog Sitter", "Chef")
+    private var skills: MutableMap<String, String> = mutableMapOf("Dog Sitter" to "Amo i cani", "Chef" to "Ho vinto la 7 edizione di masterchef",
+    "Meccanico" to "Aggiusto macchine d'epoca", "Baby sitter" to "Amo i bamibini, faccio la baby sitter da molti anni")
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     lateinit var fullNameView: TextView;
@@ -38,20 +27,17 @@ class ShowProfileActivity : AppCompatActivity() {
     lateinit var emailView: TextView;
     lateinit var myLocationView: TextView;
 
-
-
-
-
-
+    private var h : Int = 0
+    private var w : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_profile)
 
-        fullNameView = findViewById<TextView>(R.id.fullName)
-        nicknameView = findViewById<TextView>(R.id.nickName)
-        emailView = findViewById<TextView>(R.id.email)
-        myLocationView = findViewById<TextView>(R.id.location)
+        fullNameView = findViewById(R.id.fullName)
+        nicknameView = findViewById(R.id.nickName)
+        emailView = findViewById(R.id.email)
+        myLocationView = findViewById(R.id.location)
 
         fullNameView.text = fullName
 
@@ -61,59 +47,11 @@ class ShowProfileActivity : AppCompatActivity() {
 
         myLocationView.text = location
 
-        /** Expand Skill to get description **/
-        val layout = findViewById<ExpansionLayout>(R.id.expansionLayout)
-        val layoutExp = findViewById<LinearLayout>(R.id.expansionLinear)
-        val arrow = findViewById<ImageView>(R.id.headerIndicator)
-
-        //val lastLinear = findViewById<LinearLayout>(R.id.lastLinear)
-
-        skills.forEachIndexed { index , element ->
-            var x = TextView(this)
-            x.text = "Skill${index+1}: ${element}\nDescription: Provide some description"
-            x.setTextSize(20F)
-            layoutExp.addView(x, index)
+        skills.forEach{
+            setSkills(it.key, it.value)
         }
 
-
-
-       /* skills.forEach {
-
-            val newExHeader = ExpansionHeader(this)
-            val newExLayout = ExpansionLayout(this)
-            val image = ImageView(this)
-            val x = TextView(this)
-
-            image.setImageResource(com.github.florent37.expansionpanel.R.drawable.ic_expansion_header_indicator_grey_24dp)
-
-            x.text = it
-            x.setTextSize(20F)
-
-
-            lastLinear.addView(newExHeader)
-            lastLinear.addView(newExLayout)
-
-
-            newExHeader.addView(x)
-            newExHeader.addView(image)
-
-            image.setOnClickListener{
-                newExLayout.toggle(true)
-                if(newExLayout.isExpanded)
-                    image.rotation = 90F
-                else image.rotation = 0F
-            }
-
-        }*/
-
-        arrow.setOnClickListener {
-            layout.toggle(true)
-            if(layout.isExpanded)
-                arrow.rotation = 90F
-            else arrow.rotation = 0F
-        }
-
-
+        this.constantScreenLayoutOnScrolling()
 
         // RICEVUTO IL RISULTATO SOVRASCRIVO
         resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()
@@ -124,37 +62,115 @@ class ShowProfileActivity : AppCompatActivity() {
                 email = if (result.data?.getStringExtra("email")?.length.toString() != "0") result.data?.getStringExtra("email").toString() else email
                 location = if (result.data?.getStringExtra("location")?.length.toString() != "0") result.data?.getStringExtra("location").toString() else location
 
-
                 fullNameView.text = fullName
-
                 nicknameView.text = nickname
-
                 emailView.text = email
-
                 myLocationView.text = location
-
             }
-
         }
+    }
 
+    private fun constantScreenLayoutOnScrolling() {
+        val sv = findViewById<ScrollView>(R.id.scrollViewShow)
+        val ib = findViewById<ImageButton>(R.id.imageButtonShow)
+
+        sv.viewTreeObserver.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener{
+            override fun onGlobalLayout() {
+                h = sv.height
+                w = sv.width
+                ib.post { ib.layoutParams = LinearLayout.LayoutParams(w, h/3) }
+                sv.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+    }
+
+    private fun setSkills(skill: String, description: String) {
+        val linearLayout = findViewById<LinearLayout>(R.id.lastLinear)
+
+        val expH = ExpansionHeader(this)
+        val expHLayoutParams = ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT
+        )
+        expH.layoutParams = expHLayoutParams
+        expH.isToggleOnClick = true
+
+        val arrow = ImageView(this)
+        arrow.setImageResource(com.github.florent37.expansionpanel.R.drawable.ic_expansion_header_indicator_grey_24dp)
+        with(arrow) {
+            expH.id = this.id
+            layoutParams = LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+            ).apply {
+                marginStart = 950
+                topMargin = 8
+                adjustViewBounds = true
+            }
+        }
+        expH.setExpansionHeaderIndicator(arrow)
+
+        val tv = TextView(this)
+        tv.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            marginStart = 8
+            topMargin = 8
+        }
+        tv.text = skill
+        tv.textSize = 20F
+        tv.setTextAppearance(
+            this,
+            com.google.android.material.R.style.TextAppearance_AppCompat_Body2
+        )
+
+        expH.addView(tv)
+        expH.addView(arrow)
+
+        val layout = ExpansionLayout(this)
+        layout.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            marginStart = 10
+        }
+        val expansionText = TextView(this)
+        expansionText.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        expansionText.id = layout.id
+        expansionText.setTextAppearance(
+            this,
+            com.google.android.material.R.style.TextAppearance_AppCompat_Medium
+        )
+        expansionText.textSize = 20F
+        expansionText.text = description
+
+        layout.addView(expansionText)
+
+        linearLayout.addView(expH)
+        linearLayout.addView(layout)
+
+        arrow.setOnClickListener {
+            layout.toggle(true)
+            if (layout.isExpanded)
+                arrow.rotation = 90F
+            else arrow.rotation = 0F
+        }
 
     }
 
     private fun editProfile(){
-
         val intent = Intent(this, EditProfileActivity::class.java)
+
         intent.putExtra("fullName",fullName)
         intent.putExtra("nickname",nickname)
         intent.putExtra("email", email)
         intent.putExtra("location",location)
         // intent.putStringArrayListExtra("List", ArrayList<String>(skills))
-
         resultLauncher.launch(intent)
-
-
-
-
-
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -171,7 +187,6 @@ class ShowProfileActivity : AppCompatActivity() {
                 true
             }
             else ->  super.onOptionsItemSelected(item)
-
         }
     }
 
@@ -181,8 +196,6 @@ class ShowProfileActivity : AppCompatActivity() {
         outState.putString("nickname", nickname)
         outState.putString("email", email)
         outState.putString("location", location)
-
-
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
@@ -196,7 +209,6 @@ class ShowProfileActivity : AppCompatActivity() {
         nicknameView.text = nickname
         emailView.text = email
         myLocationView.text = location
-
     }
 
 

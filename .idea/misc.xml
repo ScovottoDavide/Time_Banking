@@ -5,16 +5,11 @@
       <map>
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2595" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout-land/activity_edit_profile.xml" value="0.1" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout-land/activity_show_profile.xml" value="0.21516754850088182" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout/activity_show_profile.xml" value="0.16486486486486487" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.246" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout-land/activity_edit_profile.xml" value="0.33994708994708994" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout-land/activity_show_profile.xml" value="0.264" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout/activity_edit_profile.xml" value="0.33" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout/activity_main.xml" value="0.1125" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout/activity_show_profile.xml" value="0.5" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/menu/pencil_menu.xml" value="0.4354166666666667" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/menu/popup_menu.xml" value="0.4375" />
       </map>
     </option>
   </component>
