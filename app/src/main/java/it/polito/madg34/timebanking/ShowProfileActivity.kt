@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.content.res.Configuration
 import android.os.Bundle
-import android.util.DisplayMetrics
 import android.view.*
 import android.widget.*
 import androidx.activity.result.ActivityResult
@@ -13,9 +12,11 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
-import java.io.File
+import com.google.android.material.divider.MaterialDividerItemDecoration
+import java.io.Serializable
 
 class ShowProfileActivity : AppCompatActivity() {
     private var img: Uri = Uri.parse("android.resource://it.polito.madg34.timebanking/"+R.drawable.user_icon)
@@ -31,14 +32,15 @@ class ShowProfileActivity : AppCompatActivity() {
     )
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
-    lateinit var fullNameView: TextView;
-    lateinit var nicknameView: TextView;
-    lateinit var emailView: TextView;
-    lateinit var myLocationView: TextView;
-    lateinit var img_view: ImageButton;
+    lateinit var fullNameView: TextView
+    lateinit var nicknameView: TextView
+    lateinit var emailView: TextView
+    lateinit var myLocationView: TextView
+    lateinit var img_view: ImageView;
 
     private var h: Int = 0
     private var w: Int = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +50,7 @@ class ShowProfileActivity : AppCompatActivity() {
         nicknameView = findViewById(R.id.nickName)
         emailView = findViewById(R.id.email)
         myLocationView = findViewById(R.id.location)
-        img_view = findViewById(R.id.imageButtonShow)
+        img_view = findViewById(R.id.imageUsr)
 
         fullNameView.text = fullName
 
@@ -107,14 +109,21 @@ class ShowProfileActivity : AppCompatActivity() {
 
     private fun constantScreenLayoutOnScrolling() {
         val sv = findViewById<ScrollView>(R.id.scrollViewShow)
-        val ib = findViewById<ImageButton>(R.id.imageButtonShow)
+        val constraintL = findViewById<ConstraintLayout>(R.id.landLayout)
+        val iv = findViewById<ImageView>(R.id.imageUsr)
 
         sv.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                h = sv.height
-                w = sv.width
-                ib.post { ib.layoutParams = LinearLayout.LayoutParams(w, h / 3) }
+                if(resources.configuration.orientation==Configuration.ORIENTATION_PORTRAIT){
+                    h = sv.height
+                    w = sv.width
+                    iv.post { iv.layoutParams = LinearLayout.LayoutParams(w, h / 3) }
+                } else {
+                    h = constraintL.height
+                    w = constraintL.width
+                    iv.post { iv.layoutParams = LinearLayout.LayoutParams(w / 3, h) }
+                }
                 sv.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
@@ -149,8 +158,8 @@ class ShowProfileActivity : AppCompatActivity() {
 
         /** Prepare the arrow to be placed along with the text in the Expansion Header**/
         arrow.setImageResource(com.github.florent37.expansionpanel.R.drawable.ic_expansion_header_indicator_grey_24dp)
-        var wid = 0
-        if(resources.configuration.orientation==Configuration.ORIENTATION_LANDSCAPE) wid = 4000 else wid = 2000
+        /** Margin to place the arrows **/
+        var wid = if(resources.configuration.orientation==Configuration.ORIENTATION_LANDSCAPE) 2600 else 1850
         val arrowLayoutParams = LinearLayout.LayoutParams(
             wid,
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -170,15 +179,16 @@ class ShowProfileActivity : AppCompatActivity() {
         ).apply {
             marginStart = 10
         }
+
         /** Text View for the description **/
         val expansionText = TextView(this)
         expansionText.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
-        )
+        ).apply { marginStart = 5 }
         expansionText.id = layout.id
-        expansionText.setTextAppearance(this, com.google.android.material.R.style.TextAppearance_AppCompat_Medium)
-        expansionText.textSize = 20F
+        expansionText.setTextAppearance(this, com.google.android.material.R.style.TextAppearance_AppCompat_Body1)
+        expansionText.textSize = 15F
         expansionText.text = description
 
         /** Add the Text to the expandable layout **/
@@ -205,7 +215,7 @@ class ShowProfileActivity : AppCompatActivity() {
         intent.putExtra("nickname", nickname)
         intent.putExtra("email", email)
         intent.putExtra("location", location)
-        // intent.putStringArrayListExtra("List", ArrayList<String>(skills))
+        intent.putExtra("skills", skills as Serializable)
         intent.putExtra("picture", img.toString())
 
         resultLauncher.launch(intent)
@@ -254,6 +264,5 @@ class ShowProfileActivity : AppCompatActivity() {
         myLocationView.text = location
         img_view.setImageURI(img)
     }
-
 
 }

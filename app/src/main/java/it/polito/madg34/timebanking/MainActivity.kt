@@ -10,5 +10,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         val intent = Intent(this, ShowProfileActivity::class.java)
         startActivity(intent)
+        finish()
     }
 }

@@ -2,49 +2,70 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/landLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_weight="2">
 
-    <ImageView
-        android:id="@+id/userImage"
-        android:layout_width="245dp"
-        android:layout_height="222dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:contentDescription="User"
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintEnd_toStartOf="@+id/scrollViewShow"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.497"
-        app:srcCompat="@drawable/user_icon" />
+        app:layout_constraintVertical_weight="1">
 
-    <ImageButton
-        android:id="@+id/plus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/purple_500"
-        android:contentDescription="plus"
-        android:onClick="showPopup"
-        app:layout_constraintBottom_toBottomOf="@+id/userImage"
-        app:layout_constraintEnd_toEndOf="@+id/userImage"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/userImage"
-        app:layout_constraintTop_toTopOf="@+id/userImage"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@android:drawable/ic_menu_add" />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/userImage"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_weight="1"
+            android:contentDescription="@string/picutureTest"
+            android:src="@drawable/user_icon"
+            app:civ_border_color="#FF000000"
+            app:civ_border_width="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/scrollViewShow"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.498"
+            app:layout_constraintVertical_weight="1" />
+
+        <ImageButton
+            android:id="@+id/plus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="50dp"
+            android:layout_marginBottom="20dp"
+            android:contentDescription="@string/picutureTest"
+            android:minHeight="48dp"
+            android:onClick="showPopup"
+            app:srcCompat="@drawable/outline_photo_camera_24"
+            tools:ignore="DuplicateSpeakableTextCheck" />
+    </FrameLayout>
 
     <ScrollView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
+        android:id="@+id/scrollViewShow"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/userImage"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_weight="2"
+        app:layout_constraintStart_toEndOf="@+id/frameLayout"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_weight="2">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,20 +73,32 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
+                android:id="@+id/AccountInfo"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-black"
                 android:layout_marginStart="16dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="@string/fullName"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:layout_marginBottom="8dp"
+                android:text="@string/accInfo"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                 android:textSize="20sp"
+                android:textStyle="italic" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="sans-serif-black"
+                android:text="@string/fullName"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="14sp"
                 android:textStyle="italic" />
 
             <EditText
                 android:id="@+id/editTextTextPersonName"
                 style="@style/Widget.AppCompat.EditText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:ems="10"
@@ -77,20 +110,19 @@
 
             <TextView
                 android:id="@+id/textNickname"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="sans-serif-medium"
+                android:layout_marginStart="20dp"
+                android:fontFamily="sans-serif-black"
                 android:text="@string/nickname"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textSize="20sp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="14sp"
                 android:textStyle="italic" />
 
             <EditText
                 android:id="@+id/editTextTextPersonName3"
                 style="@style/Widget.AppCompat.EditText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:ems="10"
@@ -102,18 +134,18 @@
 
             <TextView
                 android:id="@+id/textLocation"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:fontFamily="sans-serif-medium"
+                android:layout_marginStart="20dp"
+                android:fontFamily="sans-serif-black"
                 android:text="@string/location"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textSize="20sp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="14sp"
                 android:textStyle="italic" />
 
             <EditText
                 android:id="@+id/editTextLocation"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:ems="10"
@@ -125,19 +157,19 @@
 
             <TextView
                 android:id="@+id/textEmail"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:fontFamily="sans-serif-medium"
+                android:layout_marginStart="20dp"
+                android:fontFamily="sans-serif-black"
                 android:text="@string/email"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textSize="20sp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="14sp"
                 android:textStyle="italic" />
 
             <EditText
                 android:id="@+id/editTextTextEmailAddress"
                 style="@style/Widget.AppCompat.EditText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:ems="10"
@@ -150,14 +182,23 @@
 
             <TextView
                 android:id="@+id/textSkills"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:fontFamily="sans-serif-medium"
+                android:layout_marginStart="20dp"
+                android:fontFamily="sans-serif-black"
                 android:text="@string/skills"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                android:textSize="20sp"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="14sp"
                 android:textStyle="italic" />
+
+            <LinearLayout
+                android:id="@+id/lastLinear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:orientation="vertical">
+
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>

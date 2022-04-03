@@ -4,18 +4,21 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2595" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/back.xml" value="0.1" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/baseline_face_24.xml" value="0.17" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/baseline_person_pin_circle_24.xml" value="0.2205" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
-        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout-land/activity_edit_profile.xml" value="0.1" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/outline_add_circle_outline_24.xml" value="0.225" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/outline_email_24.xml" value="0.2205" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/outline_location_on_24.xml" value="0.2205" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/outline_perm_identity_24.xml" value="0.2205" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/outline_photo_camera_24.xml" value="0.225" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout-land/activity_edit_profile.xml" value="0.2" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout-land/activity_show_profile.xml" value="0.21516754850088182" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout/activity_edit_profile.xml" value="0.2536231884057971" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout/activity_main.xml" value="0.264" />
-        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout/activity_show_profile.xml" value="0.16486486486486487" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout/activity_show_profile.xml" value="0.264" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.246" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout-land/activity_edit_profile.xml" value="0.4691358024691358" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout-land/activity_show_profile.xml" value="0.4691358024691358" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout/activity_edit_profile.xml" value="0.49773550724637683" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout/activity_show_profile.xml" value="0.49732620320855614" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/menu/pencil_menu.xml" value="0.5541666666666667" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/menu/popup_menu.xml" value="0.4322916666666667" />
       </map>
     </option>
   </component>

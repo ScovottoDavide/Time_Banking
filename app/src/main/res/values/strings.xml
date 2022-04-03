@@ -15,4 +15,6 @@
     <string name="location_hint">Corso Castelfidardo, 39, Torino TO</string>
 
     <string name="skills">My skills :</string>
+
+    <string name="accInfo">My account</string>
 </resources>
