@@ -2,6 +2,7 @@ package it.polito.madg34.timebanking
 
 import android.app.Activity
 import android.content.Intent
+import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
 import android.net.Uri
 import android.content.res.Configuration
 import android.os.Bundle
@@ -102,6 +103,7 @@ class ShowProfileActivity : AppCompatActivity() {
                 nicknameView.text = nickname
                 emailView.text = email
                 myLocationView.text = location
+                println("URI: "+ img)
                 img_view.setImageURI(img)
             }
         }

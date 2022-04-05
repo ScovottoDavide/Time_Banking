@@ -2,6 +2,7 @@ package it.polito.madg34.timebanking
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Bitmap
@@ -20,7 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
-import java.io.ByteArrayOutputStream
+import java.io.*
 
 
 class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListener {
@@ -32,8 +33,8 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
     private lateinit var takePicture: ActivityResultLauncher<Intent>
     private lateinit var takePictureGallery: ActivityResultLauncher<String>
     private lateinit var userImage: ImageView
-    private lateinit var bitmap : Bitmap
-    private lateinit var uri : Uri
+    private lateinit var bitmap: Bitmap
+    private lateinit var uri: Uri
 
     private var h = 0
     private var w = 0
@@ -53,21 +54,21 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         uri = Uri.parse(_pictureString)
 
         /** _skills is being received in reverse order, so transform it to be as before **/
-        var reverse : MutableMap<String, String> = mutableMapOf()
-        for(i in _skills.entries.reversed()){
+        var reverse: MutableMap<String, String> = mutableMapOf()
+        for (i in _skills.entries.reversed()) {
             reverse[i.key] = i.value
         }
-        reverse.forEach{
+        reverse.forEach {
             setSkills(it.key, it.value)
         }
 
         constantScreenLayoutOnScrolling()
 
-        var fullName  = findViewById<EditText>(R.id.editTextTextPersonName)
-        var nickname  = findViewById<EditText>(R.id.editTextTextPersonName3)
-        var email  = findViewById<EditText>(R.id.editTextTextEmailAddress)
-        var location  = findViewById<EditText>(R.id.editTextLocation)
-        userImage  = findViewById(R.id.userImage)
+        var fullName = findViewById<EditText>(R.id.editTextTextPersonName)
+        var nickname = findViewById<EditText>(R.id.editTextTextPersonName3)
+        var email = findViewById<EditText>(R.id.editTextTextEmailAddress)
+        var location = findViewById<EditText>(R.id.editTextLocation)
+        userImage = findViewById(R.id.userImage)
 
         fullName.hint = _fullName
         nickname.hint = _nickname
@@ -75,15 +76,33 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         location.hint = _location
         userImage.setImageURI(uri)
 
-        takePicture  = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {result ->
-            if(result.resultCode == Activity.RESULT_OK){
-                handleCameraImage(result.data)
+        takePicture =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    handleCameraImage(result.data)
 
+                }
             }
-        }
 
-        takePictureGallery  = registerForActivityResult(ActivityResultContracts.GetContent()){
+        takePictureGallery = registerForActivityResult(ActivityResultContracts.GetContent()) {
             uri = it
+            /** SAVE THE IMAGE IN THE INTERNAL STORAGE **/
+            val bitmap = Images.Media.getBitmap(this.contentResolver, uri)
+            val wrapper = ContextWrapper(applicationContext)
+            var file = wrapper.getDir("Images", MODE_PRIVATE) // NEED ROOT ACCESS TO SEE IT ON THE PHONE
+            println("FILE: "+ file.absolutePath)
+            file = File(file, "GalleryPhoto"+".jpg")
+            try{
+                var stream : OutputStream? = null
+                stream = FileOutputStream(file)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+                stream.flush()
+                stream.close()
+            }catch (e : IOException){
+                e.printStackTrace()
+            }
+            // Parse the gallery image url to uri
+            uri = Uri.parse(file.absolutePath)
             userImage.setImageURI(uri)
         }
     }
@@ -101,7 +120,6 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             Images.Media.insertImage(this.getContentResolver(), bitmap, "xyz", null)
         uri = Uri.parse(path)
         userImage.setImageURI(uri)
-
     }
 
     private fun constantScreenLayoutOnScrolling() {
@@ -112,7 +130,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         sv.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                if(resources.configuration.orientation== Configuration.ORIENTATION_PORTRAIT){
+                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                     h = sv.height
                     w = sv.width
                     iv.post { iv.layoutParams = FrameLayout.LayoutParams(w, h / 3) }
@@ -151,12 +169,16 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         }
         tv.text = skill
         tv.textSize = 20F
-        tv.setTextAppearance(this, com.google.android.material.R.style.TextAppearance_AppCompat_Body2)
+        tv.setTextAppearance(
+            this,
+            com.google.android.material.R.style.TextAppearance_AppCompat_Body2
+        )
 
         /** Prepare the arrow to be placed along with the text in the Expansion Header**/
         arrow.setImageResource(com.github.florent37.expansionpanel.R.drawable.ic_expansion_header_indicator_grey_24dp)
         /** Margin to place the arrows **/
-        var wid = if(resources.configuration.orientation==Configuration.ORIENTATION_LANDSCAPE) 2600 else 1850
+        var wid =
+            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 2600 else 1850
         val arrowLayoutParams = LinearLayout.LayoutParams(
             wid,
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -183,7 +205,10 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply { marginStart = 5 }
         expansionText.id = layout.id
-        expansionText.setTextAppearance(this, com.google.android.material.R.style.TextAppearance_AppCompat_Body1)
+        expansionText.setTextAppearance(
+            this,
+            com.google.android.material.R.style.TextAppearance_AppCompat_Body1
+        )
         expansionText.textSize = 15F
         expansionText.text = description
 
@@ -206,10 +231,10 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
 
     override fun onBackPressed() {
 
-        var fullName  = findViewById<EditText>(R.id.editTextTextPersonName)
-        var nickname  = findViewById<EditText>(R.id.editTextTextPersonName3)
-        var email  = findViewById<EditText>(R.id.editTextTextEmailAddress)
-        var location  = findViewById<EditText>(R.id.editTextLocation)
+        var fullName = findViewById<EditText>(R.id.editTextTextPersonName)
+        var nickname = findViewById<EditText>(R.id.editTextTextPersonName3)
+        var email = findViewById<EditText>(R.id.editTextTextEmailAddress)
+        var location = findViewById<EditText>(R.id.editTextLocation)
 
         val returnIntent = intent
 
@@ -220,26 +245,23 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         var _picture = uri.toString()
 
         if (_fullNameMOD != null) returnIntent.putExtra("fullName", _fullNameMOD)
-        if(_nicknameMOD!= null) returnIntent.putExtra("nickname", _nicknameMOD)
-        if(_emailMOD != null) returnIntent.putExtra("email", _emailMOD)
+        if (_nicknameMOD != null) returnIntent.putExtra("nickname", _nicknameMOD)
+        if (_emailMOD != null) returnIntent.putExtra("email", _emailMOD)
         if (_locationMOD != null) returnIntent.putExtra("location", _locationMOD)
         if (_picture != null) returnIntent.putExtra("picture", _picture)
 
-        setResult(Activity.RESULT_OK,returnIntent)
+        setResult(Activity.RESULT_OK, returnIntent)
         finish()
 
         super.onBackPressed()
-
-
-
     }
 
-    fun showPopup(v : View){
-       val popup = PopupMenu(this,v)
-        popup.setOnMenuItemClickListener (this)
+    fun showPopup(v: View) {
+        val popup = PopupMenu(this, v)
+        popup.setOnMenuItemClickListener(this)
         popup.inflate(R.menu.popup_menu)
         popup.show()
-   }
+    }
 
     private fun dispatchTakePictureIntent() {
 
@@ -248,40 +270,42 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             takePicture.launch(takePictureIntent)
         } catch (e: ActivityNotFoundException) {
             // display error state to the user
+            e.printStackTrace()
         }
     }
 
     private fun dispatchTakeGalleryPictureIntent() {
         try {
             takePictureGallery.launch("image/*")
-        } catch (e: ActivityNotFoundException){
-            //......
+        } catch (e: ActivityNotFoundException) {
+            e.printStackTrace()
         }
 
     }
 
     override fun onMenuItemClick(item: MenuItem?): Boolean {
         if (item != null) {
-            return when (item.itemId){
-               R .id.select ->{
-                   dispatchTakeGalleryPictureIntent()
+            return when (item.itemId) {
+                R.id.select -> {
+                    dispatchTakeGalleryPictureIntent()
                     true
                 }
-                R.id.camera ->{
+                R.id.camera -> {
                     dispatchTakePictureIntent()
                     true
                 }
-                else ->  super.onOptionsItemSelected(item)
+                else -> super.onOptionsItemSelected(item)
 
             }
-        }else {return false}
+        } else {
+            return false
+        }
 
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("uri", uri.toString())
-
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
