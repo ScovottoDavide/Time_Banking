@@ -1,8 +1,10 @@
 package it.polito.madg34.timebanking
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION
+import android.content.SharedPreferences
 import android.net.Uri
 import android.content.res.Configuration
 import android.os.Bundle
@@ -17,9 +19,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
 import com.google.android.material.divider.MaterialDividerItemDecoration
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import java.io.Serializable
 
 class ShowProfileActivity : AppCompatActivity() {
+
+    private lateinit var sharedPref : SharedPreferences;
+    private lateinit var  gson : Gson;
+
     private var img: Uri = Uri.parse("android.resource://it.polito.madg34.timebanking/"+R.drawable.user_icon)
     private var fullName = "Mario Rossi"
     private var nickname = "Draco123"
@@ -53,6 +61,13 @@ class ShowProfileActivity : AppCompatActivity() {
         myLocationView = findViewById(R.id.location)
         img_view = findViewById(R.id.imageUsr)
 
+        //
+        gson = Gson()
+        sharedPref = getSharedPreferences("package it.polito.madg34.timebanking.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE) ?: return
+        restore()
+
+
+
         fullNameView.text = fullName
 
         nicknameView.text = nickname
@@ -75,25 +90,61 @@ class ShowProfileActivity : AppCompatActivity() {
             ActivityResultContracts.StartActivityForResult()
         ) { result: ActivityResult ->
             if (result.resultCode == Activity.RESULT_OK) {
+
                 fullName =
-                    if (result.data?.getStringExtra("fullName")?.length.toString() != "0") result.data?.getStringExtra(
-                        "fullName"
-                    ).toString() else fullName
+
+                    if (result.data?.getStringExtra("fullName")?.length.toString() != "0") {
+                        var s = result.data?.getStringExtra("fullName").toString()
+                        var serialized = gson.toJson(s)
+                        sharedPref.edit().putString("FULLNAME",serialized).commit()
+                        s
+                    } else {
+                        fullName
+                    }
+
+
                 nickname =
-                    if (result.data?.getStringExtra("nickname")?.length.toString() != "0") result.data?.getStringExtra(
-                        "nickname"
-                    ).toString() else nickname
+
+                    if (result.data?.getStringExtra("nickname")?.length.toString() != "0") {
+                        var s = result.data?.getStringExtra("nickname").toString()
+                        var serialized = gson.toJson(s)
+                        sharedPref.edit().putString("NICKNAME",serialized).commit()
+                        s
+                    } else {
+                        nickname
+                    }
+
+
                 email =
-                    if (result.data?.getStringExtra("email")?.length.toString() != "0") result.data?.getStringExtra(
-                        "email"
-                    ).toString() else email
+
+                    if (result.data?.getStringExtra("email")?.length.toString() != "0") {
+                        var s = result.data?.getStringExtra("email").toString()
+                        var serialized = gson.toJson(s)
+                        sharedPref.edit().putString("EMAIL",serialized).commit()
+                        s
+                    } else {
+                        email
+                    }
+
+
                 location =
-                    if (result.data?.getStringExtra("location")?.length.toString() != "0") result.data?.getStringExtra(
-                        "location"
-                    ).toString() else location
+
+                    if (result.data?.getStringExtra("location")?.length.toString() != "0") {
+                        var s = result.data?.getStringExtra("location").toString()
+                        var serialized = gson.toJson(s)
+                        sharedPref.edit().putString("LOCATION",serialized).commit()
+                        s
+                    } else {
+                        location
+                    }
+
+
                 img =
+
                     if (result.data?.getStringExtra("picture")?.length.toString() != "0") {
                         var s = result.data?.getStringExtra("picture").toString()
+                        var serialized = gson.toJson(s)
+                        sharedPref.edit().putString("IMG",serialized).commit()
                         Uri.parse(s)
                     } else {
                         img
@@ -108,6 +159,34 @@ class ShowProfileActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun restore(){
+
+        if (sharedPref.contains("FULLNAME")){
+            fullName = gson.fromJson(sharedPref.getString("FULLNAME", "Ciao"), String::class.java)
+        }
+        if (sharedPref.contains("NICKNAME")){
+            nickname = gson.fromJson(sharedPref.getString("NICKNAME", ""), String::class.java)
+        }
+        if (sharedPref.contains("EMAIL")){
+            email = gson.fromJson(sharedPref.getString("EMAIL", ""), String::class.java)
+        }
+        if (sharedPref.contains("LOCATION")){
+            location = gson.fromJson(sharedPref.getString("LOCATION", ""), String::class.java)
+        }
+        if (sharedPref.contains("SKILLS")){
+            fullName = gson.fromJson(sharedPref.getString("SKILLS", ""), object :
+                TypeToken<MutableMap<String, String>>() {}.type)
+        }
+        if (sharedPref.contains("IMG")){
+            val s = gson.fromJson(sharedPref.getString("IMG", ""), String::class.java)
+            img = Uri.parse(s)
+        }
+
+
+    }
+
+
 
     private fun constantScreenLayoutOnScrolling() {
         val sv = findViewById<ScrollView>(R.id.scrollViewShow)
