@@ -122,6 +122,8 @@ class ShowProfileActivity : AppCompatActivity() {
 
                 val res = result.data?.getSerializableExtra("skills") as HashMap<String, String>?
                 skills = if(res?.size!! > 0){
+                    val serialized = gson.toJson(res)
+                    sharedPref.edit().putString("SKILLS",serialized).apply()
                     res
                 } else skills
 
@@ -154,8 +156,8 @@ class ShowProfileActivity : AppCompatActivity() {
             location = gson.fromJson(sharedPref.getString("LOCATION", ""), String::class.java)
         }
         if (sharedPref.contains("SKILLS")){
-            fullName = gson.fromJson(sharedPref.getString("SKILLS", ""), object :
-                TypeToken<MutableMap<String, String>>() {}.type)
+            skills = gson.fromJson(sharedPref.getString("SKILLS", ""), object :
+                TypeToken<HashMap<String, String>>() {}.type)
         }
         if (sharedPref.contains("IMG")){
             val s = gson.fromJson(sharedPref.getString("IMG", ""), String::class.java)

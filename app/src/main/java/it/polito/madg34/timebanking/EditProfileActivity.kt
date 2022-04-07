@@ -20,6 +20,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.FileProvider
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
 import java.io.*
@@ -88,9 +89,10 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         takePictureGallery = registerForActivityResult(ActivityResultContracts.GetContent()) {
             uri = it
             /** SAVE THE IMAGE IN THE INTERNAL STORAGE **/
-            val bitmap = Images.Media.getBitmap(this.contentResolver, uri)
+             bitmap = Images.Media.getBitmap(this.contentResolver, uri)
             val wrapper = ContextWrapper(applicationContext)
             var file = wrapper.getDir("Images", MODE_PRIVATE) // NEED ROOT ACCESS TO SEE IT ON THE PHONE
+
             println("FILE: "+ file.absolutePath)
             file = File(file, "GalleryPhoto"+".jpg")
             try{
@@ -99,12 +101,16 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
                 stream.flush()
                 stream.close()
+                val path: String =
+                    Images.Media.insertImage(this.getContentResolver(), bitmap, "xyz", null)
+                // Parse the gallery image url to uri
+                uri = Uri.parse(path)
+                userImage.setImageURI(uri)
             }catch (e : IOException){
                 e.printStackTrace()
             }
-            // Parse the gallery image url to uri
-            uri = Uri.parse(file.absolutePath)
-            userImage.setImageURI(uri)
+
+
         }
 
         var skillOld = ""
