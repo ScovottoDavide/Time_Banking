@@ -17,4 +17,6 @@
     <string name="skills">My skills :</string>
 
     <string name="accInfo">My account</string>
+
+    <string name="editSkillTitle">Edit skill :</string>
 </resources>

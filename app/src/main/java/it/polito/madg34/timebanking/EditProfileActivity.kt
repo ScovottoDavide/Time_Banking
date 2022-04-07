@@ -15,6 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewTreeObserver
 import android.widget.*
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -35,6 +36,9 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
     private lateinit var userImage: ImageView
     private lateinit var bitmap: Bitmap
     private lateinit var uri: Uri
+    private lateinit var _skills : HashMap<String, String>
+
+    private lateinit var editSkillResultLauncher: ActivityResultLauncher<Intent>
 
     private var h = 0
     private var w = 0
@@ -49,17 +53,14 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         var _email = intent.getStringExtra("email")
         var _location = intent.getStringExtra("location")
         var _pictureString = intent.getStringExtra("picture")
-        var _skills = intent.getSerializableExtra("skills") as MutableMap<String, String>
+        _skills = intent.getSerializableExtra("skills") as HashMap<String, String>
 
         uri = Uri.parse(_pictureString)
 
-        /** _skills is being received in reverse order, so transform it to be as before **/
-        var reverse: MutableMap<String, String> = mutableMapOf()
-        for (i in _skills.entries.reversed()) {
-            reverse[i.key] = i.value
-        }
-        reverse.forEach {
-            setSkills(it.key, it.value)
+        var indexName = 100
+        var indexDesc = -100
+        _skills.forEach {
+            setSkills(it.key, it.value, indexName++, indexDesc--)
         }
 
         constantScreenLayoutOnScrolling()
@@ -70,10 +71,10 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         var location = findViewById<EditText>(R.id.editTextLocation)
         userImage = findViewById(R.id.userImage)
 
-        fullName.hint = _fullName
-        nickname.hint = _nickname
-        email.hint = _email
-        location.hint = _location
+        fullName.setText(_fullName)
+        nickname.setText(_nickname)
+        email.setText(_email)
+        location.setText(_location)
         userImage.setImageURI(uri)
 
         takePicture =
@@ -104,6 +105,53 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             // Parse the gallery image url to uri
             uri = Uri.parse(file.absolutePath)
             userImage.setImageURI(uri)
+        }
+
+        var skillOld = ""
+        var skillName = ""
+        var skillDescription = ""
+        var skillIndex :Int? = 0
+        var skillIndexDesc : Int? = 0
+        /** GET SKILL MODIFICATION AFTER EDITSKILL ACTIVITY IS DONE **/
+        editSkillResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result : ActivityResult ->
+            if(result.resultCode == Activity.RESULT_OK){
+                skillIndexDesc = if(result.data?.getIntExtra("skillDescIndex", 0)!! < 0){
+                    var s = result.data?.getIntExtra("skillDescIndex", 0)
+                    s
+                } else skillIndexDesc
+
+                skillIndex = if(result.data?.getIntExtra("skillIndex", 0)!! > 0){
+                    var s = result.data?.getIntExtra("skillIndex", 0)
+                    s
+                } else skillIndex
+
+                skillOld = if(result.data?.getStringExtra("skillOld")?.length.toString() != "0"){
+                    var s = result.data?.getStringExtra("skillOld").toString()
+                    s
+                } else skillOld
+
+                skillName = if(result.data?.getStringExtra("skillName")?.length.toString() != "0"){
+                    var s = result.data?.getStringExtra("skillName").toString()
+                    s
+                } else skillName
+
+                skillDescription = if(result.data?.getStringExtra("skillDescription")?.length.toString() != "0"){
+                    var s = result.data?.getStringExtra("skillDescription").toString()
+                    s
+                } else skillDescription
+
+                if(skillOld == skillName) _skills[skillName] = skillDescription
+                else {
+                    _skills.remove(skillOld)
+                    _skills[skillName] = skillDescription
+                }
+
+                val tvMOD = findViewById<TextView>(skillIndex!!)
+                tvMOD.text = skillName
+                val descMOD = findViewById<TextView>(skillIndexDesc!!)
+                descMOD.text = skillDescription
+
+            }
         }
     }
 
@@ -144,12 +192,13 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         })
     }
 
-    private fun setSkills(skill: String, description: String) {
+    private fun setSkills(skill: String, description: String, indexName : Int, indexDesc : Int) {
         val linearLayout = findViewById<LinearLayout>(R.id.lastLinear)
 
         val expH = ExpansionHeader(linearLayout.context)
         val arrow = ImageView(linearLayout.context)
         val tv = TextView(linearLayout.context)
+        val pencil = ImageButton(linearLayout.context)
 
         /** 1. Set expansion header layout params **/
         val expHLayoutParams = LinearLayout.LayoutParams(
@@ -164,14 +213,15 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
-            marginStart = 12
-            topMargin = 8
+            marginStart = 80
+            topMargin = 20
         }
+        tv.id = indexName
         tv.text = skill
         tv.textSize = 20F
         tv.setTextAppearance(
             this,
-            com.google.android.material.R.style.TextAppearance_AppCompat_Body2
+            com.google.android.material.R.style.TextAppearance_AppCompat_Medium
         )
 
         /** Prepare the arrow to be placed along with the text in the Expansion Header**/
@@ -185,9 +235,18 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         )
         arrowLayoutParams.gravity = Gravity.CENTER_VERTICAL or Gravity.END
 
+
+        /** Allow the user to modify the skill **/
+        pencil.setImageResource(R.drawable.outline_edit_24)
+        pencil.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+            bottomMargin=5
+        }
+        pencil.setBackgroundColor(getResources().getColor(R.color.white))
+
         /** Add the Text and the Arrow to build the header of each skill **/
         expH.addView(arrow, arrowLayoutParams)
         expH.addView(tv)
+        expH.addView(pencil)
 
         /** Prepare the layout for the description **/
         val layout = ExpansionLayout(this)
@@ -195,7 +254,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
-            marginStart = 10
+            marginStart = 20
         }
 
         /** Text View for the description **/
@@ -204,7 +263,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply { marginStart = 5 }
-        expansionText.id = layout.id
+        expansionText.id = indexDesc
         expansionText.setTextAppearance(
             this,
             com.google.android.material.R.style.TextAppearance_AppCompat_Body1
@@ -225,6 +284,17 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             if (layout.isExpanded)
                 arrow.rotation = 90F
             else arrow.rotation = 0F
+        }
+
+        pencil.setOnClickListener {
+            val intent = Intent(this, EditSkill::class.java)
+
+            intent.putExtra("skillDescIndex", indexDesc)
+            intent.putExtra("skillIndex", indexName)
+            intent.putExtra("skillOld", skill)
+            intent.putExtra("skillName", skill)
+            intent.putExtra("skillDescription", description)
+            editSkillResultLauncher.launch(intent)
         }
 
     }
@@ -249,6 +319,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         if (_emailMOD != null) returnIntent.putExtra("email", _emailMOD)
         if (_locationMOD != null) returnIntent.putExtra("location", _locationMOD)
         if (_picture != null) returnIntent.putExtra("picture", _picture)
+        returnIntent.putExtra("skills", _skills)
 
         setResult(Activity.RESULT_OK, returnIntent)
         finish()

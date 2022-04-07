@@ -117,7 +117,7 @@
                     android:importantForAutofill="no"
                     android:inputType="textPersonName"
                     android:minHeight="48dp"
-                    android:textSize="16sp" />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:id="@+id/textEmail"
@@ -139,7 +139,7 @@
                     android:importantForAutofill="no"
                     android:inputType="textEmailAddress"
                     android:minHeight="48dp"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     tools:ignore="TextContrastCheck" />
 
                 <TextView
@@ -161,6 +161,7 @@
                     android:importantForAutofill="no"
                     android:inputType="textPostalAddress"
                     android:minHeight="48dp"
+                    android:textSize="20sp"
                     tools:ignore="TextContrastCheck" />
 
                 <TextView
