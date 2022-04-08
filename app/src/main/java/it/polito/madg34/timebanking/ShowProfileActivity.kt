@@ -30,7 +30,7 @@ class ShowProfileActivity : AppCompatActivity() {
     private var nickname = "Draco123"
     private var email = "mariorossi@general.it"
     private var location = "Corso Castelfidardo, 39, Torino TO"
-    private var skills: HashMap<String, String> = hashMapOf(
+    private var skills: MutableMap<String, String> = mutableMapOf(
         "Dog Sitter" to "Amo i cani",
         "Chef" to "Ho vinto la 7 edizione di masterchef",
         "Meccanico" to "Aggiusto macchine d'epoca",
@@ -52,6 +52,14 @@ class ShowProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_show_profile)
 
+        setSupportActionBar(findViewById(R.id.my_toolbar))
+        val ab = supportActionBar
+        if (ab != null) {
+            ab.title = ""
+        }
+//        val toolbar = findViewById<Toolbar>(R.id.my_toolbar)
+//        toolbar.setTitle("")
+
         fullNameView = findViewById(R.id.fullName)
         nicknameView = findViewById(R.id.nickName)
         emailView = findViewById(R.id.email)
@@ -61,6 +69,10 @@ class ShowProfileActivity : AppCompatActivity() {
         gson = Gson()
         sharedPref = getSharedPreferences("package it.polito.madg34.timebanking.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE) ?: return
         restore()
+
+//        sharedPref = getSharedPreferences("package it.polito.madg34.timebanking.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+//        val editor = sharedPref.edit()
+//        editor.clear().apply()
 
         fullNameView.text = fullName
         nicknameView.text = nickname
@@ -120,7 +132,7 @@ class ShowProfileActivity : AppCompatActivity() {
                         Uri.parse(s)
                     } else img
 
-                val res = result.data?.getSerializableExtra("skills") as HashMap<String, String>?
+                val res = result.data?.getSerializableExtra("skills") as MutableMap<String, String>?
                 skills = if(res?.size!! > 0){
                     val serialized = gson.toJson(res)
                     sharedPref.edit().putString("SKILLS",serialized).apply()
@@ -157,7 +169,7 @@ class ShowProfileActivity : AppCompatActivity() {
         }
         if (sharedPref.contains("SKILLS")){
             skills = gson.fromJson(sharedPref.getString("SKILLS", ""), object :
-                TypeToken<HashMap<String, String>>() {}.type)
+                TypeToken<MutableMap<String, String>>() {}.type)
         }
         if (sharedPref.contains("IMG")){
             val s = gson.fromJson(sharedPref.getString("IMG", ""), String::class.java)
@@ -181,7 +193,7 @@ class ShowProfileActivity : AppCompatActivity() {
                 } else {
                     h = constraintL.height
                     w = constraintL.width
-                    iv.post { iv.layoutParams = LinearLayout.LayoutParams(w / 3, h) }
+                    iv.post { iv.layoutParams = LinearLayout.LayoutParams(w / 3, h + 150) }
                 }
                 sv.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
@@ -290,7 +302,6 @@ class ShowProfileActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.pencil -> {
                 editProfile()
-                //Toast.makeText(this, "Pencil Premuto", Toast.LENGTH_SHORT).show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -303,7 +314,7 @@ class ShowProfileActivity : AppCompatActivity() {
         outState.putString("nickname", nickname)
         outState.putString("email", email)
         outState.putString("location", location)
-        outState.putSerializable("skills", skills)
+        outState.putSerializable("skills", skills as Serializable)
         outState.putString("img", img.toString())
     }
 
@@ -313,7 +324,7 @@ class ShowProfileActivity : AppCompatActivity() {
         nickname = savedInstanceState.getString("nickname", "")
         email = savedInstanceState.getString("email", "")
         location = savedInstanceState.getString("location", "")
-        skills = savedInstanceState.getSerializable("skills") as HashMap<String, String>
+        skills = savedInstanceState.getSerializable("skills") as MutableMap<String, String>
 
         val s = savedInstanceState.getString("img")
         img = Uri.parse(s)
@@ -323,7 +334,6 @@ class ShowProfileActivity : AppCompatActivity() {
         nicknameView.text = nickname
         emailView.text = email
         myLocationView.text = location
-        skills = this.skills
         img_view.setImageURI(img)
     }
 

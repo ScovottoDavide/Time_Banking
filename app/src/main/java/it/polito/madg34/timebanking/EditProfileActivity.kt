@@ -37,7 +37,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
     private lateinit var userImage: ImageView
     private lateinit var bitmap: Bitmap
     private lateinit var uri: Uri
-    private lateinit var _skills : HashMap<String, String>
+    private lateinit var _skills : MutableMap<String, String>
 
     private lateinit var editSkillResultLauncher: ActivityResultLauncher<Intent>
 
@@ -54,7 +54,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         var _email = intent.getStringExtra("email")
         var _location = intent.getStringExtra("location")
         var _pictureString = intent.getStringExtra("picture")
-        _skills = intent.getSerializableExtra("skills") as HashMap<String, String>
+        _skills = intent.getSerializableExtra("skills") as MutableMap<String, String>
 
         uri = Uri.parse(_pictureString)
 
@@ -191,7 +191,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
                 } else {
                     h = constraintL.height
                     w = constraintL.width
-                    iv.post { iv.layoutParams = FrameLayout.LayoutParams(w / 3, h) }
+                    iv.post { iv.layoutParams = FrameLayout.LayoutParams(w / 3, h - 180) }
                 }
                 sv.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
@@ -325,7 +325,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         if (_emailMOD != null) returnIntent.putExtra("email", _emailMOD)
         if (_locationMOD != null) returnIntent.putExtra("location", _locationMOD)
         if (_picture != null) returnIntent.putExtra("picture", _picture)
-        returnIntent.putExtra("skills", _skills)
+        returnIntent.putExtra("skills", _skills as Serializable)
 
         setResult(Activity.RESULT_OK, returnIntent)
         finish()
