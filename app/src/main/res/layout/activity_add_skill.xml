@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".EditSkill">
+    tools:context=".AddSkill">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -42,7 +42,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
-        android:text="@string/editSkillTitle"
+        android:text="@string/addSkillTitle"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/skillName"
@@ -63,7 +63,8 @@
         app:layout_constraintBottom_toTopOf="@+id/skillDescription"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/TitleAddSkill" />
+        app:layout_constraintTop_toBottomOf="@+id/TitleAddSkill"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/skillDescription"
@@ -78,5 +79,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/skillName" />
+        app:layout_constraintTop_toBottomOf="@+id/skillName"
+        android:autofillHints="" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

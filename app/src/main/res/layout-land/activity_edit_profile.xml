@@ -196,10 +196,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:fontFamily="sans-serif-black"
+                android:paddingEnd="7dp"
+                android:paddingBottom="5dp"
                 android:text="@string/skills"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="14sp"
-                android:textStyle="italic" />
+                android:textStyle="italic"
+                app:drawableEndCompat="@drawable/outline_add_circle_outline_24" />
 
             <LinearLayout
                 android:id="@+id/lastLinear"

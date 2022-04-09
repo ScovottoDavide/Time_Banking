@@ -40,6 +40,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
     private lateinit var _skills : MutableMap<String, String>
 
     private lateinit var editSkillResultLauncher: ActivityResultLauncher<Intent>
+    private lateinit var addSkillResultLauncher: ActivityResultLauncher<Intent>
 
     private var h = 0
     private var w = 0
@@ -113,8 +114,6 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             }catch (e : IOException){
                 e.printStackTrace()
             }
-
-
         }
 
         var skillOld = ""
@@ -160,6 +159,29 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
                 tvMOD.text = skillName
                 val descMOD = findViewById<TextView>(skillIndexDesc!!)
                 descMOD.text = skillDescription
+
+            }
+        }
+
+        var newSkillName : String? = ""
+        var newSkillDesc : String? = ""
+        addSkill()
+        addSkillResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result : ActivityResult ->
+            if(result.resultCode == Activity.RESULT_OK){
+                newSkillName = if(result.data?.getStringExtra("skillName")?.length.toString() != "0"){
+                    val s = result.data?.getStringExtra("skillName").toString()
+                    s
+                } else newSkillName
+
+                newSkillDesc = if(result.data?.getStringExtra("skillDescription")?.length.toString() != "0"){
+                    val s = result.data?.getStringExtra("skillDescription").toString()
+                    s
+                } else newSkillDesc
+
+                if(newSkillName?.length!=0 && newSkillDesc?.length != 0){
+                    _skills.put(newSkillName!!, newSkillDesc!!)
+                    setSkills(newSkillName!!, newSkillDesc!!, indexName++, indexDesc--)
+                }
 
             }
         }
@@ -307,6 +329,16 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             editSkillResultLauncher.launch(intent)
         }
 
+    }
+
+    private fun addSkill() {
+        val buttonAddSkill = findViewById<TextView>(R.id.textSkills)
+
+        buttonAddSkill.setOnClickListener {
+            val intent = Intent(this, AddSkill::class.java)
+
+            addSkillResultLauncher.launch(intent)
+        }
     }
 
     override fun onBackPressed() {
