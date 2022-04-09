@@ -48,12 +48,16 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_profile)
 
+        setSupportActionBar(findViewById(R.id.my_toolbar))
+        val ab = supportActionBar
+        if (ab != null) ab.title = "Time Banking"
+
         val intent = intent
-        var _fullName = intent.getStringExtra("fullName")
-        var _nickname = intent.getStringExtra("nickname")
-        var _email = intent.getStringExtra("email")
-        var _location = intent.getStringExtra("location")
-        var _pictureString = intent.getStringExtra("picture")
+        val _fullName = intent.getStringExtra("fullName")
+        val _nickname = intent.getStringExtra("nickname")
+        val _email = intent.getStringExtra("email")
+        val _location = intent.getStringExtra("location")
+        val _pictureString = intent.getStringExtra("picture")
         _skills = intent.getSerializableExtra("skills") as MutableMap<String, String>
 
         uri = Uri.parse(_pictureString)
@@ -66,10 +70,10 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
 
         constantScreenLayoutOnScrolling()
 
-        var fullName = findViewById<EditText>(R.id.editTextTextPersonName)
-        var nickname = findViewById<EditText>(R.id.editTextTextPersonName3)
-        var email = findViewById<EditText>(R.id.editTextTextEmailAddress)
-        var location = findViewById<EditText>(R.id.editTextLocation)
+        val fullName = findViewById<EditText>(R.id.editTextTextPersonName)
+        val nickname = findViewById<EditText>(R.id.editTextTextPersonName3)
+        val email = findViewById<EditText>(R.id.editTextTextEmailAddress)
+        val location = findViewById<EditText>(R.id.editTextLocation)
         userImage = findViewById(R.id.userImage)
 
         fullName.setText(_fullName)
@@ -96,7 +100,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             println("FILE: "+ file.absolutePath)
             file = File(file, "GalleryPhoto"+".jpg")
             try{
-                var stream : OutputStream? = null
+                val stream: OutputStream?
                 stream = FileOutputStream(file)
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
                 stream.flush()
@@ -122,27 +126,27 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         editSkillResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){ result : ActivityResult ->
             if(result.resultCode == Activity.RESULT_OK){
                 skillIndexDesc = if(result.data?.getIntExtra("skillDescIndex", 0)!! < 0){
-                    var s = result.data?.getIntExtra("skillDescIndex", 0)
+                    val s = result.data?.getIntExtra("skillDescIndex", 0)
                     s
                 } else skillIndexDesc
 
                 skillIndex = if(result.data?.getIntExtra("skillIndex", 0)!! > 0){
-                    var s = result.data?.getIntExtra("skillIndex", 0)
+                    val s = result.data?.getIntExtra("skillIndex", 0)
                     s
                 } else skillIndex
 
                 skillOld = if(result.data?.getStringExtra("skillOld")?.length.toString() != "0"){
-                    var s = result.data?.getStringExtra("skillOld").toString()
+                    val s = result.data?.getStringExtra("skillOld").toString()
                     s
                 } else skillOld
 
                 skillName = if(result.data?.getStringExtra("skillName")?.length.toString() != "0"){
-                    var s = result.data?.getStringExtra("skillName").toString()
+                    val s = result.data?.getStringExtra("skillName").toString()
                     s
                 } else skillName
 
                 skillDescription = if(result.data?.getStringExtra("skillDescription")?.length.toString() != "0"){
-                    var s = result.data?.getStringExtra("skillDescription").toString()
+                    val s = result.data?.getStringExtra("skillDescription").toString()
                     s
                 } else skillDescription
 
@@ -233,7 +237,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         /** Prepare the arrow to be placed along with the text in the Expansion Header**/
         arrow.setImageResource(com.github.florent37.expansionpanel.R.drawable.ic_expansion_header_indicator_grey_24dp)
         /** Margin to place the arrows **/
-        var wid =
+        val wid =
             if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 2600 else 1850
         val arrowLayoutParams = LinearLayout.LayoutParams(
             wid,
@@ -307,10 +311,10 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
 
     override fun onBackPressed() {
 
-        var fullName = findViewById<EditText>(R.id.editTextTextPersonName)
-        var nickname = findViewById<EditText>(R.id.editTextTextPersonName3)
-        var email = findViewById<EditText>(R.id.editTextTextEmailAddress)
-        var location = findViewById<EditText>(R.id.editTextLocation)
+        val fullName = findViewById<EditText>(R.id.editTextTextPersonName)
+        val nickname = findViewById<EditText>(R.id.editTextTextPersonName3)
+        val email = findViewById<EditText>(R.id.editTextTextEmailAddress)
+        val location = findViewById<EditText>(R.id.editTextLocation)
 
         val returnIntent = intent
 
@@ -318,13 +322,13 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         _nicknameMOD = nickname.text.toString()
         _emailMOD = email.text.toString()
         _locationMOD = location.text.toString()
-        var _picture = uri.toString()
+        val _picture = uri.toString()
 
         if (_fullNameMOD != null) returnIntent.putExtra("fullName", _fullNameMOD)
         if (_nicknameMOD != null) returnIntent.putExtra("nickname", _nicknameMOD)
         if (_emailMOD != null) returnIntent.putExtra("email", _emailMOD)
         if (_locationMOD != null) returnIntent.putExtra("location", _locationMOD)
-        if (_picture != null) returnIntent.putExtra("picture", _picture)
+        returnIntent.putExtra("picture", _picture)
         returnIntent.putExtra("skills", _skills as Serializable)
 
         setResult(Activity.RESULT_OK, returnIntent)

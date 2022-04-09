@@ -6,12 +6,15 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.content.res.Configuration
+import android.graphics.Typeface
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.*
 import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.github.florent37.expansionpanel.ExpansionHeader
@@ -54,11 +57,7 @@ class ShowProfileActivity : AppCompatActivity() {
 
         setSupportActionBar(findViewById(R.id.my_toolbar))
         val ab = supportActionBar
-        if (ab != null) {
-            ab.title = ""
-        }
-//        val toolbar = findViewById<Toolbar>(R.id.my_toolbar)
-//        toolbar.setTitle("")
+        if (ab != null) ab.title = "Time Banking"
 
         fullNameView = findViewById(R.id.fullName)
         nicknameView = findViewById(R.id.nickName)
@@ -230,7 +229,7 @@ class ShowProfileActivity : AppCompatActivity() {
         /** Prepare the arrow to be placed along with the text in the Expansion Header**/
         arrow.setImageResource(com.github.florent37.expansionpanel.R.drawable.ic_expansion_header_indicator_grey_24dp)
         /** Margin to place the arrows **/
-        var wid = if(resources.configuration.orientation==Configuration.ORIENTATION_LANDSCAPE) 2600 else 1850
+        val wid = if(resources.configuration.orientation==Configuration.ORIENTATION_LANDSCAPE) 2600 else 1850
         val arrowLayoutParams = LinearLayout.LayoutParams(
             wid,
             LinearLayout.LayoutParams.WRAP_CONTENT
