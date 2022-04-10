@@ -191,6 +191,30 @@
                 tools:ignore="TextContrastCheck" />
 
             <TextView
+                android:id="@+id/aboutUser"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="sans-serif-black"
+                android:text="@string/aboutMe"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textSize="14sp"
+                android:textStyle="italic" />
+
+            <EditText
+                android:id="@+id/userDesc"
+                style="@style/Widget.AppCompat.EditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:ems="10"
+                android:hint="@string/aboutMe"
+                android:inputType="textMultiLine"
+                android:importantForAutofill="no"
+                android:minHeight="48dp"
+                android:textSize="16sp" />
+
+            <TextView
                 android:id="@+id/textSkills"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

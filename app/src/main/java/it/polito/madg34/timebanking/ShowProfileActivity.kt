@@ -21,6 +21,7 @@ import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import org.w3c.dom.Text
 import java.io.Serializable
 
 class ShowProfileActivity : AppCompatActivity() {
@@ -33,18 +34,22 @@ class ShowProfileActivity : AppCompatActivity() {
     private var nickname = "Draco123"
     private var email = "mariorossi@general.it"
     private var location = "Corso Castelfidardo, 39, Torino TO"
+    private var aboutUser = "Salve a tutti, mi chiamo Massimo e ho 20 anni. Sono una persona disponibile" +
+                            " e sono qui per offrire il mio tempo libero e le mie capacità. Offrire aiuto" +
+                            " è una cosa che adoro e non esitate a contattarmi."
     private var skills: MutableMap<String, String> = mutableMapOf(
         "Dog Sitter" to "Amo i cani",
         "Chef" to "Ho vinto la 7 edizione di masterchef",
         "Meccanico" to "Aggiusto macchine d'epoca",
         "Baby sitter" to "Amo i bamibini, faccio la baby sitter da molti anniiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
-    )
+    ).toSortedMap()
     private lateinit var resultLauncher: ActivityResultLauncher<Intent>
 
     lateinit var fullNameView: TextView
     lateinit var nicknameView: TextView
     lateinit var emailView: TextView
     lateinit var myLocationView: TextView
+    lateinit var userDesc : TextView
     lateinit var img_view: ImageView
 
     private var h: Int = 0
@@ -63,6 +68,7 @@ class ShowProfileActivity : AppCompatActivity() {
         nicknameView = findViewById(R.id.nickName)
         emailView = findViewById(R.id.email)
         myLocationView = findViewById(R.id.location)
+        userDesc = findViewById(R.id.userDesc)
         img_view = findViewById(R.id.imageUsr)
 
         gson = Gson()
@@ -77,6 +83,7 @@ class ShowProfileActivity : AppCompatActivity() {
         nicknameView.text = nickname
         emailView.text = email
         myLocationView.text = location
+        userDesc.text = aboutUser
         img_view.setImageURI(img)
 
         skills.forEach {
@@ -123,6 +130,14 @@ class ShowProfileActivity : AppCompatActivity() {
                         s
                     } else location
 
+                aboutUser =
+                    if (result.data?.getStringExtra("aboutUser")?.length.toString() != "0") {
+                        val s = result.data?.getStringExtra("aboutUser").toString()
+                        val serialized = gson.toJson(s)
+                        sharedPref.edit().putString("ABOUTUSER",serialized).apply()
+                        s
+                    } else aboutUser
+
                 img =
                     if (result.data?.getStringExtra("picture")?.length.toString() != "0") {
                         val s = result.data?.getStringExtra("picture").toString()
@@ -142,9 +157,10 @@ class ShowProfileActivity : AppCompatActivity() {
                 nicknameView.text = nickname
                 emailView.text = email
                 myLocationView.text = location
+                userDesc.text = aboutUser
                 val ln = findViewById<LinearLayout>(R.id.lastLinear)
                 ln.removeAllViewsInLayout()
-                skills.forEach {
+                skills.toSortedMap().forEach {
                     setSkills(it.key, it.value)
                 }
                 img_view.setImageURI(img)
@@ -165,6 +181,9 @@ class ShowProfileActivity : AppCompatActivity() {
         }
         if (sharedPref.contains("LOCATION")){
             location = gson.fromJson(sharedPref.getString("LOCATION", ""), String::class.java)
+        }
+        if (sharedPref.contains("ABOUTUSER")){
+            aboutUser = gson.fromJson(sharedPref.getString("ABOUTUSER", ""), String::class.java)
         }
         if (sharedPref.contains("SKILLS")){
             skills = gson.fromJson(sharedPref.getString("SKILLS", ""), object :
@@ -285,6 +304,7 @@ class ShowProfileActivity : AppCompatActivity() {
         intent.putExtra("nickname", nickname)
         intent.putExtra("email", email)
         intent.putExtra("location", location)
+        intent.putExtra("aboutUser", aboutUser)
         intent.putExtra("skills", skills as Serializable)
         intent.putExtra("picture", img.toString())
 
@@ -313,6 +333,7 @@ class ShowProfileActivity : AppCompatActivity() {
         outState.putString("nickname", nickname)
         outState.putString("email", email)
         outState.putString("location", location)
+        outState.putString("aboutUser", aboutUser)
         outState.putSerializable("skills", skills as Serializable)
         outState.putString("img", img.toString())
     }
@@ -323,6 +344,7 @@ class ShowProfileActivity : AppCompatActivity() {
         nickname = savedInstanceState.getString("nickname", "")
         email = savedInstanceState.getString("email", "")
         location = savedInstanceState.getString("location", "")
+        aboutUser = savedInstanceState.getString("aboutUser", "")
         skills = savedInstanceState.getSerializable("skills") as MutableMap<String, String>
 
         val s = savedInstanceState.getString("img")
@@ -333,6 +355,7 @@ class ShowProfileActivity : AppCompatActivity() {
         nicknameView.text = nickname
         emailView.text = email
         myLocationView.text = location
+        userDesc.text = aboutUser
         img_view.setImageURI(img)
     }
 

@@ -31,6 +31,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
     var _nicknameMOD: String? = null
     var _emailMOD: String? = null
     var _locationMOD: String? = null
+    var _aboutUserMOD: String? = null
 
     private lateinit var takePicture: ActivityResultLauncher<Intent>
     private lateinit var takePictureGallery: ActivityResultLauncher<String>
@@ -58,6 +59,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         val _nickname = intent.getStringExtra("nickname")
         val _email = intent.getStringExtra("email")
         val _location = intent.getStringExtra("location")
+        val _aboutUser = intent.getStringExtra("aboutUser")
         val _pictureString = intent.getStringExtra("picture")
         _skills = intent.getSerializableExtra("skills") as MutableMap<String, String>
 
@@ -65,7 +67,8 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
 
         var indexName = 100
         var indexDesc = -100
-        _skills.forEach {
+        println()
+        _skills.toSortedMap().forEach {
             setSkills(it.key, it.value, indexName++, indexDesc--)
         }
 
@@ -75,12 +78,14 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         val nickname = findViewById<EditText>(R.id.editTextTextPersonName3)
         val email = findViewById<EditText>(R.id.editTextTextEmailAddress)
         val location = findViewById<EditText>(R.id.editTextLocation)
+        val userDesc = findViewById<EditText>(R.id.userDesc)
         userImage = findViewById(R.id.userImage)
 
         fullName.setText(_fullName)
         nickname.setText(_nickname)
         email.setText(_email)
         location.setText(_location)
+        userDesc.setText(_aboutUser)
         userImage.setImageURI(uri)
 
         takePicture =
@@ -347,6 +352,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         val nickname = findViewById<EditText>(R.id.editTextTextPersonName3)
         val email = findViewById<EditText>(R.id.editTextTextEmailAddress)
         val location = findViewById<EditText>(R.id.editTextLocation)
+        val userDesc = findViewById<EditText>(R.id.userDesc)
 
         val returnIntent = intent
 
@@ -354,12 +360,14 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         _nicknameMOD = nickname.text.toString()
         _emailMOD = email.text.toString()
         _locationMOD = location.text.toString()
+        _aboutUserMOD = userDesc.text.toString()
         val _picture = uri.toString()
 
         if (_fullNameMOD != null) returnIntent.putExtra("fullName", _fullNameMOD)
         if (_nicknameMOD != null) returnIntent.putExtra("nickname", _nicknameMOD)
         if (_emailMOD != null) returnIntent.putExtra("email", _emailMOD)
         if (_locationMOD != null) returnIntent.putExtra("location", _locationMOD)
+        if(_aboutUserMOD != null) returnIntent.putExtra("aboutUser", _aboutUserMOD)
         returnIntent.putExtra("picture", _picture)
         returnIntent.putExtra("skills", _skills as Serializable)
 
