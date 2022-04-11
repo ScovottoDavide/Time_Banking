@@ -97,7 +97,8 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             }
 
         takePictureGallery = registerForActivityResult(ActivityResultContracts.GetContent()) {
-            uri = it
+            if(it != null) uri = it
+            else return@registerForActivityResult
             /** SAVE THE IMAGE IN THE INTERNAL STORAGE **/
              bitmap = Images.Media.getBitmap(this.contentResolver, uri)
             val wrapper = ContextWrapper(applicationContext)
