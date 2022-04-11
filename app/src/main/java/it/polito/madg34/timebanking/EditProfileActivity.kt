@@ -23,6 +23,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
+import org.w3c.dom.Text
 import java.io.*
 
 
@@ -38,7 +39,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
     private lateinit var userImage: ImageView
     private lateinit var bitmap: Bitmap
     private lateinit var uri: Uri
-    private lateinit var _skills : MutableMap<String, String>
+    private var _skills : MutableMap<String, String>? = null
 
     private lateinit var editSkillResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var addSkillResultLauncher: ActivityResultLauncher<Intent>
@@ -61,14 +62,13 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         val _location = intent.getStringExtra("location")
         val _aboutUser = intent.getStringExtra("aboutUser")
         val _pictureString = intent.getStringExtra("picture")
-        _skills = intent.getSerializableExtra("skills") as MutableMap<String, String>
+        _skills = intent.getSerializableExtra("skills") as MutableMap<String, String>?
 
         uri = Uri.parse(_pictureString)
 
         var indexName = 100
         var indexDesc = -100
-        println()
-        _skills.toSortedMap().forEach {
+        _skills?.toSortedMap()?.forEach {
             setSkills(it.key, it.value, indexName++, indexDesc--)
         }
 
@@ -155,17 +155,30 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
                     s
                 } else skillDescription
 
-                if(skillOld == skillName) _skills[skillName] = skillDescription
+                if(skillOld == skillName) _skills!![skillName] = skillDescription
                 else {
-                    _skills.remove(skillOld)
-                    _skills[skillName] = skillDescription
+                    _skills!!.remove(skillOld)
+                    _skills!![skillName] = skillDescription
                 }
 
                 val tvMOD = findViewById<TextView>(skillIndex!!)
                 tvMOD.text = skillName
                 val descMOD = findViewById<TextView>(skillIndexDesc!!)
                 descMOD.text = skillDescription
+            } else {
+                skillOld = if(result.data?.getStringExtra("skillOld")?.length.toString() != "0"){
+                    val s = result.data?.getStringExtra("skillOld").toString()
+                    s
+                } else skillOld
 
+                val ln = findViewById<LinearLayout>(R.id.lastLinear)
+                ln.removeAllViewsInLayout()
+                _skills?.remove(skillOld)
+                var indexName = 100
+                var indexDesc = -100
+                _skills?.toSortedMap()?.forEach {
+                    setSkills(it.key, it.value, indexName++, indexDesc--)
+                }
             }
         }
 
@@ -185,7 +198,7 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
                 } else newSkillDesc
 
                 if(newSkillName?.length!=0 && newSkillDesc?.length != 0){
-                    _skills.put(newSkillName!!, newSkillDesc!!)
+                    _skills?.put(newSkillName!!, newSkillDesc!!)
                     setSkills(newSkillName!!, newSkillDesc!!, indexName++, indexDesc--)
                 }
 
@@ -371,6 +384,8 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         if(_aboutUserMOD != null) returnIntent.putExtra("aboutUser", _aboutUserMOD)
         returnIntent.putExtra("picture", _picture)
         returnIntent.putExtra("skills", _skills as Serializable)
+
+        println("Returned" + _skills)
 
         setResult(Activity.RESULT_OK, returnIntent)
         finish()

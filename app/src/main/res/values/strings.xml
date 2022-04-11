@@ -22,5 +22,7 @@
 
     <string name="editSkillTitle">Edit skill :</string>
     <string name="addSkillTitle">Add skill :</string>
+    <string name="removeSkill">Delete skill</string>
+
     <string name="barTitle">Time Banking</string>
 </resources>

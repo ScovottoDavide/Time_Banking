@@ -3,8 +3,10 @@ package it.polito.madg34.timebanking
 import android.app.Activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 
 class EditSkill : AppCompatActivity() {
 
@@ -31,25 +33,36 @@ class EditSkill : AppCompatActivity() {
 
         tv.text = _skillName
         editDesc.setText(_skillDescription)
+
+        val deleteButton = findViewById<Button>(R.id.deleteSkill)
+        deleteButton.setOnClickListener {
+
+            intent.putExtra("skillOld", _skillOld)
+            setResult(Activity.RESULT_CANCELED, intent)
+            finish()
+        }
     }
 
     override fun onBackPressed() {
         val returnIntent = intent
-        if(_index >= 0){
-            val skillName = findViewById<EditText>(R.id.skillName)
-            val skillDescription = findViewById<EditText>(R.id.skillDescription)
-
-            val skillNameMOD = skillName.text.toString()
-            val skillDescriptionMOD = skillDescription.text.toString()
-
-            returnIntent.putExtra("skillName", skillNameMOD)
-            returnIntent.putExtra("skillDescription", skillDescriptionMOD)
-            returnIntent.putExtra("skillOld", _skillOld)
-            returnIntent.putExtra("skillIndex", _index)
-            returnIntent.putExtra("skillDescIndex", _indexDesc)
-        }
-        setResult(Activity.RESULT_OK, returnIntent)
-        finish()
-        super.onBackPressed()
+        val skillName = findViewById<EditText>(R.id.skillName)
+        val skillDescription = findViewById<EditText>(R.id.skillDescription)
+        val skillNameMOD = skillName.text.toString()
+        var skillDescriptionMOD = skillDescription.text.toString()
+        if(skillNameMOD.isNotEmpty()){
+            if(_index >= 0){
+                returnIntent.putExtra("skillName", skillNameMOD)
+                if(skillDescriptionMOD.isEmpty())
+                    skillDescriptionMOD = "[No Description]"
+                returnIntent.putExtra("skillDescription", skillDescriptionMOD)
+                returnIntent.putExtra("skillOld", _skillOld)
+                returnIntent.putExtra("skillIndex", _index)
+                returnIntent.putExtra("skillDescIndex", _indexDesc)
+            }
+            setResult(Activity.RESULT_OK, returnIntent)
+            finish()
+            super.onBackPressed()
+        }else
+            Toast.makeText(this, "To delete skill press the button Delete", Toast.LENGTH_SHORT).show()
     }
 }

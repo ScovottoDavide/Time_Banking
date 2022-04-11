@@ -37,7 +37,7 @@ class ShowProfileActivity : AppCompatActivity() {
     private var aboutUser = "Salve a tutti, mi chiamo Massimo e ho 20 anni. Sono una persona disponibile" +
                             " e sono qui per offrire il mio tempo libero e le mie capacità. Offrire aiuto" +
                             " è una cosa che adoro e non esitate a contattarmi."
-    private var skills: MutableMap<String, String> = mutableMapOf(
+    private var skills: MutableMap<String, String>? = mutableMapOf(
         "Dog Sitter" to "Amo i cani",
         "Chef" to "Ho vinto la 7 edizione di masterchef",
         "Meccanico" to "Aggiusto macchine d'epoca",
@@ -86,7 +86,7 @@ class ShowProfileActivity : AppCompatActivity() {
         userDesc.text = aboutUser
         img_view.setImageURI(img)
 
-        skills.forEach {
+        skills?.forEach {
             setSkills(it.key, it.value)
         }
 
@@ -151,7 +151,11 @@ class ShowProfileActivity : AppCompatActivity() {
                     val serialized = gson.toJson(res)
                     sharedPref.edit().putString("SKILLS",serialized).apply()
                     res
-                } else skills
+                } else {
+                    val serialized = gson.toJson(res)
+                    sharedPref.edit().putString("SKILLS",serialized).apply()
+                    null
+                }
 
                 fullNameView.text = fullName
                 nicknameView.text = nickname
@@ -160,7 +164,7 @@ class ShowProfileActivity : AppCompatActivity() {
                 userDesc.text = aboutUser
                 val ln = findViewById<LinearLayout>(R.id.lastLinear)
                 ln.removeAllViewsInLayout()
-                skills.toSortedMap().forEach {
+                skills?.toSortedMap()?.forEach {
                     setSkills(it.key, it.value)
                 }
                 img_view.setImageURI(img)
@@ -188,6 +192,7 @@ class ShowProfileActivity : AppCompatActivity() {
         if (sharedPref.contains("SKILLS")){
             skills = gson.fromJson(sharedPref.getString("SKILLS", ""), object :
                 TypeToken<MutableMap<String, String>>() {}.type)
+            skills?.toSortedMap()
         }
         if (sharedPref.contains("IMG")){
             val s = gson.fromJson(sharedPref.getString("IMG", ""), String::class.java)
@@ -305,7 +310,7 @@ class ShowProfileActivity : AppCompatActivity() {
         intent.putExtra("email", email)
         intent.putExtra("location", location)
         intent.putExtra("aboutUser", aboutUser)
-        intent.putExtra("skills", skills as Serializable)
+        intent.putExtra("skills", skills as Serializable?)
         intent.putExtra("picture", img.toString())
 
         resultLauncher.launch(intent)
@@ -334,7 +339,7 @@ class ShowProfileActivity : AppCompatActivity() {
         outState.putString("email", email)
         outState.putString("location", location)
         outState.putString("aboutUser", aboutUser)
-        outState.putSerializable("skills", skills as Serializable)
+        outState.putSerializable("skills", skills as Serializable?)
         outState.putString("img", img.toString())
     }
 
@@ -345,7 +350,7 @@ class ShowProfileActivity : AppCompatActivity() {
         email = savedInstanceState.getString("email", "")
         location = savedInstanceState.getString("location", "")
         aboutUser = savedInstanceState.getString("aboutUser", "")
-        skills = savedInstanceState.getSerializable("skills") as MutableMap<String, String>
+        skills = savedInstanceState.getSerializable("skills") as MutableMap<String, String>?
 
         val s = savedInstanceState.getString("img")
         img = Uri.parse(s)

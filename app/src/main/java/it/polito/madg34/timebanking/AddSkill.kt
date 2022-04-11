@@ -28,9 +28,11 @@ class AddSkill : AppCompatActivity() {
         val skillDescription = findViewById<EditText>(R.id.skillDescription)
 
         val skillNameMOD = skillName.text.toString()
-        val skillDescMOD = skillDescription.text.toString()
+        var skillDescMOD = skillDescription.text.toString()
 
         returnIntent.putExtra("skillName", skillNameMOD)
+        if(skillDescMOD.isEmpty())
+            skillDescMOD = "[No Description]"
         returnIntent.putExtra("skillDescription", skillDescMOD)
 
         setResult(Activity.RESULT_OK, returnIntent)
