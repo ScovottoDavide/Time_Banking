@@ -20,10 +20,8 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.FileProvider
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
-import org.w3c.dom.Text
 import java.io.*
 
 
@@ -99,24 +97,32 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         takePictureGallery = registerForActivityResult(ActivityResultContracts.GetContent()) {
             if(it != null) uri = it
             else return@registerForActivityResult
+
+
+
+
             /** SAVE THE IMAGE IN THE INTERNAL STORAGE **/
              bitmap = Images.Media.getBitmap(this.contentResolver, uri)
             val wrapper = ContextWrapper(applicationContext)
             var file = wrapper.getDir("Images", MODE_PRIVATE) // NEED ROOT ACCESS TO SEE IT ON THE PHONE
 
-            println("FILE: "+ file.absolutePath)
+
             file = File(file, "GalleryPhoto"+".jpg")
+
             try{
                 val stream: OutputStream?
                 stream = FileOutputStream(file)
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
                 stream.flush()
                 stream.close()
-                val path: String =
-                    Images.Media.insertImage(this.getContentResolver(), bitmap, "xyz", null)
-                // Parse the gallery image url to uri
-                uri = Uri.parse(path)
+
+                val path: String = file.absolutePath
+
+                uri = Uri.parse(file.absolutePath)
+                userImage.setImageURI(null);
                 userImage.setImageURI(uri)
+
+
             }catch (e : IOException){
                 e.printStackTrace()
             }
@@ -205,6 +211,8 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
             }
         }
     }
+
+
 
     private fun handleCameraImage(intent: Intent?) {
         bitmap = intent?.extras?.get("data") as Bitmap

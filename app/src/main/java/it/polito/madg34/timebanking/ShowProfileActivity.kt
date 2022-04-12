@@ -167,6 +167,7 @@ class ShowProfileActivity : AppCompatActivity() {
                 skills?.toSortedMap()?.forEach {
                     setSkills(it.key, it.value)
                 }
+                img_view.setImageURI(null);
                 img_view.setImageURI(img)
             }
         }
