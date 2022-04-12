@@ -162,6 +162,7 @@ class ShowProfileActivity : AppCompatActivity() {
                 emailView.text = email
                 myLocationView.text = location
                 userDesc.text = aboutUser
+
                 val ln = findViewById<LinearLayout>(R.id.lastLinear)
                 ln.removeAllViewsInLayout()
                 skills?.toSortedMap()?.forEach {

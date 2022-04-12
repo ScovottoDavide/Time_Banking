@@ -97,15 +97,10 @@ class EditProfileActivity : AppCompatActivity(), PopupMenu.OnMenuItemClickListen
         takePictureGallery = registerForActivityResult(ActivityResultContracts.GetContent()) {
             if(it != null) uri = it
             else return@registerForActivityResult
-
-
-
-
             /** SAVE THE IMAGE IN THE INTERNAL STORAGE **/
              bitmap = Images.Media.getBitmap(this.contentResolver, uri)
             val wrapper = ContextWrapper(applicationContext)
             var file = wrapper.getDir("Images", MODE_PRIVATE) // NEED ROOT ACCESS TO SEE IT ON THE PHONE
-
 
             file = File(file, "GalleryPhoto"+".jpg")
 

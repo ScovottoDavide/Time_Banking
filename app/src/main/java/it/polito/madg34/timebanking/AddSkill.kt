@@ -7,9 +7,6 @@ import android.widget.EditText
 
 class AddSkill : AppCompatActivity() {
 
-    var _skillName : String ? = ""
-    var _skillDescription : String ? = ""
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_skill)
@@ -31,8 +28,11 @@ class AddSkill : AppCompatActivity() {
         var skillDescMOD = skillDescription.text.toString()
 
         returnIntent.putExtra("skillName", skillNameMOD)
-        if(skillDescMOD.isEmpty())
+        if(skillDescMOD.isEmpty()){
             skillDescMOD = "[No Description]"
+            skillDescription.hint = "[No Description]"
+        }
+
         returnIntent.putExtra("skillDescription", skillDescMOD)
 
         setResult(Activity.RESULT_OK, returnIntent)
