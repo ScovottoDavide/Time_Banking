@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    app:startDestination="@id/timeSlotEditFragment">
+
+    <fragment
+        android:id="@+id/timeSlotDetailsFragment"
+        android:name="it.polito.madg34.timebanking.TimeSlotDetailsFragment"
+        android:label="TimeSlotDetailsFragment" >
+        <action
+            android:id="@+id/action_timeSlotDetailsFragment_to_timeSlotEditFragment"
+            app:destination="@id/timeSlotEditFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/timeSlotEditFragment"
+        android:name="it.polito.madg34.timebanking.TimeSlotEditFragment"
+        android:label="TimeSlotEditFragment" />
+</navigation>
