@@ -9,6 +9,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.navArgs
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -19,6 +20,14 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
     private lateinit var button : Button;
     private lateinit var  time : TextView;
     private lateinit var button_T : Button;
+    private lateinit var title : EditText;
+    private lateinit var description : EditText;
+    private lateinit var duration : EditText;
+    private lateinit var location : EditText;
+
+
+
+
     private  var hour = 0;
     private  var minute = 0;
 
@@ -60,6 +69,13 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
         button_T.setOnClickListener{
             TimePickerDialog(requireContext(), timerPicker,hour, minute, true ).show()
         }
+
+        title.setText(arguments?.getString("title") ?: "" )
+        description.setText(arguments?.getString("description") ?: "")
+        date.setText(arguments?.getString("date") ?: "")
+        time.setText(arguments?.getString("time") ?: "")
+        duration.setText(arguments?.getString("duration") ?: "")
+        location.setText(arguments?.getString("location") ?: "")
 
 
 

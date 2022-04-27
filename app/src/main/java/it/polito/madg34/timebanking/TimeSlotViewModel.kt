@@ -11,4 +11,6 @@ class TimeSlotViewModel: ViewModel() {
     val duration_vm = MutableLiveData<String>().also{it.value = "1h"}
     val location_vm = MutableLiveData<String>().also{it.value = "Torino"}
 
+
+
 }
