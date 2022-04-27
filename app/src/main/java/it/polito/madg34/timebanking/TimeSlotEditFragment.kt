@@ -1,6 +1,7 @@
 package it.polito.madg34.timebanking
 
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
@@ -18,6 +19,8 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
     private lateinit var button : Button;
     private lateinit var  time : TextView;
     private lateinit var button_T : Button;
+    private  var hour = 0;
+    private  var minute = 0;
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -42,8 +45,20 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
             updateLable(myCalendar)
         }
 
+
+        val timerPicker = TimePickerDialog.OnTimeSetListener {timePicker, selectedHour, selectedMinute ->
+            hour = selectedHour
+            minute = selectedMinute
+            time.setText(String.format(Locale.getDefault(),"%02d:%02d", hour , minute))
+        }
+
+
         button.setOnClickListener {
             DatePickerDialog(requireContext(), datePicker, myCalendar.get(Calendar.YEAR),  myCalendar.get(Calendar.MONTH),  myCalendar.get(Calendar.DAY_OF_MONTH)).show()
+        }
+
+        button_T.setOnClickListener{
+            TimePickerDialog(requireContext(), timerPicker,hour, minute, true ).show()
         }
 
 
@@ -57,6 +72,8 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
         date.setText(sdf.format(myCalendar.time))
 
     }
+
+
 
 
 }
