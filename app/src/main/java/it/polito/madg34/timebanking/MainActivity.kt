@@ -1,8 +1,7 @@
 package it.polito.madg34.timebanking
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,6 +11,7 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
         finish()*/
     }
+
 
 
 }

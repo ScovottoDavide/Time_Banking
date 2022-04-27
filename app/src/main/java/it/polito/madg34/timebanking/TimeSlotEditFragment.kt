@@ -3,19 +3,22 @@ package it.polito.madg34.timebanking
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.navGraphViewModels
 import java.text.SimpleDateFormat
 import java.util.*
 
 class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
 
-    val vm by viewModels<TimeSlotViewModel>()
+    val vm by navGraphViewModels<TimeSlotViewModel>(R.id.main)
     private lateinit var  date : TextView;
     private lateinit var button : Button;
     private lateinit var  time : TextView;
@@ -70,12 +73,42 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
             TimePickerDialog(requireContext(), timerPicker,hour, minute, true ).show()
         }
 
-        title.setText(arguments?.getString("title") ?: "" )
-        description.setText(arguments?.getString("description") ?: "")
-        date.setText(arguments?.getString("date") ?: "")
-        time.setText(arguments?.getString("time") ?: "")
-        duration.setText(arguments?.getString("duration") ?: "")
-        location.setText(arguments?.getString("location") ?: "")
+        vm.title_vm.observe(this.viewLifecycleOwner){
+            title.text = "$it"
+        }
+
+        vm.description_vm.observe(this.viewLifecycleOwner){
+            description.text = "$it"
+        }
+        vm.date_vm.observe(this.viewLifecycleOwner){
+            date.text = "$it"
+        }
+        vm.time_vm.observe(this.viewLifecycleOwner){
+            time.text = "$it"
+        }
+        vm.duration_vm.observe(this.viewLifecycleOwner){
+            duration.text = "$it"
+        }
+
+        vm.location_vm.observe(this.viewLifecycleOwner){
+            location.text = "$it"
+        }
+
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                vm.m_title(title.text.toString())
+                Log.d("prova", title.text.toString())
+                vm.m_description(description.text.toString())
+                vm.m_date(date.text.toString())
+                vm.m_time(time.text.toString())
+                vm.m_duration(duration.text.toString())
+                vm.m_location(location.text.toString())
+                if (isEnabled) {
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                }
+            }
+        })
 
 
 
@@ -88,6 +121,8 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
         date.setText(sdf.format(myCalendar.time))
 
     }
+
+
 
 
 
