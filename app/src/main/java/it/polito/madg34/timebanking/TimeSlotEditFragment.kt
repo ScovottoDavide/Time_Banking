@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -15,12 +16,23 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
     val vm by viewModels<TimeSlotViewModel>()
     private lateinit var  date : TextView;
     private lateinit var button : Button;
+    private lateinit var  time : TextView;
+    private lateinit var button_T : Button;
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        button = view.findViewById<Button>(R.id.button)
-        date = view.findViewById<TextView>(R.id.date)
+        button = view.findViewById<Button>(R.id.button1)
+        date = view.findViewById<TextView>(R.id.date_slot_edit)
+        time = view.findViewById<TextView>(R.id.time_slot_edit)
+        button_T = view.findViewById<Button>(R.id.button2)
+
+
+
+        val title = view.findViewById<TextView>(R.id.title_slot_edit)
+        val description = view.findViewById<TextView>(R.id.description_slot_edit)
+        val duration = view.findViewById<TextView>(R.id.duration_slot_edit)
+        val location = view.findViewById<TextView>(R.id.location_slot_edit)
 
         val myCalendar = Calendar.getInstance()
         val datePicker = DatePickerDialog.OnDateSetListener {view , year, month, dayOfMonth ->
