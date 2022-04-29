@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
@@ -20,9 +21,9 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
 
     val vm by navGraphViewModels<TimeSlotViewModel>(R.id.main)
     private lateinit var  date : TextView;
-    private lateinit var button : Button;
+    private lateinit var button : ImageButton;
     private lateinit var  time : TextView;
-    private lateinit var button_T : Button;
+    private lateinit var button_T : ImageButton;
     private lateinit var title : EditText;
     private lateinit var description : EditText;
     private lateinit var duration : EditText;
@@ -37,10 +38,10 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        button = view.findViewById<Button>(R.id.button1)
+        button = view.findViewById<ImageButton>(R.id.button1)
         date = view.findViewById<TextView>(R.id.date_slot_edit)
         time = view.findViewById<TextView>(R.id.time_slot_edit)
-        button_T = view.findViewById<Button>(R.id.button2)
+        button_T = view.findViewById<ImageButton>(R.id.button2)
 
 
 
@@ -97,7 +98,6 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 vm.m_title(title.text.toString())
-                Log.d("prova", title.text.toString())
                 vm.m_description(description.text.toString())
                 vm.m_date(date.text.toString())
                 vm.m_time(time.text.toString())

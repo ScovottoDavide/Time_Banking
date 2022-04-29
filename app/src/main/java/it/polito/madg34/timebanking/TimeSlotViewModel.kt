@@ -14,7 +14,6 @@ class TimeSlotViewModel: ViewModel() {
 
     fun m_title(s: String){
         title_vm.also { it.value = s }
-        Log.d("TAG2", title_vm.value.toString())
 
 
     }
