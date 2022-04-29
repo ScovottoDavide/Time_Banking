@@ -20,6 +20,8 @@ import java.util.*
 class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
 
     val vm by navGraphViewModels<TimeSlotViewModel>(R.id.main)
+
+
     private lateinit var  date : TextView;
     private lateinit var button : ImageButton;
     private lateinit var  time : TextView;

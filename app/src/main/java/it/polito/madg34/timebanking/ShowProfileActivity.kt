@@ -318,7 +318,7 @@ class ShowProfileActivity : AppCompatActivity() {
         resultLauncher.launch(intent)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.pencil_menu, menu)
         return true
