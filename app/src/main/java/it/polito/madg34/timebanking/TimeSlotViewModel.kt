@@ -1,6 +1,7 @@
 package it.polito.madg34.timebanking
 
 import android.util.Log
+import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -33,11 +34,11 @@ class TimeSlotViewModel: ViewModel() {
         _description_vm.also { it.value = s }
     }
 
-    fun m_date(s: String){
+    fun m_date(s: String?){
         _date_vm.also { it.value = s }
     }
 
-    fun m_time(s: String){
+    fun m_time(s: String?){
         _time_vm.also { it.value = s }
     }
 

@@ -5,157 +5,180 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/barTitle2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="@string/barTitle"
+        android:textAppearance="@style/TextAppearance.AppCompat"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
+
+    <TextView
+        android:id="@+id/titleEditService"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="start|center_vertical"
+        android:text="@string/EditService"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar2"
+        app:layout_constraintVertical_chainStyle="spread" />
+
+    <ScrollView
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleEditService">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/textView6"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outlinedTitle"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Title:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+                android:layout_marginBottom="8dp"
+                android:hint="Title"
+                app:boxStrokeWidth="1dp">
 
-            <EditText
-                android:id="@+id/title_slot_edit"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/outlinedTitleFixed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="prova"
+                    android:textColor="#757575" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outlinedDescription"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:minHeight="48dp"
-                android:text="Name"
-                tools:text="Title"
-                />
+                android:hint="Description">
 
-            <TextView
-                android:id="@+id/textView10"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/outlinedDescriptionFixed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="prova"
+                    android:textColor="#757575" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <TableRow
+                android:id="@+id/RowDateTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Description:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+                android:layout_marginBottom="8dp">
 
-            <EditText
-                android:id="@+id/description_slot_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:minHeight="48dp"
-                android:text="Name" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlinedDate"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="190dp"
+                    android:layout_height="wrap_content"
+                    android:hint="Date"
+                    app:startIconDrawable="@android:drawable/ic_menu_my_calendar"
+                    app:startIconCheckable="true">
 
-            <TextView
-                android:id="@+id/textView11"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Date:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/outlinedDateFixed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="prova"
+                        android:textColor="#757575" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <ImageButton
-                    android:id="@+id/button1"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlinedTime"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#5C1BCF"
-                    android:contentDescription="Calendar"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/date_slot_edit"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+                    android:hint="Time"
+                    app:startIconDrawable="@android:drawable/ic_menu_recent_history"
+                    app:startIconCheckable="true">
 
-                <TextView
-                    android:id="@+id/date_slot_edit"
-                    android:layout_width="wrap_content"
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/outlinedTimeFixed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="prova"
+                        android:textColor="#757575" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </TableRow>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outlinedDuration"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:hint="Duration">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/outlinedDurationFixed"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:gravity="bottom"
-                    android:inputType="textPersonName"
-                    android:minHeight="48dp"
-                    android:text="Name"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:text="prova"
+                    android:textColor="#757575" />
 
-            <TextView
-                android:id="@+id/timee"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outlinedLocation"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Time:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+                android:layout_marginBottom="8dp"
+                android:hint="Location">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageButton
-                    android:id="@+id/button2"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/outlinedLocationFixed"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="#5C1BCF"
-                    android:contentDescription="Time"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/time_slot_edit"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@android:drawable/ic_menu_recent_history" />
+                    android:text="prova"
+                    android:textColor="#757575" />
 
-                <TextView
-                    android:id="@+id/time_slot_edit"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:gravity="bottom|start"
-                    android:inputType="textPersonName"
-                    android:minHeight="48dp"
-                    android:text="Name"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <TextView
-                android:id="@+id/textView12"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Duration:"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-
-            <EditText
-                android:id="@+id/duration_slot_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:minHeight="48dp"
-                android:text="Name" />
-
-            <TextView
-                android:id="@+id/textView13"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Location"
-                android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-
-            <EditText
-                android:id="@+id/location_slot_edit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:inputType="textPersonName"
-                android:minHeight="48dp"
-                android:text="Name" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </ScrollView>
 
