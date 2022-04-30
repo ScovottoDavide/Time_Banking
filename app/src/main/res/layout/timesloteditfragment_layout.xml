@@ -73,15 +73,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:hint="Title"
+                android:hint="@string/Title"
                 app:boxStrokeWidth="1dp">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedTitleFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="prova"
-                    android:textColor="#757575" />
+                    android:textColor="#757575"
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -90,15 +90,15 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Description">
+                android:hint="@string/Description">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedDescriptionFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:text="prova"
-                    android:textColor="#757575" />
+                    android:textColor="#757575"
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -113,16 +113,17 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
-                    android:hint="Date"
+                    android:hint="@string/Date"
+                    app:startIconCheckable="true"
                     app:startIconDrawable="@android:drawable/ic_menu_my_calendar"
-                    app:startIconCheckable="true">
+                    app:startIconTint="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/outlinedDateFixed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="prova"
-                        android:textColor="#757575" />
+                        android:textColor="#757575"
+                        tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -131,16 +132,17 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:hint="Time"
+                    android:hint="@string/Time"
+                    app:startIconCheckable="true"
                     app:startIconDrawable="@android:drawable/ic_menu_recent_history"
-                    app:startIconCheckable="true">
+                    app:startIconTint="@color/black">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/outlinedTimeFixed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="prova"
-                        android:textColor="#757575" />
+                        android:textColor="#757575"
+                        tools:ignore="TextContrastCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -152,14 +154,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:hint="Duration">
+                android:hint="@string/Duration">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedDurationFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="prova"
-                    android:textColor="#757575" />
+                    android:textColor="#757575"
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -169,14 +171,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:hint="Location">
+                android:hint="@string/Location"
+                app:startIconDrawable="@drawable/outline_location_on_24"
+                app:startIconTint="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedLocationFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="prova"
-                    android:textColor="#757575" />
+                    android:textColor="#757575"
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>

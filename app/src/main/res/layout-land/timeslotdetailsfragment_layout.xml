@@ -108,8 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
-                    android:textColor="#757575"
-                    tools:ignore="DuplicateSpeakableTextCheck" />
+                    android:textColor="#757575" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -151,7 +150,8 @@
                         android:id="@+id/outlinedTimeFixed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="#757575" />
+                        android:textColor="#757575"
+                        tools:ignore="DuplicateSpeakableTextCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -164,8 +164,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:enabled="false"
-                android:hint="@string/Duration"
-                >
+                android:hint="@string/Duration">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedDurationFixed"

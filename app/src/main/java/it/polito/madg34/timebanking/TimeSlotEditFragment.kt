@@ -48,12 +48,12 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
         super.onCreate(savedInstanceState)
 
         if(savedInstanceState != null) {
-            _title = savedInstanceState?.getString("title").toString()
-            _description = savedInstanceState?.getString("description").toString()
-            _date = savedInstanceState?.getString("date").toString()
-            _time = savedInstanceState?.getString("time").toString()
-            _duration = savedInstanceState?.getString("duration").toString()
-            _location = savedInstanceState?.getString("location").toString()
+            _title = savedInstanceState.getString("title").toString()
+            _description = savedInstanceState.getString("description").toString()
+            _date = savedInstanceState.getString("date").toString()
+            _time = savedInstanceState.getString("time").toString()
+            _duration = savedInstanceState.getString("duration").toString()
+            _location = savedInstanceState.getString("location").toString()
 
             vm.m_title(_title)
             vm.m_description(_description)
@@ -67,12 +67,12 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         halfWidth(view)
-        title = view.findViewById<TextInputEditText>(R.id.outlinedTitleFixed)
-        description = view.findViewById<TextInputEditText>(R.id.outlinedDescriptionFixed)
-        duration = view.findViewById<TextInputEditText>(R.id.outlinedDurationFixed)
-        location = view.findViewById<TextInputEditText>(R.id.outlinedLocationFixed)
-        date = view.findViewById<TextInputLayout>(R.id.outlinedDate)
-        time = view.findViewById<TextInputLayout>(R.id.outlinedTime)
+        title = view.findViewById(R.id.outlinedTitleFixed)
+        description = view.findViewById(R.id.outlinedDescriptionFixed)
+        duration = view.findViewById(R.id.outlinedDurationFixed)
+        location = view.findViewById(R.id.outlinedLocationFixed)
+        date = view.findViewById(R.id.outlinedDate)
+        time = view.findViewById(R.id.outlinedTime)
 
         val myCalendar = Calendar.getInstance()
         val datePicker = DatePickerDialog.OnDateSetListener {_ , year, month, dayOfMonth ->

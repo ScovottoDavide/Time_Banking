@@ -1,15 +1,7 @@
 package it.polito.madg34.timebanking
 
-
-import android.util.Log
-import android.widget.EditText
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
@@ -22,7 +14,7 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
     var sharedPref: SharedPreferences = getApplication<Application>().getSharedPreferences("package it.polito.madg34.timebanking.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
     private var  gson : Gson = Gson()
 
-
+    //val p = clear()
 
     var _title_vm = MutableLiveData<String>().also{
         if(sharedPref.contains("title")){
@@ -98,7 +90,7 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
         sharedPref.edit().putString("location",serialized).apply()
     }
 
-
-
-
+    fun clear(){
+        sharedPref.edit().clear().apply()
+    }
 }

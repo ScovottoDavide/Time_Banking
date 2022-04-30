@@ -35,16 +35,16 @@
         app:layout_constraintVertical_bias="0.022" />
 
     <TextView
-        android:id="@+id/titlleEditService"
+        android:id="@+id/titleEditService"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="start|center_vertical"
-        android:text="@string/OfferedService"
+        android:text="@string/EditService"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollViewService"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,30 +52,20 @@
         app:layout_constraintVertical_chainStyle="spread" />
 
     <ScrollView
-        android:id="@+id/scrollViewService"
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titlleEditService">
+        app:layout_constraintTop_toBottomOf="@+id/titleEditService">
 
         <LinearLayout
-            android:id="@+id/LinearL"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toolbar2">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedTitle"
@@ -83,7 +73,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:enabled="false"
                 android:hint="@string/Title"
                 app:boxStrokeWidth="1dp">
 
@@ -91,7 +80,8 @@
                     android:id="@+id/outlinedTitleFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#757575" />
+                    android:textColor="#757575"
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -100,7 +90,6 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
                 android:hint="@string/Description">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -109,7 +98,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:textColor="#757575"
-                    tools:ignore="DuplicateSpeakableTextCheck" />
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -124,8 +113,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:hint="@string/Date"
+                    app:startIconCheckable="true"
                     app:startIconDrawable="@android:drawable/ic_menu_my_calendar"
                     app:startIconTint="@color/black">
 
@@ -133,7 +122,8 @@
                         android:id="@+id/outlinedDateFixed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="#757575" />
+                        android:textColor="#757575"
+                        tools:ignore="TextContrastCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -142,8 +132,8 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:hint="@string/Time"
+                    app:startIconCheckable="true"
                     app:startIconDrawable="@android:drawable/ic_menu_recent_history"
                     app:startIconTint="@color/black">
 
@@ -151,7 +141,8 @@
                         android:id="@+id/outlinedTimeFixed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="#757575" />
+                        android:textColor="#757575"
+                        tools:ignore="TextContrastCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -163,15 +154,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:enabled="false"
-                android:hint="@string/Duration"
-                >
+                android:hint="@string/Duration">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedDurationFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#757575" />
+                    android:textColor="#757575"
+                    tools:ignore="TextContrastCheck,TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -181,7 +171,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:enabled="false"
                 android:hint="@string/Location"
                 app:startIconDrawable="@drawable/outline_location_on_24"
                 app:startIconTint="@color/black">
@@ -190,10 +179,11 @@
                     android:id="@+id/outlinedLocationFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#757575" />
+                    android:textColor="#757575"
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
     </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
