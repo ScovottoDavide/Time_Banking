@@ -29,7 +29,8 @@
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
                 android:text="Name"
-                tools:text="Title" />
+                tools:text="Title"
+                />
 
             <TextView
                 android:id="@+id/textView10"

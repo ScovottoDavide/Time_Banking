@@ -3,16 +3,19 @@ package it.polito.madg34.timebanking
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
-import android.util.Log
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
+import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.core.widget.doAfterTextChanged
+import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
 import androidx.navigation.navGraphViewModels
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,6 +23,14 @@ import java.util.*
 class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
 
     val vm by navGraphViewModels<TimeSlotViewModel>(R.id.main)
+
+    private lateinit var  _date : String;
+    private lateinit var  _time : String;
+    private lateinit var _title : String;
+    private lateinit var _description : String;
+    private lateinit var _duration : String;
+    private lateinit var _location : String;
+
 
 
     private lateinit var  date : TextView;
@@ -37,20 +48,47 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
     private  var hour = 0;
     private  var minute = 0;
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        if(savedInstanceState != null) {
+            _title = savedInstanceState?.getString("title").toString()
+            _description = savedInstanceState?.getString("description").toString()
+            _date = savedInstanceState?.getString("date").toString()
+            _time = savedInstanceState?.getString("time").toString()
+            _duration = savedInstanceState?.getString("duration").toString()
+            _location = savedInstanceState?.getString("location").toString()
+
+            vm.m_title(_title)
+            vm.m_description(_description)
+            vm.m_date(_date)
+            vm.m_time(_time)
+            vm.m_duration(_duration)
+            vm.m_location(_location)
+        }
+
+    }
+
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         button = view.findViewById<ImageButton>(R.id.button1)
-        date = view.findViewById<TextView>(R.id.date_slot_edit)
-        time = view.findViewById<TextView>(R.id.time_slot_edit)
+
         button_T = view.findViewById<ImageButton>(R.id.button2)
 
 
 
-        val title = view.findViewById<TextView>(R.id.title_slot_edit)
-        val description = view.findViewById<TextView>(R.id.description_slot_edit)
-        val duration = view.findViewById<TextView>(R.id.duration_slot_edit)
-        val location = view.findViewById<TextView>(R.id.location_slot_edit)
+        title = view.findViewById<EditText>(R.id.title_slot_edit)
+        description = view.findViewById<EditText>(R.id.description_slot_edit)
+        duration = view.findViewById<EditText>(R.id.duration_slot_edit)
+        location = view.findViewById<EditText>(R.id.location_slot_edit)
+        date = view.findViewById<TextView>(R.id.date_slot_edit)
+        time = view.findViewById<TextView>(R.id.time_slot_edit)
+
+
 
         val myCalendar = Calendar.getInstance()
         val datePicker = DatePickerDialog.OnDateSetListener {view , year, month, dayOfMonth ->
@@ -77,25 +115,33 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
         }
 
         vm.title_vm.observe(this.viewLifecycleOwner){
-            title.text = "$it"
+            title.setText("$it")
         }
 
         vm.description_vm.observe(this.viewLifecycleOwner){
-            description.text = "$it"
+            description.setText("$it")
         }
         vm.date_vm.observe(this.viewLifecycleOwner){
-            date.text = "$it"
+            date.setText("$it")
         }
         vm.time_vm.observe(this.viewLifecycleOwner){
-            time.text = "$it"
+            time.setText("$it")
         }
         vm.duration_vm.observe(this.viewLifecycleOwner){
-            duration.text = "$it"
+            duration.setText("$it")
         }
 
         vm.location_vm.observe(this.viewLifecycleOwner){
-            location.text = "$it"
+            location.setText("$it")
         }
+
+
+
+
+
+
+
+
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
@@ -117,6 +163,7 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
 
     }
 
+
     private fun updateLable(myCalendar: Calendar) {
         val myFormat = "dd-MM-yyyy"
         val sdf = SimpleDateFormat(myFormat, Locale.ITALY)
@@ -124,7 +171,16 @@ class TimeSlotEditFragment: Fragment(R.layout.timesloteditfragment_layout) {
 
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("title", title.text.toString())
+        outState.putString("description", description.text.toString())
+        outState.putString("date", date.text.toString())
+        outState.putString("time", time.text.toString())
+        outState.putString("duration", duration.text.toString())
+        outState.putString("location", location.text.toString())
 
+    }
 
 
 

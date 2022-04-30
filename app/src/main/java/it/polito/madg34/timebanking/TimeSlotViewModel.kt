@@ -4,6 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class TimeSlotViewModel: ViewModel() {
 
@@ -23,7 +26,7 @@ class TimeSlotViewModel: ViewModel() {
     val location_vm : LiveData<String> = _location_vm
 
     fun m_title(s: String){
-        _title_vm.also { it.value = s }
+        _title_vm.value = s
     }
 
     fun m_description(s: String){
@@ -45,6 +48,8 @@ class TimeSlotViewModel: ViewModel() {
     fun m_location(s: String){
         _location_vm.also { it.value = s }
     }
+
+
 
 
 }
