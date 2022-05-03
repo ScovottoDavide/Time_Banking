@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    app:startDestination="@id/timeSlotDetailsFragment">
+    app:startDestination="@id/timeSlotListFragment">
 
     <fragment
         android:id="@+id/timeSlotDetailsFragment"
@@ -15,6 +15,9 @@
             app:enterAnim="@anim/slide_in"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out"/>
+        <action
+            android:id="@+id/action_timeSlotDetailsFragment_to_timeSlotListFragment"
+            app:destination="@id/timeSlotListFragment" />
     </fragment>
     <fragment
         android:id="@+id/timeSlotEditFragment"
@@ -23,6 +26,26 @@
         <action
             android:id="@+id/action_timeSlotEditFragment_to_timeSlotDetailsFragment2"
             app:destination="@id/timeSlotDetailsFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
+        <action
+            android:id="@+id/action_timeSlotEditFragment_to_timeSlotListFragment"
+            app:destination="@id/timeSlotListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/timeSlotListFragment"
+        android:name="it.polito.madg34.timebanking.TimeSlotListFragment"
+        android:label="TimeSlotListFragment" >
+        <action
+            android:id="@+id/action_timeSlotListFragment_to_timeSlotDetailsFragment2"
+            app:destination="@id/timeSlotDetailsFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
+        <action
+            android:id="@+id/action_timeSlotListFragment_to_timeSlotEditFragment2"
+            app:destination="@id/timeSlotEditFragment"
             app:enterAnim="@anim/slide_in"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out"/>

@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toolbar
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -18,6 +19,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import java.time.LocalDate
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 class TimeSlotDetailsFragment : Fragment() {
 
@@ -40,6 +44,10 @@ class TimeSlotDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         halfWidth(view)
+
+        val bundle = arguments
+        val item : TimeSlot? = vm.listServices.value?.get(bundle?.getInt("index")!!)
+
         val title = view.findViewById<TextInputEditText>(R.id.outlinedTitleFixed)
         val description = view.findViewById<TextInputEditText>(R.id.outlinedDescriptionFixed)
         val date = view.findViewById<TextInputEditText>(R.id.outlinedDateFixed)
@@ -47,33 +55,32 @@ class TimeSlotDetailsFragment : Fragment() {
         val duration = view.findViewById<TextInputEditText>(R.id.outlinedDurationFixed)
         val location = view.findViewById<TextInputEditText>(R.id.outlinedLocationFixed)
 
-        vm.title_vm.observe(this.viewLifecycleOwner){
-            title.setText(it)
-            Log.d("TAG", title.text.toString())
+        // Observe in order to get automatically the updated values
+        vm.listServices.observe(this.viewLifecycleOwner){
+            title.setText(item?.title)
+            description.setText(item?.description)
+            date.setText(item?.date)
+            time.setText(item?.time)
+            duration.setText(item?.duration)
+            location.setText(item?.location)
         }
 
-        vm.description_vm.observe(this.viewLifecycleOwner){
-            description.setText(it)
-        }
-        vm.date_vm.observe(this.viewLifecycleOwner){
-            date.setText(it)
-        }
-        vm.time_vm.observe(this.viewLifecycleOwner){
-            time.setText(it)
-        }
-        vm.duration_vm.observe(this.viewLifecycleOwner){
-            duration.setText(it)
-        }
-
-        vm.location_vm.observe(this.viewLifecycleOwner){
-            location.setText(it)
-        }
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                vm.saveServices(vm.listServices.value!!)
+                if (isEnabled) {
+                    isEnabled = false
+                    requireActivity().onBackPressed()
+                }
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.pencil -> {
-                findNavController().navigate(R.id.action_timeSlotDetailsFragment_to_timeSlotEditFragment)
+                val bundle = arguments
+                findNavController().navigate(R.id.action_timeSlotDetailsFragment_to_timeSlotEditFragment, bundle)
                 true
             }
             else -> super.onOptionsItemSelected(item)
