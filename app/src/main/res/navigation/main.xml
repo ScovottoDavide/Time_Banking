@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
-    app:startDestination="@id/showProfileFragment">
+    app:startDestination="@id/timeSlotListFragment">
 
     <fragment
         android:id="@+id/timeSlotDetailsFragment"
@@ -16,7 +16,10 @@
             app:popExitAnim="@anim/slide_out"/>
         <action
             android:id="@+id/action_timeSlotDetailsFragment_to_timeSlotListFragment"
-            app:destination="@id/timeSlotListFragment" />
+            app:destination="@id/timeSlotListFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
     </fragment>
     <fragment
         android:id="@+id/timeSlotEditFragment"
@@ -30,7 +33,10 @@
             app:popExitAnim="@anim/slide_out"/>
         <action
             android:id="@+id/action_timeSlotEditFragment_to_timeSlotListFragment"
-            app:destination="@id/timeSlotListFragment" />
+            app:destination="@id/timeSlotListFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
     </fragment>
     <fragment
         android:id="@+id/timeSlotListFragment"
@@ -50,7 +56,10 @@
             app:popExitAnim="@anim/slide_out"/>
         <action
             android:id="@+id/action_timeSlotListFragment_to_showProfileFragment"
-            app:destination="@id/showProfileFragment" />
+            app:destination="@id/showProfileFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
     </fragment>
     <fragment
         android:id="@+id/showProfileFragment"
@@ -58,10 +67,16 @@
         android:label="@string/app_name" >
         <action
             android:id="@+id/action_showProfileFragment_to_editProfileFragment"
-            app:destination="@id/editProfileFragment" />
+            app:destination="@id/editProfileFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
         <action
             android:id="@+id/action_showProfileFragment_to_timeSlotListFragment"
-            app:destination="@id/timeSlotListFragment" />
+            app:destination="@id/timeSlotListFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
@@ -69,9 +84,16 @@
         android:label="@string/app_name" >
         <action
             android:id="@+id/action_editProfileFragment_to_addSkillFragment"
-            app:destination="@id/addSkillFragment" />
+            app:destination="@id/addSkillFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
         <action
             android:id="@+id/action_editProfileFragment_to_editSkillFragment"
+            android:label="@string/app_name"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
             app:destination="@id/editSkillFragment" />
     </fragment>
     <fragment
