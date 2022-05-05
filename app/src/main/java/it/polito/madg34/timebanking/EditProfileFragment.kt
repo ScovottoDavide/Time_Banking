@@ -1,8 +1,12 @@
 package it.polito.madg34.timebanking
 
+import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.ContextWrapper
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
@@ -10,6 +14,7 @@ import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
@@ -17,12 +22,17 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
+import java.io.*
 
 class EditProfileFragment : Fragment() {
     val vm by navGraphViewModels<ProfileViewModel>(R.id.main)
 
     private var h = 0
     private var w = 0
+    private lateinit var bitmap: Bitmap
+    private  var uri: Uri? = null
+
+
 
     private lateinit var takePicture: ActivityResultLauncher<Intent>
     private lateinit var takePictureGallery: ActivityResultLauncher<String>
@@ -60,11 +70,18 @@ class EditProfileFragment : Fragment() {
                 } else {
                     false
                 }
+
             })
+
+
             popupMenu.show()
         })
+
         return view
     }
+
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -77,21 +94,68 @@ class EditProfileFragment : Fragment() {
         val email = view.findViewById<EditText>(R.id.editTextTextEmailAddress)
         val location = view.findViewById<EditText>(R.id.editTextLocation)
         val userDesc = view.findViewById<EditText>(R.id.userDesc)
+        val userImage = view.findViewById<ImageView>(R.id.userImage)
 
         fullName.setText(item?.fullName)
         nickname.setText(item?.nickname)
         email.setText(item?.email)
         location.setText(item?.location)
         userDesc.setText(item?.aboutUser)
+        userImage.setImageURI(Uri.parse(item?.img))
         var indexName = 100
         var indexDesc = -100
         item?.skills?.toSortedMap()?.forEach {
             setSkills(it.key, it.value, indexName++, indexDesc--, view)
         }
 
-        takePictureGallery = registerForActivityResult(ActivityResultContracts.GetContent()) {}
-        takePicture =
-            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result -> }
+
+        takePictureGallery = registerForActivityResult(ActivityResultContracts.GetContent()) {
+            if(it != null) uri = it
+            else return@registerForActivityResult
+            /** SAVE THE IMAGE IN THE INTERNAL STORAGE **/
+            bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
+            val wrapper = ContextWrapper(activity?.applicationContext)
+            var file = wrapper.getDir("Images", AppCompatActivity.MODE_PRIVATE) // NEED ROOT ACCESS TO SEE IT ON THE PHONE
+
+            file = File(file, "GalleryPhoto"+".jpg")
+
+            try{
+                val stream: OutputStream?
+                stream = FileOutputStream(file)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
+                stream.flush()
+                stream.close()
+                val path: String = file.absolutePath
+                uri = Uri.parse(file.absolutePath)
+                userImage.setImageURI(null);
+                userImage.setImageURI(uri)
+
+
+            }catch (e : IOException){
+                e.printStackTrace()
+            }
+        }
+
+
+        takePicture =registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                bitmap = result?.data?.extras?.get("data") as Bitmap
+                val bytes = ByteArrayOutputStream()
+                bitmap.compress(
+                    Bitmap.CompressFormat.JPEG,
+                    100,
+                    bytes
+                ) // Used for compression rate of the Image : 100 means no compression
+
+                val path: String =
+                    MediaStore.Images.Media.insertImage(activity?.contentResolver, bitmap, "xyz", null)
+                uri = Uri.parse(path)
+                userImage.setImageURI(uri)
+
+            }
+
+        }
+
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
@@ -103,7 +167,7 @@ class EditProfileFragment : Fragment() {
                         this.email = email.text.toString()
                         this.location = location.text.toString()
                         this.aboutUser = userDesc.text.toString()
-                        //it.img = location.text.toString()
+                        if(uri!=null) this.img = uri?.toString()
                     }
                     vm.saveServices(vm.profile.value!!)
                     if (isEnabled) {
@@ -114,10 +178,19 @@ class EditProfileFragment : Fragment() {
             })
 
         constantScreenLayoutOnScrolling(view)
+
+
+
+
+
+
         val buttonAddSkill = view.findViewById<TextView>(R.id.textSkills)
+
         buttonAddSkill.setOnClickListener {
             findNavController().navigate(R.id.action_editProfileFragment_to_addSkillFragment)
+
         }
+
     }
 
     private fun setSkills(
@@ -237,6 +310,7 @@ class EditProfileFragment : Fragment() {
                 bundle
             )
         }
+
     }
 
     private fun dispatchTakePictureIntent() {

@@ -1,6 +1,7 @@
 package it.polito.madg34.timebanking
 
 import android.content.res.Configuration
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.*
@@ -56,7 +57,7 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
             emailView.text = item?.email
             myLocationView.text = item?.location
             userDesc.text = item?.aboutUser
-            //img_view.setImageURI(item?.img)
+            img_view.setImageURI(Uri.parse(item?.img))
             item?.skills?.forEach {
                 setSkills(it.key, it.value, view)
             }
