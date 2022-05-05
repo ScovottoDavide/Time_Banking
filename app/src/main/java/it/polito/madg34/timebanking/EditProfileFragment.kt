@@ -101,7 +101,10 @@ class EditProfileFragment : Fragment() {
         email.setText(item?.email)
         location.setText(item?.location)
         userDesc.setText(item?.aboutUser)
-        userImage.setImageURI(Uri.parse(item?.img))
+        if(item?.img != null)
+            userImage.setImageURI(Uri.parse(item.img))
+        else userImage.setImageResource(R.drawable.user)
+
         var indexName = 100
         var indexDesc = -100
         item?.skills?.toSortedMap()?.forEach {
