@@ -17,9 +17,9 @@ class TimeSlotListFragment : Fragment() {
     lateinit var timeSlotsRV: RecyclerView
     lateinit var emptyView : TextView
 
-   /*private val services: MutableList<TimeSlot> = mutableListOf(
+   private val services: MutableList<TimeSlot> = mutableListOf(
         TimeSlot("uno", "prova", "04-05-2022", "00:06", "1 Hour", "Torino")
-   )*/
+   )
     /*private val services: MutableList<TimeSlot> = mutableListOf(
         TimeSlot("", "", "", "", "", "")
     )*/
@@ -33,7 +33,7 @@ class TimeSlotListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //vm._listServices.value = services
+        vm._listServices.value = services
         //vm.saveServices(vm.listServices.value!!)
 
         if(vm.listServices.value?.size != null){

@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
+        android:id="@+id/scrollViewShow"
+        style="@android:style/Widget.Holo.ScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:id="@+id/LinearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/my_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                app:titleMarginStart="120dp"
+                app:titleTextColor="@color/white" />
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imageUsr"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/picutureTest"
+                android:src="@drawable/user_icon"
+                app:civ_border_color="#FF000000"
+                app:civ_border_width="1dp" />
+
+
+            <TextView
+                android:id="@+id/AccountInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="sans-serif-black"
+                android:text="@string/accInfo"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                android:textSize="20sp"
+                android:textStyle="italic" />
+
+            <LinearLayout
+                android:id="@+id/LinearLayoutShow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/fullName"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/fullName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/outline_perm_identity_24" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp" />
+
+                <TextView
+                    android:id="@+id/textNickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/nickname"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/nickName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/baseline_face_24" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp" />
+
+                <TextView
+                    android:id="@+id/textEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/email"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/outline_email_24" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp" />
+
+                <TextView
+                    android:id="@+id/textLocation"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/location"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="16sp"
+                    app:drawableStartCompat="@drawable/outline_location_on_24" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp" />
+
+                <TextView
+                    android:id="@+id/aboutUser"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/aboutMe"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/userDesc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="16sp" />
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/materialDivider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp" />
+
+                <TextView
+                    android:id="@+id/skills"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/skills"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
+
+                <LinearLayout
+                    android:id="@+id/lastLinear"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:orientation="vertical">
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

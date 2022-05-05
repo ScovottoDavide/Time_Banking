@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    app:startDestination="@id/timeSlotListFragment">
+    app:startDestination="@id/showProfileFragment">
 
     <fragment
         android:id="@+id/timeSlotDetailsFragment"
@@ -50,4 +50,31 @@
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out"/>
     </fragment>
+    <fragment
+        android:id="@+id/showProfileFragment"
+        android:name="it.polito.madg34.timebanking.ShowProfileFragment"
+        android:label="ShowProfileFragment" >
+        <action
+            android:id="@+id/action_showProfileFragment_to_editProfileFragment"
+            app:destination="@id/editProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="it.polito.madg34.timebanking.EditProfileFragment"
+        android:label="EditProfileFragment" >
+        <action
+            android:id="@+id/action_editProfileFragment_to_addSkillFragment"
+            app:destination="@id/addSkillFragment" />
+        <action
+            android:id="@+id/action_editProfileFragment_to_editSkillFragment"
+            app:destination="@id/editSkillFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addSkillFragment"
+        android:name="it.polito.madg34.timebanking.AddSkillFragment"
+        android:label="AddSkillFragment" />
+    <fragment
+        android:id="@+id/editSkillFragment"
+        android:name="it.polito.madg34.timebanking.EditSkillFragment"
+        android:label="EditSkillFragment" />
 </navigation>
