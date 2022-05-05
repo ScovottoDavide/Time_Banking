@@ -90,11 +90,9 @@
             app:popExitAnim="@anim/slide_out"/>
         <action
             android:id="@+id/action_editProfileFragment_to_editSkillFragment"
-            android:label="@string/app_name"
-            app:enterAnim="@anim/slide_in"
-            app:popEnterAnim="@anim/fade_in"
-            app:popExitAnim="@anim/slide_out"/>
-            app:destination="@id/editSkillFragment" />
+            app:destination="@id/editSkillFragment" /><![CDATA[
+        app:destination="@id/editSkillFragment" />
+    ]]>
     </fragment>
     <fragment
         android:id="@+id/addSkillFragment"
