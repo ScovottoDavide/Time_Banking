@@ -178,14 +178,7 @@ class EditProfileFragment : Fragment() {
             })
 
         constantScreenLayoutOnScrolling(view)
-
-
-
-
-
-
         val buttonAddSkill = view.findViewById<TextView>(R.id.textSkills)
-
         buttonAddSkill.setOnClickListener {
             findNavController().navigate(R.id.action_editProfileFragment_to_addSkillFragment)
 

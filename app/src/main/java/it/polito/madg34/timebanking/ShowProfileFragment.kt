@@ -57,7 +57,10 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
             emailView.text = item?.email
             myLocationView.text = item?.location
             userDesc.text = item?.aboutUser
-            img_view.setImageURI(Uri.parse(item?.img))
+            if(item?.img == null)
+                img_view.setImageResource(R.drawable.user)
+            else
+                img_view.setImageURI(Uri.parse(item?.img))
             item?.skills?.forEach {
                 setSkills(it.key, it.value, view)
             }
