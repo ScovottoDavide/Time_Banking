@@ -3,6 +3,7 @@ package it.polito.madg34.timebanking
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,14 +18,18 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     //val p = clear()
 
+
     var _profile = MutableLiveData<ProfileUser>().also{
         if(sharedPref.contains("ProfileUser")){
             val type : Type = object : TypeToken<ProfileUser>() {}.type
-            it.value = gson.fromJson(sharedPref.getString("listServices", null), type)
+            it.value = gson.fromJson(sharedPref.getString("ProfileUser", null), type)
+
         }
     }
 
     var profile : LiveData<ProfileUser> = _profile
+
+
     fun saveServices(v : ProfileUser){
         _profile.value = v
         val serialized = gson.toJson(v)

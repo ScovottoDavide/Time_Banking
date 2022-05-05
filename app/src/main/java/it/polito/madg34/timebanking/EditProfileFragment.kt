@@ -1,29 +1,124 @@
 package it.polito.madg34.timebanking
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.View
-import android.view.ViewTreeObserver
-import android.widget.FrameLayout
-import android.widget.ImageView
-import android.widget.ScrollView
-import android.widget.TextView
+import android.provider.MediaStore
+import android.view.*
+import android.widget.*
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.github.florent37.expansionpanel.ExpansionHeader
+import com.github.florent37.expansionpanel.ExpansionLayout
 
-class EditProfileFragment : Fragment(R.layout.editprofilefragment_layout) {
+class EditProfileFragment : Fragment() {
     val vm by navGraphViewModels<ProfileViewModel>(R.id.main)
 
     private var h = 0
     private var w = 0
 
+    private lateinit var takePicture: ActivityResultLauncher<Intent>
+    private lateinit var takePictureGallery: ActivityResultLauncher<String>
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.editprofilefragment_layout, container, false)
+
+        val buttonPopup = view.findViewById<ImageButton>(R.id.plus)
+        buttonPopup.setOnClickListener(View.OnClickListener() {
+            val popupMenu = PopupMenu(context,buttonPopup)
+            popupMenu.menuInflater.inflate(R.menu.popup_menu, popupMenu.menu)
+
+            popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
+                if (item != null) {
+                     when (item.itemId) {
+                        R.id.select -> {
+                            dispatchTakeGalleryPictureIntent()
+                            true
+                        }
+                        R.id.camera -> {
+                            dispatchTakePictureIntent()
+                            true
+                        }
+                        else -> super.onOptionsItemSelected(item)
+
+                    }
+                } else {
+                     false
+                }
+
+            })
+
+
+            popupMenu.show()
+        })
+
+        return view
+    }
+
+
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //val bundle : Bundle? = arguments
+        val item : ProfileUser? = vm.profile.value
+
+        val fullName = view.findViewById<EditText>(R.id.editTextTextPersonName)
+        val nickname = view.findViewById<EditText>(R.id.editTextTextPersonName3)
+        val email = view.findViewById<EditText>(R.id.editTextTextEmailAddress)
+        val location = view.findViewById<EditText>(R.id.editTextLocation)
+        val userDesc = view.findViewById<EditText>(R.id.userDesc)
+
+        fullName.setText(item?.fullName)
+        nickname.setText(item?.nickname)
+        email.setText(item?.email)
+        location.setText(item?.location)
+        userDesc.setText(item?.aboutUser)
+        var indexName = 100
+        var indexDesc = -100
+        item?.skills?.toSortedMap()?.forEach {
+            setSkills(it.key, it.value, indexName++, indexDesc--, view)
+        }
+
+
+        takePictureGallery = registerForActivityResult(ActivityResultContracts.GetContent()) {}
+        takePicture =registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->}
+
+
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    vm.profile.value?.also {
+                            it.also {
+                                it.fullName = fullName.text.toString()
+                                it.nickname = nickname.text.toString()
+                                it.email = email.text.toString()
+                                it.location = location.text.toString()
+                                it.aboutUser = userDesc.text.toString()
+                                //it.img = location.text.toString()
+                        }
+                    }
+                    vm.saveServices(vm.profile.value!!)
+                    if (isEnabled) {
+                        isEnabled = false
+                        requireActivity().onBackPressed()
+                    }
+                }
+            })
+
         constantScreenLayoutOnScrolling(view)
+
+
+
 
 
 
@@ -38,6 +133,133 @@ class EditProfileFragment : Fragment(R.layout.editprofilefragment_layout) {
 
 
 
+    private fun setSkills(skill: String, description: String, indexName: Int, indexDesc: Int, view: View) {
+        val linearLayout = view.findViewById<LinearLayout>(R.id.lastLinear)
+
+        val expH = ExpansionHeader(linearLayout.context)
+        val arrow = ImageView(linearLayout.context)
+        val tv = TextView(linearLayout.context)
+        val pencil = ImageButton(linearLayout.context)
+
+        /** 1. Set expansion header layout params **/
+        val expHLayoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        expH.layoutParams = expHLayoutParams
+        expH.isToggleOnClick = true
+
+        /** Prepate the textView to be inserted in the Expansion Header **/
+        tv.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            marginStart = 80
+            topMargin = 20
+        }
+        tv.id = indexName
+        tv.text = skill
+        tv.textSize = 20F
+        tv.setTextAppearance(
+            activity,
+            com.google.android.material.R.style.TextAppearance_AppCompat_Medium
+        )
+
+        /** Prepare the arrow to be placed along with the text in the Expansion Header**/
+        arrow.setImageResource(com.github.florent37.expansionpanel.R.drawable.ic_expansion_header_indicator_grey_24dp)
+        /** Margin to place the arrows **/
+        val wid =
+            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 2600 else 1850
+        val arrowLayoutParams = LinearLayout.LayoutParams(
+            wid,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        arrowLayoutParams.gravity = Gravity.CENTER_VERTICAL or Gravity.END
+
+
+        /** Allow the user to modify the skill **/
+        pencil.setImageResource(R.drawable.outline_edit_24)
+        pencil.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
+            bottomMargin=5
+        }
+        pencil.setBackgroundColor(getResources().getColor(R.color.white))
+
+        /** Add the Text and the Arrow to build the header of each skill **/
+        expH.addView(arrow, arrowLayoutParams)
+        expH.addView(tv)
+        expH.addView(pencil)
+
+        /** Prepare the layout for the description **/
+        val layout = ExpansionLayout(activity)
+        layout.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            marginStart = 20
+        }
+
+        /** Text View for the description **/
+        val expansionText = TextView(activity)
+        expansionText.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply { marginStart = 5 }
+        expansionText.id = indexDesc
+        expansionText.setTextAppearance(
+            activity,
+            com.google.android.material.R.style.TextAppearance_AppCompat_Body1
+        )
+        expansionText.textSize = 15F
+        expansionText.text = description
+
+        /** Add the Text to the expandable layout **/
+        layout.addView(expansionText)
+
+        /** Add all to the parent, which is the last layout **/
+        linearLayout.addView(expH)
+        linearLayout.addView(layout)
+
+        /** To let the description appear and the arrow rotate **/
+        arrow.setOnClickListener {
+            layout.toggle(true)
+            if (layout.isExpanded)
+                arrow.rotation = 90F
+            else arrow.rotation = 0F
+        }
+
+        pencil.setOnClickListener {
+            var bundle = bundleOf("skillDescIndex" to indexDesc,
+                "skillIndex" to indexName,
+                "skillOld" to  skill,
+                "skillName" to  skill,
+                "skillDescription" to description)
+
+
+            findNavController().navigate(R.id.action_editProfileFragment_to_editSkillFragment, bundle)
+
+        }
+
+    }
+
+    private fun dispatchTakePictureIntent() {
+
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        try {
+            takePicture.launch(takePictureIntent)
+        } catch (e: ActivityNotFoundException) {
+            // display error state to the user
+            e.printStackTrace()
+        }
+    }
+
+    private fun dispatchTakeGalleryPictureIntent() {
+        try {
+            takePictureGallery.launch("image/*")
+        } catch (e: ActivityNotFoundException) {
+            e.printStackTrace()
+        }
+
+    }
 
 
     private fun constantScreenLayoutOnScrolling(view: View) {
@@ -64,3 +286,5 @@ class EditProfileFragment : Fragment(R.layout.editprofilefragment_layout) {
     }
 
 }
+
+

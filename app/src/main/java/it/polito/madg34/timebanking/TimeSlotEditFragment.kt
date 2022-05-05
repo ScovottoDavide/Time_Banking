@@ -91,6 +91,7 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
         duration.setText(item?.duration.toString())
         location.setText(item?.location)
 
+
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {

@@ -8,6 +8,8 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.github.florent37.expansionpanel.ExpansionHeader
+import com.github.florent37.expansionpanel.ExpansionLayout
 
 class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
     val vm by navGraphViewModels<ProfileViewModel>(R.id.main)
@@ -15,12 +17,14 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
     private var h = 0
     private var w = 0
 
-    /*lateinit var fullNameView: TextView
+    lateinit var fullNameView: TextView
     lateinit var nicknameView: TextView
     lateinit var emailView: TextView
     lateinit var myLocationView: TextView
     lateinit var userDesc : TextView
-    lateinit var img_view: ImageView*/
+    lateinit var img_view: ImageView
+
+    private val prova : ProfileUser = ProfileUser(null, "Ciao", "prova", "dddd", "dddd","CCC", mutableMapOf("Ciao" to "Ciao"))
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.showprofilefragment_layout, container, false)
@@ -32,7 +36,7 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-       /* //val bundle : Bundle? = arguments
+        vm._profile.value = prova
         val item : ProfileUser? = vm.profile.value
 
         fullNameView = view.findViewById(R.id.fullName)
@@ -49,7 +53,10 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
             myLocationView.text = item?.location
             userDesc.text = item?.aboutUser
             //img_view.setImageURI(item?.img)
-        }*/
+            item?.skills?.forEach {
+                setSkills(it.key, it.value, view)
+            }
+        }
 
 
 
@@ -57,6 +64,85 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
         constantScreenLayoutOnScrolling(view)
 
 
+
+    }
+
+    private fun setSkills(skill: String, description: String, view: View) {
+        val linearLayout = view.findViewById<LinearLayout>(R.id.lastLinear)
+
+        val expH = ExpansionHeader(linearLayout.context)
+        val arrow = ImageView(linearLayout.context)
+        val tv = TextView(linearLayout.context)
+
+        /** 1. Set expansion header layout params **/
+        val expHLayoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        expH.layoutParams = expHLayoutParams
+        expH.isToggleOnClick = true
+
+        /** Prepate the textView to be inserted in the Expansion Header **/
+        tv.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            marginStart = 12
+            topMargin = 8
+        }
+        tv.text = skill
+        tv.textSize = 20F
+        tv.setTextAppearance(activity, com.google.android.material.R.style.TextAppearance_AppCompat_Body2)
+
+        /** Prepare the arrow to be placed along with the text in the Expansion Header**/
+        arrow.setImageResource(com.github.florent37.expansionpanel.R.drawable.ic_expansion_header_indicator_grey_24dp)
+        /** Margin to place the arrows **/
+        val wid = if(resources.configuration.orientation==Configuration.ORIENTATION_LANDSCAPE) 2600 else 1850
+        val arrowLayoutParams = LinearLayout.LayoutParams(
+            wid,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        )
+        arrowLayoutParams.gravity = Gravity.CENTER_VERTICAL or Gravity.END
+
+        /** Add the Text and the Arrow to build the header of each skill **/
+        expH.addView(arrow, arrowLayoutParams)
+        expH.addView(tv)
+        //expH.addView(arrow)
+
+        /** Prepare the layout for the description **/
+        val layout = ExpansionLayout(activity)
+        layout.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            marginStart = 10
+        }
+
+        /** Text View for the description **/
+        val expansionText = TextView(activity)
+        expansionText.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply { marginStart = 5 }
+        expansionText.id = layout.id
+        expansionText.setTextAppearance(activity, com.google.android.material.R.style.TextAppearance_AppCompat_Body1)
+        expansionText.textSize = 15F
+        expansionText.text = description
+
+        /** Add the Text to the expandable layout **/
+        layout.addView(expansionText)
+
+        /** Add all to the parent, which is the last layout **/
+        linearLayout.addView(expH)
+        linearLayout.addView(layout)
+
+        /** To let the description appear and the arrow rotate **/
+        arrow.setOnClickListener {
+            layout.toggle(true)
+            if (layout.isExpanded)
+                arrow.rotation = 90F
+            else arrow.rotation = 0F
+        }
 
     }
 
