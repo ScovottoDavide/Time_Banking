@@ -29,7 +29,7 @@ class AddSkillFragment: Fragment(R.layout.addskillfragment_layout) {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if(!skillName.text.isEmpty()){
+                    if(skillName.text.isNotEmpty()){
                         if(skillDesc.text.isEmpty())
                             item?.skills?.set(skillName.text.toString(), "No description")
                         else
