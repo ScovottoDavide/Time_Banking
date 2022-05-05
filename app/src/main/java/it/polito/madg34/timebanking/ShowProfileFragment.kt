@@ -4,10 +4,14 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.appbar.MaterialToolbar
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
 
@@ -24,7 +28,7 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
     lateinit var userDesc : TextView
     lateinit var img_view: ImageView
 
-    private val prova : ProfileUser = ProfileUser(null, "Ciao", "prova", "dddd", "dddd","CCC", mutableMapOf("Ciao" to "Ciao"))
+    //private val prova : ProfileUser = ProfileUser(null, "Ciao", "prova", "dddd", "dddd","CCC", mutableMapOf("Ciao" to "Ciao"))
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.showprofilefragment_layout, container, false)
@@ -36,7 +40,7 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        vm._profile.value = prova
+        //vm._profile.value = prova
         val item : ProfileUser? = vm.profile.value
 
         fullNameView = view.findViewById(R.id.fullName)
@@ -169,6 +173,10 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.pencil_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.pencil -> {

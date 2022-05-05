@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     app:startDestination="@id/showProfileFragment">
 
@@ -49,19 +48,25 @@
             app:enterAnim="@anim/slide_in"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out"/>
+        <action
+            android:id="@+id/action_timeSlotListFragment_to_showProfileFragment"
+            app:destination="@id/showProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/showProfileFragment"
         android:name="it.polito.madg34.timebanking.ShowProfileFragment"
-        android:label="ShowProfileFragment" >
+        android:label="@string/app_name" >
         <action
             android:id="@+id/action_showProfileFragment_to_editProfileFragment"
             app:destination="@id/editProfileFragment" />
+        <action
+            android:id="@+id/action_showProfileFragment_to_timeSlotListFragment"
+            app:destination="@id/timeSlotListFragment" />
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
         android:name="it.polito.madg34.timebanking.EditProfileFragment"
-        android:label="EditProfileFragment" >
+        android:label="@string/app_name" >
         <action
             android:id="@+id/action_editProfileFragment_to_addSkillFragment"
             app:destination="@id/addSkillFragment" />
@@ -72,9 +77,9 @@
     <fragment
         android:id="@+id/addSkillFragment"
         android:name="it.polito.madg34.timebanking.AddSkillFragment"
-        android:label="AddSkillFragment" />
+        android:label="@string/app_name" />
     <fragment
         android:id="@+id/editSkillFragment"
         android:name="it.polito.madg34.timebanking.EditSkillFragment"
-        android:label="EditSkillFragment" />
+        android:label="@string/app_name" />
 </navigation>
