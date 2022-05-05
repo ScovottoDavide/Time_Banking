@@ -17,6 +17,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import java.time.LocalDate
@@ -32,11 +33,7 @@ class TimeSlotDetailsFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.timeslotdetailsfragment_layout, container, false)
-        val toolB = view.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar2)
-        toolB.inflateMenu(R.menu.pencil_menu)
-        toolB.setOnMenuItemClickListener {
-            onOptionsItemSelected(it)
-        }
+        setHasOptionsMenu(true)
         halfWidth(view)
         return view
     }
@@ -45,7 +42,7 @@ class TimeSlotDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         halfWidth(view)
 
-        val bundle = arguments
+        val bundle : Bundle? = arguments
         val item : TimeSlot? = vm.listServices.value?.get(bundle?.getInt("index")!!)
 
         val title = view.findViewById<TextInputEditText>(R.id.outlinedTitleFixed)

@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/timeSlotDetailsFragment"
         android:name="it.polito.madg34.timebanking.TimeSlotDetailsFragment"
-        android:label="TimeSlotDetailsFragment" >
+        android:label="@string/app_name" >
         <action
             android:id="@+id/action_timeSlotDetailsFragment_to_timeSlotEditFragment"
             app:destination="@id/timeSlotEditFragment"
@@ -22,7 +22,7 @@
     <fragment
         android:id="@+id/timeSlotEditFragment"
         android:name="it.polito.madg34.timebanking.TimeSlotEditFragment"
-        android:label="TimeSlotEditFragment" >
+        android:label="@string/app_name" >
         <action
             android:id="@+id/action_timeSlotEditFragment_to_timeSlotDetailsFragment2"
             app:destination="@id/timeSlotDetailsFragment"
@@ -36,7 +36,7 @@
     <fragment
         android:id="@+id/timeSlotListFragment"
         android:name="it.polito.madg34.timebanking.TimeSlotListFragment"
-        android:label="TimeSlotListFragment" >
+        android:label="@string/app_name" >
         <action
             android:id="@+id/action_timeSlotListFragment_to_timeSlotDetailsFragment2"
             app:destination="@id/timeSlotDetailsFragment"

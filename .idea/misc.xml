@@ -4,11 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.2595" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable-v24/menu-48px.xml" value="0.1" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable-v24/outline_edit_24.xml" value="0.258" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/back.xml" value="0.1" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/baseline_face_24.xml" value="0.17" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/baseline_person_pin_circle_24.xml" value="0.2205" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/menu-48px.xml" value="0.1515" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/menu_icon.xml" value="0.1775" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/outline_add_circle_outline_24.xml" value="0.225" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/outline_email_24.xml" value="0.2205" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/drawable/outline_location_on_24.xml" value="0.2205" />
@@ -28,6 +31,9 @@
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout/timeslotdetailsfragment_layout.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout/timesloteditfragment_layout.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout/timeslotlistfragment_layout.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/layout/top_app_bar_menu.xml" value="0.24094202898550723" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/menu/pencil_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/menu/popup_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.246" />
       </map>
     </option>
