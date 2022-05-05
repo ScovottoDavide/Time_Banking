@@ -4,10 +4,14 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.appbar.MaterialToolbar
 
 class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
     val vm by navGraphViewModels<ProfileViewModel>(R.id.main)
@@ -51,13 +55,7 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
             //img_view.setImageURI(item?.img)
         }*/
 
-
-
-
         constantScreenLayoutOnScrolling(view)
-
-
-
     }
 
     private fun constantScreenLayoutOnScrolling(view: View) {
@@ -83,6 +81,10 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.pencil_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.pencil -> {
