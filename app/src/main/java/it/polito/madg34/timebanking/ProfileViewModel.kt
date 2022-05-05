@@ -18,7 +18,6 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     //val p = clear()
 
-
     var _profile = MutableLiveData<ProfileUser>().also{
         if(sharedPref.contains("ProfileUser")){
             val type : Type = object : TypeToken<ProfileUser>() {}.type
@@ -27,8 +26,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    var profile : LiveData<ProfileUser> = _profile
-
+    var profile : LiveData<ProfileUser> =  _profile
 
     fun saveServices(v : ProfileUser){
         _profile.value = v

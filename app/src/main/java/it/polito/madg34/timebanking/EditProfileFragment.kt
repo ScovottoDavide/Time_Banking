@@ -27,17 +27,25 @@ class EditProfileFragment : Fragment() {
     private lateinit var takePicture: ActivityResultLauncher<Intent>
     private lateinit var takePictureGallery: ActivityResultLauncher<String>
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.editprofilefragment_layout, container, false)
+
+        if (vm.profile.value == null) {
+            vm.saveServices(emptyProfile())
+        }
 
         val buttonPopup = view.findViewById<ImageButton>(R.id.plus)
         buttonPopup.setOnClickListener(View.OnClickListener() {
-            val popupMenu = PopupMenu(context,buttonPopup)
+            val popupMenu = PopupMenu(context, buttonPopup)
             popupMenu.menuInflater.inflate(R.menu.popup_menu, popupMenu.menu)
 
             popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
                 if (item != null) {
-                     when (item.itemId) {
+                    when (item.itemId) {
                         R.id.select -> {
                             dispatchTakeGalleryPictureIntent()
                             true
@@ -50,26 +58,19 @@ class EditProfileFragment : Fragment() {
 
                     }
                 } else {
-                     false
+                    false
                 }
-
             })
-
-
             popupMenu.show()
         })
-
         return view
     }
-
-
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         //val bundle : Bundle? = arguments
-        val item : ProfileUser? = vm.profile.value
+        val item: ProfileUser? = vm.profile.value
 
         val fullName = view.findViewById<EditText>(R.id.editTextTextPersonName)
         val nickname = view.findViewById<EditText>(R.id.editTextTextPersonName3)
@@ -88,24 +89,21 @@ class EditProfileFragment : Fragment() {
             setSkills(it.key, it.value, indexName++, indexDesc--, view)
         }
 
-
         takePictureGallery = registerForActivityResult(ActivityResultContracts.GetContent()) {}
-        takePicture =registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->}
-
+        takePicture =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result -> }
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    vm.profile.value?.also {
-                            it.also {
-                                it.fullName = fullName.text.toString()
-                                it.nickname = nickname.text.toString()
-                                it.email = email.text.toString()
-                                it.location = location.text.toString()
-                                it.aboutUser = userDesc.text.toString()
-                                //it.img = location.text.toString()
-                        }
+                    vm.profile.value?.apply {
+                        this.fullName = fullName.text.toString()
+                        this.nickname = nickname.text.toString()
+                        this.email = email.text.toString()
+                        this.location = location.text.toString()
+                        this.aboutUser = userDesc.text.toString()
+                        //it.img = location.text.toString()
                     }
                     vm.saveServices(vm.profile.value!!)
                     if (isEnabled) {
@@ -116,24 +114,19 @@ class EditProfileFragment : Fragment() {
             })
 
         constantScreenLayoutOnScrolling(view)
-
-
-
-
-
-
         val buttonAddSkill = view.findViewById<TextView>(R.id.textSkills)
-
         buttonAddSkill.setOnClickListener {
             findNavController().navigate(R.id.action_editProfileFragment_to_addSkillFragment)
-
         }
-
     }
 
-
-
-    private fun setSkills(skill: String, description: String, indexName: Int, indexDesc: Int, view: View) {
+    private fun setSkills(
+        skill: String,
+        description: String,
+        indexName: Int,
+        indexDesc: Int,
+        view: View
+    ) {
         val linearLayout = view.findViewById<LinearLayout>(R.id.lastLinear)
 
         val expH = ExpansionHeader(linearLayout.context)
@@ -179,8 +172,11 @@ class EditProfileFragment : Fragment() {
 
         /** Allow the user to modify the skill **/
         pencil.setImageResource(R.drawable.outline_edit_24)
-        pencil.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT).apply {
-            bottomMargin=5
+        pencil.layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.WRAP_CONTENT,
+            LinearLayout.LayoutParams.WRAP_CONTENT
+        ).apply {
+            bottomMargin = 5
         }
         pencil.setBackgroundColor(getResources().getColor(R.color.white))
 
@@ -228,17 +224,19 @@ class EditProfileFragment : Fragment() {
         }
 
         pencil.setOnClickListener {
-            var bundle = bundleOf("skillDescIndex" to indexDesc,
+            val bundle = bundleOf(
+                "skillDescIndex" to indexDesc,
                 "skillIndex" to indexName,
-                "skillOld" to  skill,
-                "skillName" to  skill,
-                "skillDescription" to description)
+                "skillOld" to skill,
+                "skillName" to skill,
+                "skillDescription" to description
+            )
 
-
-            findNavController().navigate(R.id.action_editProfileFragment_to_editSkillFragment, bundle)
-
+            findNavController().navigate(
+                R.id.action_editProfileFragment_to_editSkillFragment,
+                bundle
+            )
         }
-
     }
 
     private fun dispatchTakePictureIntent() {

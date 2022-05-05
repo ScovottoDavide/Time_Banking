@@ -62,13 +62,7 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
             }
         }
 
-
-
-
         constantScreenLayoutOnScrolling(view)
-
-
-
     }
 
     private fun setSkills(skill: String, description: String, view: View) {
