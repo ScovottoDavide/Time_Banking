@@ -26,19 +26,13 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
     private var h: Int = 0
     private var w: Int = 0
 
-    private lateinit var _date: String;
-    private lateinit var _time: String;
-    private lateinit var _title: String;
-    private lateinit var _description: String;
-    private lateinit var _duration: String;
-    private lateinit var _location: String;
-
     private lateinit var title: TextInputEditText
     private lateinit var description: TextInputEditText
     private lateinit var duration: TextInputEditText
     private lateinit var location: TextInputEditText
     private lateinit var date: TextInputLayout
     private lateinit var time: TextInputLayout
+    private lateinit var item :TimeSlot
 
     private var hour = 0;
     private var minute = 0;
@@ -82,36 +76,49 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
         }
 
         val bundle = arguments
-        val item: TimeSlot? = vm.listServices.value?.get(bundle?.getInt("index")!!)
+        val index = bundle?.getInt("index")!!
+        item = if(index>=0)
+            vm.listServices.value?.get(index)!!
+        else emptyTimeSlot()
 
-        title.setText(item?.title)
-        description.setText(item?.description)
-        date.editText?.setText(item?.date)
-        time.editText?.setText(item?.time)
-        duration.setText(item?.duration.toString())
-        location.setText(item?.location)
+        title.setText(item.title)
+        description.setText(item.description)
+        date.editText?.setText(item.date)
+        time.editText?.setText(item.time)
+        duration.setText(item.duration)
+        location.setText(item.location)
 
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    vm.listServices.value?.also {
-                        it.forEach {
-                            it.also {
-                                it.title = title.text.toString()
-                                it.description = description.text.toString()
-                                it.date = date.editText?.text.toString()
-                                it.time = time.editText?.text.toString()
-                                it.duration = duration.text.toString()
-                                it.location = location.text.toString()
+                    if(item.title.isEmpty() || item.description.isEmpty() || item.date.isEmpty() || item.time.isEmpty() || item.duration.isEmpty() || item.location.isEmpty())
+                        Toast.makeText(context, "Please, fill the entire form.", Toast.LENGTH_SHORT).show()
+                    else {
+                        if (index >= 0) {
+                            vm.listServices.value?.get(index).also {
+                                it?.title = title.text.toString()
+                                it?.description = description.text.toString()
+                                it?.date = date.editText?.text.toString()
+                                it?.time = time.editText?.text.toString()
+                                it?.duration = duration.text.toString()
+                                it?.location = location.text.toString()
                             }
+                        } else {
+                            item.title = title.text.toString()
+                            item.description = description.text.toString()
+                            item.date = date.editText?.text.toString()
+                            item.time = time.editText?.text.toString()
+                            item.duration = duration.text.toString()
+                            item.location = location.text.toString()
+                            vm.listServices.value?.add(item)
                         }
-                    }
-                    vm.saveServices(vm.listServices.value!!)
-                    if (isEnabled) {
-                        isEnabled = false
-                        requireActivity().onBackPressed()
+                        vm.saveServices(vm.listServices.value!!)
+                        if (isEnabled) {
+                            isEnabled = false
+                            requireActivity().onBackPressed()
+                        }
                     }
                 }
             })

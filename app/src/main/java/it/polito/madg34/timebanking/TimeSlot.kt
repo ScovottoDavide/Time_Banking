@@ -7,3 +7,7 @@ class TimeSlot(var title : String,
                     var duration : String,
                     var location : String,
                     )
+
+fun emptyTimeSlot() : TimeSlot{
+    return TimeSlot("", "", "", "","", "")
+}
