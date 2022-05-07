@@ -1,8 +1,10 @@
 package it.polito.madg34.timebanking
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -10,6 +12,8 @@ import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
+import de.hdodenhof.circleimageview.CircleImageView
 
 
 class TimeSlotListFragment : Fragment() {
@@ -42,14 +46,18 @@ class TimeSlotListFragment : Fragment() {
             timeSlotsRV = view.findViewById(R.id.ServicesList)
             timeSlotsRV.layoutManager = LinearLayoutManager(this.context)
             timeSlotsRV.adapter = TimeSlotAdapter(vm.listServices.value!!)
+
+            val add_button: FloatingActionButton = view.findViewById(R.id.add_button)
+            add_button.setOnClickListener{
+                findNavController().navigate(R.id.action_timeSlotListFragment_to_timeSlotEditFragment2, bundleOf("index" to (vm.listServices.value?.size!! + 1)))
+            }
         } else {
             emptyView = view.findViewById(R.id.emptyListTV)
             emptyView.visibility = View.VISIBLE
-        }
-
-        val add_button: FloatingActionButton = view.findViewById(R.id.add_button)
-        add_button.setOnClickListener{
-            findNavController().navigate(R.id.action_timeSlotListFragment_to_timeSlotEditFragment2, bundleOf("index" to -1))
+            val add_button: FloatingActionButton = view.findViewById(R.id.add_button)
+            add_button.setOnClickListener{
+                findNavController().navigate(R.id.action_timeSlotListFragment_to_timeSlotEditFragment2, bundleOf("index" to -1))
+            }
         }
     }
 }

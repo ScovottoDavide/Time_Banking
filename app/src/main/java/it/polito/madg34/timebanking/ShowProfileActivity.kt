@@ -6,22 +6,18 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import android.content.res.Configuration
-import android.graphics.Typeface
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.*
 import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import org.w3c.dom.Text
 import java.io.Serializable
 
 class ShowProfileActivity : AppCompatActivity() {
@@ -69,7 +65,7 @@ class ShowProfileActivity : AppCompatActivity() {
         emailView = findViewById(R.id.email)
         myLocationView = findViewById(R.id.location)
         userDesc = findViewById(R.id.userDesc)
-        img_view = findViewById(R.id.imageUsr)
+        img_view = findViewById(R.id.userImg)
 
         gson = Gson()
         sharedPref = getSharedPreferences("package it.polito.madg34.timebanking.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE) ?: return
@@ -206,7 +202,7 @@ class ShowProfileActivity : AppCompatActivity() {
     private fun constantScreenLayoutOnScrolling() {
         val sv = findViewById<ScrollView>(R.id.scrollViewShow)
         val constraintL = findViewById<ConstraintLayout>(R.id.landLayout)
-        val iv = findViewById<ImageView>(R.id.imageUsr)
+        val iv = findViewById<ImageView>(R.id.userImg)
 
         sv.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {

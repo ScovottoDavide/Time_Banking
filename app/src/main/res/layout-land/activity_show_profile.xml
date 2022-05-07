@@ -24,7 +24,7 @@
         app:titleMarginStart="300dp"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/imageUsr"
+        android:id="@+id/userImg"
         android:layout_width="187dp"
         android:layout_height="152dp"
         android:layout_marginStart="16dp"
@@ -53,7 +53,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageUsr"
+        app:layout_constraintStart_toEndOf="@+id/userImg"
         app:layout_constraintTop_toBottomOf="@+id/my_toolbar">
 
         <LinearLayout

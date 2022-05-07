@@ -5,16 +5,15 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.*
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
-import com.google.android.material.appbar.MaterialToolbar
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
+import com.google.android.material.navigation.NavigationView
+import de.hdodenhof.circleimageview.CircleImageView
+import org.w3c.dom.Text
 
 class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
     val vm by navGraphViewModels<ProfileViewModel>(R.id.main)
@@ -49,7 +48,7 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
         emailView = view.findViewById(R.id.email)
         myLocationView = view.findViewById(R.id.location)
         userDesc = view.findViewById(R.id.userDesc)
-        img_view = view.findViewById(R.id.imageUsr)
+        img_view = view.findViewById(R.id.userImg)
 
         vm.profile.observe(this.viewLifecycleOwner){
             fullNameView.text = item?.fullName
@@ -57,10 +56,21 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
             emailView.text = item?.email
             myLocationView.text = item?.location
             userDesc.text = item?.aboutUser
-            if(item?.img == null)
-                img_view.setImageResource(R.drawable.user)
-            else
-                img_view.setImageURI(Uri.parse(item?.img))
+
+            val navView  = activity?.findViewById<NavigationView>(R.id.nav_view)
+            val header = navView?.getHeaderView(0)
+            val name = header?.findViewById<TextView>(R.id.nomecognome)
+            if(!item?.fullName?.isEmpty()!!)
+                name?.text = item.fullName
+            val email = header?.findViewById<TextView>(R.id.headerMail)
+            if(!item.email?.isEmpty()!!)
+                email?.text = item.email
+            val imgProfile = header?.findViewById<CircleImageView>(R.id.nav_header_userImg)
+            if(item?.img != null) {
+                img_view.setImageURI(Uri.parse(item.img))
+                imgProfile?.setImageURI(Uri.parse(item.img))
+            }
+
             item?.skills?.forEach {
                 setSkills(it.key, it.value, view)
             }
@@ -151,7 +161,7 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
     private fun constantScreenLayoutOnScrolling(view: View) {
         val sv = view.findViewById<ScrollView>(R.id.scrollViewShow)
         val constraintL = view.findViewById<ConstraintLayout>(R.id.landLayout)
-        val iv = view.findViewById<ImageView>(R.id.imageUsr)
+        val iv = view.findViewById<ImageView>(R.id.userImg)
 
         sv.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {

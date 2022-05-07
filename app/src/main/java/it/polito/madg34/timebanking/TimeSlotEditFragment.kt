@@ -77,9 +77,18 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
 
         val bundle = arguments
         val index = bundle?.getInt("index")!!
-        item = if(index>=0)
-            vm.listServices.value?.get(index)!!
-        else emptyTimeSlot()
+        println("INDEX ${index}")
+        if(index == -1)
+            item = emptyTimeSlot()
+        else {
+            if(index>=0 && index < vm.listServices.value?.size!!){
+                item = vm.listServices.value?.get(index)!!
+            }
+            else if (index > vm.listServices.value?.size!!){
+                item = emptyTimeSlot()
+            }
+        }
+
 
         title.setText(item.title)
         description.setText(item.description)
@@ -93,10 +102,11 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if(item.title.isEmpty() || item.description.isEmpty() || item.date.isEmpty() || item.time.isEmpty() || item.duration.isEmpty() || item.location.isEmpty())
+                    if(title.text.toString().isEmpty() || description.text.toString().isEmpty() || date.editText?.text.toString().isEmpty()
+                        || time.editText?.text.toString().isEmpty() || duration.text.toString().isEmpty() || location.text.toString().isEmpty())
                         Toast.makeText(context, "Please, fill the entire form.", Toast.LENGTH_SHORT).show()
                     else {
-                        if (index >= 0) {
+                        if (index>=0 && index <= vm.listServices.value?.size!!) {
                             vm.listServices.value?.get(index).also {
                                 it?.title = title.text.toString()
                                 it?.description = description.text.toString()
@@ -104,8 +114,23 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
                                 it?.time = time.editText?.text.toString()
                                 it?.duration = duration.text.toString()
                                 it?.location = location.text.toString()
+                                vm.saveServices(vm.listServices.value!!)
+                                Toast.makeText(context, "Service successfully edited.", Toast.LENGTH_SHORT).show()
                             }
-                        } else {
+                        } else if(index==-1){
+                            item.title = title.text.toString()
+                            item.description = description.text.toString()
+                            item.date = date.editText?.text.toString()
+                            item.time = time.editText?.text.toString()
+                            item.duration = duration.text.toString()
+                            item.location = location.text.toString()
+                            /*println("ITEM ${item}")
+                            vm.listServices.value?.set(0, item)
+                            println("LIST ${vm.listServices.value}")*/
+                            vm.saveServices(mutableListOf(item))
+                            Toast.makeText(context, "Service successfully added.", Toast.LENGTH_SHORT).show()
+                        }
+                        else {
                             item.title = title.text.toString()
                             item.description = description.text.toString()
                             item.date = date.editText?.text.toString()
@@ -113,8 +138,9 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
                             item.duration = duration.text.toString()
                             item.location = location.text.toString()
                             vm.listServices.value?.add(item)
+                            vm.saveServices(vm.listServices.value!!)
+                            Toast.makeText(context, "Service successfully added.", Toast.LENGTH_SHORT).show()
                         }
-                        vm.saveServices(vm.listServices.value!!)
                         if (isEnabled) {
                             isEnabled = false
                             requireActivity().onBackPressed()

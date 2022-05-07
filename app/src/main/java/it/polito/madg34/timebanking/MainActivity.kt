@@ -1,23 +1,32 @@
 package it.polito.madg34.timebanking
 
+import android.net.Uri
 import android.os.Bundle
+import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelLazy
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.get
+import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.navigation.NavigationView
+import de.hdodenhof.circleimageview.CircleImageView
 
 
 class MainActivity : AppCompatActivity() {
-
+    lateinit var vmProfile : ProfileViewModel
     lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var navController: NavController
     lateinit var drawerLayout: DrawerLayout
@@ -41,8 +50,9 @@ class MainActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener{ item ->
             when(item.itemId){
                 R.id.nav_profile -> {
-                    if(navController.currentDestination?.id != navController.graph[R.id.showProfileFragment].id)
+                    if(navController.currentDestination?.id != navController.graph[R.id.showProfileFragment].id){
                         navController.navigate(R.id.action_timeSlotListFragment_to_showProfileFragment)
+                    }
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_listServices -> {
@@ -53,18 +63,25 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
+        vmProfile = ViewModelProvider(this).get()
+
+        if(vmProfile.profile.value != null){
+            val header = navView.getHeaderView(0)
+            val name = header?.findViewById<TextView>(R.id.nomecognome)
+            if(!vmProfile.profile.value?.fullName?.isEmpty()!!)
+                name?.text = vmProfile.profile.value?.fullName
+            val email = header?.findViewById<TextView>(R.id.headerMail)
+            if(!vmProfile.profile.value?.email?.isEmpty()!!)
+                email?.text = vmProfile.profile.value?.email
+            val imgProfile = header.findViewById<CircleImageView>(R.id.nav_header_userImg)
+            if(vmProfile.profile.value?.img != null){
+                imgProfile.setImageURI(Uri.parse(vmProfile.profile.value?.img))
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.fragmentContainerView)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
-    fun showHamburgerIcon() {
-        val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
-        val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, toolbar, 0,0)
-        supportActionBar!!.setDisplayHomeAsUpEnabled(false)
-        toggle.isDrawerIndicatorEnabled = true
     }
 }

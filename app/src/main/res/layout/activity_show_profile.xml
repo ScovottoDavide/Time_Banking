@@ -36,7 +36,7 @@
                 app:titleMarginStart="120dp"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageUsr"
+                android:id="@+id/userImg"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
                 android:layout_marginStart="16dp"
