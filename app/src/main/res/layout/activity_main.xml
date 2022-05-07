@@ -23,12 +23,13 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/my_toolbar"
-                style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
+                style="@style/Theme.TimeBanking"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
+                android:background="@color/Goldenrod"
                 app:navigationIcon="@drawable/menu_icon"
                 app:title="@string/app_name"
-                app:titleCentered="true"/>
+                app:titleCentered="true" />
 
         </com.google.android.material.appbar.AppBarLayout>
 

@@ -37,6 +37,7 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
         sharedPref.edit().putString("listServices", serialized).apply()
     }
 
+
     fun clear(){
         sharedPref.edit().clear().apply()
     }

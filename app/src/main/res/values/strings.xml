@@ -25,7 +25,7 @@
     <string name="removeSkill">Delete skill</string>
     <string name="OfferedService">Offered Service :</string>
     <string name="EditService">Edit Service :</string>
-    <string name="ListOfferedServices">List Offered Services</string>
+    <string name="ListOfferedServices">My Services</string>
 
     <string name="EmptyList">No offered services available</string>
 

@@ -124,9 +124,6 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
                             item.time = time.editText?.text.toString()
                             item.duration = duration.text.toString()
                             item.location = location.text.toString()
-                            /*println("ITEM ${item}")
-                            vm.listServices.value?.set(0, item)
-                            println("LIST ${vm.listServices.value}")*/
                             vm.saveServices(mutableListOf(item))
                             Toast.makeText(context, "Service successfully added.", Toast.LENGTH_SHORT).show()
                         }
