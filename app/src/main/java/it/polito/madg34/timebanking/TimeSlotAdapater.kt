@@ -41,7 +41,6 @@ class TimeSlotAdapter(val data : MutableList<TimeSlot>) : RecyclerView.Adapter<T
             data.removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, itemCount)
-            vmTimeSlot.listServices.value?.removeAt(position)
             // trigger observers
             vmTimeSlot._listServices.value = vmTimeSlot.listServices.value
             vmTimeSlot.saveServices(data)

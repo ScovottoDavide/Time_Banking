@@ -32,17 +32,7 @@ class TimeSlotListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        timeSlotsRV = view.findViewById(R.id.ServicesList)
-        timeSlotsRV.layoutManager = LinearLayoutManager(this.context)
-        timeSlotsRV.adapter = TimeSlotAdapter(vm.listServices.value!!)
         val addButton: FloatingActionButton = view.findViewById(R.id.add_button)
-        addButton.setOnClickListener {
-            findNavController().navigate(
-                R.id.action_timeSlotListFragment_to_timeSlotEditFragment2,
-                bundleOf("index" to (vm.listServices.value?.size!! + 1))
-            )
-        }
         if (vm.listServices.value?.size == 0 || vm.listServices.value?.size == null) {
             emptyView = view.findViewById(R.id.emptyListTV)
             emptyView.visibility = View.VISIBLE
@@ -50,6 +40,16 @@ class TimeSlotListFragment : Fragment() {
                 findNavController().navigate(
                     R.id.action_timeSlotListFragment_to_timeSlotEditFragment2,
                     bundleOf("index" to -1)
+                )
+            }
+        } else {
+            timeSlotsRV = view.findViewById(R.id.ServicesList)
+            timeSlotsRV.layoutManager = LinearLayoutManager(this.context)
+            timeSlotsRV.adapter = TimeSlotAdapter(vm.listServices.value!!)
+            addButton.setOnClickListener {
+                findNavController().navigate(
+                    R.id.action_timeSlotListFragment_to_timeSlotEditFragment2,
+                    bundleOf("index" to (vm.listServices.value?.size!! + 1))
                 )
             }
         }

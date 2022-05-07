@@ -76,8 +76,7 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
         }
 
         val bundle = arguments
-        val index = bundle?.getInt("index")!!
-        println("INDEX ${index}")
+        val index = bundle?.getInt("index") ?: item.index
         if(index == -1)
             item = emptyTimeSlot()
         else {
@@ -89,14 +88,12 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
             }
         }
 
-
         title.setText(item.title)
         description.setText(item.description)
         date.editText?.setText(item.date)
         time.editText?.setText(item.time)
         duration.setText(item.duration)
         location.setText(item.location)
-
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
@@ -114,6 +111,7 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
                                 it?.time = time.editText?.text.toString()
                                 it?.duration = duration.text.toString()
                                 it?.location = location.text.toString()
+                                it?.index = index
                                 vm.saveServices(vm.listServices.value!!)
                                 Toast.makeText(context, "Service successfully edited.", Toast.LENGTH_SHORT).show()
                             }
@@ -124,6 +122,7 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
                             item.time = time.editText?.text.toString()
                             item.duration = duration.text.toString()
                             item.location = location.text.toString()
+                            item.index = index
                             vm.saveServices(mutableListOf(item))
                             Toast.makeText(context, "Service successfully added.", Toast.LENGTH_SHORT).show()
                         }
@@ -134,6 +133,7 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
                             item.time = time.editText?.text.toString()
                             item.duration = duration.text.toString()
                             item.location = location.text.toString()
+                            item.index = index
                             vm.listServices.value?.add(item)
                             vm.saveServices(vm.listServices.value!!)
                             Toast.makeText(context, "Service successfully added.", Toast.LENGTH_SHORT).show()

@@ -86,7 +86,6 @@ class EditProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //val bundle : Bundle? = arguments
         val item: ProfileUser? = vm.profile.value
 
         val fullName = view.findViewById<EditText>(R.id.editTextTextPersonName)
@@ -101,8 +100,10 @@ class EditProfileFragment : Fragment() {
         email.setText(item?.email)
         location.setText(item?.location)
         userDesc.setText(item?.aboutUser)
-        if(item?.img != null)
+        if(item?.img != null){
+            println("IMAGE")
             userImage.setImageURI(Uri.parse(item.img))
+        }
         else userImage.setImageResource(R.drawable.user)
 
         var indexName = 100
@@ -128,12 +129,10 @@ class EditProfileFragment : Fragment() {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
                 stream.flush()
                 stream.close()
-                val path: String = file.absolutePath
                 uri = Uri.parse(file.absolutePath)
-                userImage.setImageURI(null);
+                userImage.setImageURI(null)
                 userImage.setImageURI(uri)
-
-
+                item?.img = uri.toString()
             }catch (e : IOException){
                 e.printStackTrace()
             }
@@ -154,11 +153,8 @@ class EditProfileFragment : Fragment() {
                     MediaStore.Images.Media.insertImage(activity?.contentResolver, bitmap, "xyz", null)
                 uri = Uri.parse(path)
                 userImage.setImageURI(uri)
-
             }
-
         }
-
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,

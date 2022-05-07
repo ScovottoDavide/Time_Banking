@@ -90,9 +90,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         vmTimeSlot = ViewModelProvider(this).get()
-        val fragment = supportFragmentManager.findFragmentById(R.id.timeSlotListFragment)
-        println("fragment $fragment")
-        val emptyView = fragment?.view?.findViewById<TextView>(R.id.emptyListTV)
         vmTimeSlot.listServices.observe(this){
             if(vmTimeSlot.listServices.value?.size == 0){
                 // Dirty way, trigger reacreation of fragment to show empty message

@@ -6,8 +6,8 @@ class TimeSlot(var title : String,
                     var time : String,
                     var duration : String,
                     var location : String,
-                    )
+                    var index : Int)
 
 fun emptyTimeSlot() : TimeSlot{
-    return TimeSlot("", "", "", "","", "")
+    return TimeSlot("", "", "", "","", "", -1)
 }
