@@ -28,7 +28,7 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
 
     var profile : LiveData<ProfileUser> =  _profile
 
-    fun saveServices(v : ProfileUser){
+    fun saveProfile(v : ProfileUser){
         _profile.value = v
         val serialized = gson.toJson(v)
         println("SAVING")

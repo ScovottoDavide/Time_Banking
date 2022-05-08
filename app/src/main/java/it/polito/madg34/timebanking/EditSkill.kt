@@ -36,7 +36,6 @@ class EditSkill : AppCompatActivity() {
 
         val deleteButton = findViewById<Button>(R.id.deleteSkill)
         deleteButton.setOnClickListener {
-
             intent.putExtra("skillOld", _skillOld)
             setResult(Activity.RESULT_CANCELED, intent)
             finish()

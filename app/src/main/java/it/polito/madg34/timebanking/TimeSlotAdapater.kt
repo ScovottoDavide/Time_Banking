@@ -13,6 +13,7 @@ import androidx.fragment.app.findFragment
 import androidx.lifecycle.*
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 
 class TimeSlotAdapter(val data : MutableList<TimeSlot>) : RecyclerView.Adapter<TimeSlotViewHolder>() {
 
@@ -44,6 +45,7 @@ class TimeSlotAdapter(val data : MutableList<TimeSlot>) : RecyclerView.Adapter<T
             // trigger observers
             vmTimeSlot._listServices.value = vmTimeSlot.listServices.value
             vmTimeSlot.saveServices(data)
+            Snackbar.make(holder.itemView, "Service successfully removed!", Snackbar.LENGTH_LONG).show()
         }
 
         val editCardViewButton : ImageButton = holder.itemView.findViewById(R.id.editCard)

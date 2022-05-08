@@ -2,6 +2,7 @@ package it.polito.madg34.timebanking
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.res.Configuration
@@ -10,6 +11,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
@@ -22,6 +24,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
+import com.google.android.material.snackbar.Snackbar
 import java.io.*
 
 class EditProfileFragment : Fragment() {
@@ -43,9 +46,10 @@ class EditProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.editprofilefragment_layout, container, false)
+        setHasOptionsMenu(true)
 
         if (vm.profile.value == null) {
-            vm.saveServices(emptyProfile())
+            vm.saveProfile(emptyProfile())
         }
 
         val buttonPopup = view.findViewById<ImageButton>(R.id.plus)
@@ -168,7 +172,8 @@ class EditProfileFragment : Fragment() {
                         this.aboutUser = userDesc.text.toString()
                         if(uri!=null) this.img = uri?.toString()
                     }
-                    vm.saveServices(vm.profile.value!!)
+                    vm.saveProfile(vm.profile.value!!)
+                    Snackbar.make(view, "Profile successfully edited", Snackbar.LENGTH_LONG).show()
                     if (isEnabled) {
                         isEnabled = false
                         requireActivity().onBackPressed()
@@ -297,10 +302,7 @@ class EditProfileFragment : Fragment() {
                 "skillDescription" to description
             )
 
-            findNavController().navigate(
-                R.id.action_editProfileFragment_to_editSkillFragment,
-                bundle
-            )
+            findNavController().navigate(R.id.action_editProfileFragment_to_editSkillFragment, bundle)
         }
 
     }
@@ -346,9 +348,33 @@ class EditProfileFragment : Fragment() {
                 sv.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
-
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.save_page, menu)
+        return super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.save -> {
+                closeKeyboard()
+                // Backing is too fast--> the closing of keyboard is too slow!
+                Thread.sleep(100)
+                requireActivity().onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun closeKeyboard() {
+        // this will give us the view which is currently focus in this layout
+        val v: View? = this.view?.findFocus()
+
+        val manager: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(v?.windowToken, 0)
+    }
 }
 
 

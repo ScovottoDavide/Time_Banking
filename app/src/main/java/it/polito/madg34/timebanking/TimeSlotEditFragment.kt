@@ -2,17 +2,20 @@ package it.polito.madg34.timebanking
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.View
-import android.view.ViewTreeObserver
+import android.view.*
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
@@ -22,10 +25,13 @@ import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAccessor
 import java.util.*
 import kotlin.math.min
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 
-class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
+class TimeSlotEditFragment : Fragment() {
 
     val vm by navGraphViewModels<TimeSlotViewModel>(R.id.main)
 
@@ -43,6 +49,12 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
     private var hour = 0;
     private var minute = 0;
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = inflater.inflate(R.layout.timesloteditfragment_layout, container, false)
+        setHasOptionsMenu(true)
+        return view
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         halfWidth(view)
@@ -52,6 +64,19 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
         location = view.findViewById(R.id.outlinedLocationFixed)
         date = view.findViewById(R.id.outlinedDate)
         time = view.findViewById(R.id.outlinedTime)
+
+        val bundle = arguments
+        val index = bundle?.getInt("index") ?: item.index
+        if(index == -1)
+            item = emptyTimeSlot()
+        else {
+            if(index>=0 && index < vm.listServices.value?.size!!){
+                item = vm.listServices.value?.get(index)!!
+            }
+            else if (index > vm.listServices.value?.size!!){
+                item = emptyTimeSlot()
+            }
+        }
 
 
         val datePicker = MaterialDatePicker.Builder.datePicker()
@@ -66,7 +91,6 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
             .setMinute(minute)
             .setTitleText("Select Service time")
             .build()
-
 
         date.setStartIconOnClickListener {
             datePicker.show(this.parentFragmentManager, "")
@@ -89,19 +113,6 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
                 else minutes = timePicker.minute.toString()
                 val timeString = timePicker.hour.toString() + ":" + minutes
                 time.editText?.setText(timeString)
-            }
-        }
-
-        val bundle = arguments
-        val index = bundle?.getInt("index") ?: item.index
-        if(index == -1)
-            item = emptyTimeSlot()
-        else {
-            if(index>=0 && index < vm.listServices.value?.size!!){
-                item = vm.listServices.value?.get(index)!!
-            }
-            else if (index > vm.listServices.value?.size!!){
-                item = emptyTimeSlot()
             }
         }
 
@@ -130,7 +141,7 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
                                 it?.location = location.text.toString()
                                 it?.index = index
                                 vm.saveServices(vm.listServices.value!!)
-                                Toast.makeText(context, "Service successfully edited.", Toast.LENGTH_SHORT).show()
+                                Snackbar.make(view, "Service successfully edited!", Snackbar.LENGTH_LONG).show()
                             }
                         } else if(index==-1){
                             item.title = title.text.toString()
@@ -141,7 +152,7 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
                             item.location = location.text.toString()
                             item.index = index
                             vm.saveServices(mutableListOf(item))
-                            Toast.makeText(context, "Service successfully added.", Toast.LENGTH_SHORT).show()
+                            Snackbar.make(view, "Service successfully added!", Snackbar.LENGTH_LONG).show()
                         }
                         else {
                             item.title = title.text.toString()
@@ -153,7 +164,7 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
                             item.index = index
                             vm.listServices.value?.add(item)
                             vm.saveServices(vm.listServices.value!!)
-                            Toast.makeText(context, "Service successfully added.", Toast.LENGTH_SHORT).show()
+                            Snackbar.make(view, "Service successfully added!", Snackbar.LENGTH_LONG).show()
                         }
                         if (isEnabled) {
                             isEnabled = false
@@ -186,5 +197,29 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
                 row.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.save_page, menu)
+        return super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.save -> {
+                closeKeyboard()
+                requireActivity().onBackPressed()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun closeKeyboard() {
+        // this will give us the view which is currently focus in this layout
+        val v: View? = this.view?.findFocus()
+
+        val manager: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(v?.windowToken, 0)
     }
 }
