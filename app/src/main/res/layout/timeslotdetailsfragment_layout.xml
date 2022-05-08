@@ -47,7 +47,7 @@
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:gravity="start|center_vertical"
+        android:gravity="center|center_vertical"
         android:text="@string/OfferedService"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="24sp"
@@ -92,7 +92,9 @@
                 android:layout_marginBottom="8dp"
                 android:enabled="false"
                 android:hint="@string/Title"
-                app:boxStrokeWidth="1dp">
+                app:boxStrokeWidth="1dp"
+                app:startIconDrawable="@drawable/format_title"
+                app:startIconTint="@color/Black">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedTitleFixed"
@@ -108,7 +110,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:enabled="false"
-                android:hint="@string/Description">
+                android:hint="@string/Description"
+                app:startIconDrawable="@drawable/text_long"
+                app:startIconTint="@color/Black">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedDescriptionFixed"
@@ -172,7 +176,8 @@
                 android:layout_marginBottom="8dp"
                 android:enabled="false"
                 android:hint="@string/Duration"
-                >
+                app:startIconDrawable="@drawable/timer_sand"
+                app:startIconTint="@color/Black">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedDurationFixed"

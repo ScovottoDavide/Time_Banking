@@ -49,7 +49,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@id/serviceImage"
-            android:drawableStart="@drawable/subtitles_outline"
+            android:drawableStart="@drawable/format_title"
             android:drawableTint="@color/Gray"
             android:text="@string/fullName"
             android:textColor="@color/black"

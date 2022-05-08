@@ -81,7 +81,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:hint="@string/Title"
-                app:boxStrokeWidth="1dp">
+                app:boxStrokeWidth="1dp"
+                app:startIconDrawable="@drawable/format_title">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedTitleFixed"
@@ -97,7 +98,8 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/Description">
+                android:hint="@string/Description"
+                app:startIconDrawable="@drawable/text_long">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedDescriptionFixed"
@@ -163,13 +165,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:hint="@string/Duration">
+                android:hint="@string/Duration"
+                app:startIconDrawable="@drawable/timer_sand">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedDurationFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#757575"
+                    android:enabled="false"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>

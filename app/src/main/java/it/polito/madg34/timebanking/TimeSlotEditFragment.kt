@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDate
@@ -40,11 +41,12 @@ class TimeSlotEditFragment : Fragment() {
 
     private lateinit var title: TextInputEditText
     private lateinit var description: TextInputEditText
-    private lateinit var duration: TextInputEditText
+    private lateinit var duration: TextInputLayout
     private lateinit var location: TextInputEditText
     private lateinit var date: TextInputLayout
     private lateinit var time: TextInputLayout
     private lateinit var item :TimeSlot
+    private lateinit var pageTitle : TextView
 
     private var hour = 0;
     private var minute = 0;
@@ -60,24 +62,28 @@ class TimeSlotEditFragment : Fragment() {
         halfWidth(view)
         title = view.findViewById(R.id.outlinedTitleFixed)
         description = view.findViewById(R.id.outlinedDescriptionFixed)
-        duration = view.findViewById(R.id.outlinedDurationFixed)
+        duration = view.findViewById(R.id.outlinedDuration)
         location = view.findViewById(R.id.outlinedLocationFixed)
         date = view.findViewById(R.id.outlinedDate)
         time = view.findViewById(R.id.outlinedTime)
 
         val bundle = arguments
         val index = bundle?.getInt("index") ?: item.index
-        if(index == -1)
+        if(index == -1){
             item = emptyTimeSlot()
+            pageTitle = view.findViewById(R.id.titleEditService)
+            pageTitle.setText(R.string.AddService)
+        }
         else {
             if(index>=0 && index < vm.listServices.value?.size!!){
                 item = vm.listServices.value?.get(index)!!
             }
             else if (index > vm.listServices.value?.size!!){
                 item = emptyTimeSlot()
+                pageTitle = view.findViewById(R.id.titleEditService)
+                pageTitle.setText(R.string.AddService)
             }
         }
-
 
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Select date")
@@ -90,6 +96,13 @@ class TimeSlotEditFragment : Fragment() {
             .setHour(hour)
             .setMinute(minute)
             .setTitleText("Select Service time")
+            .build()
+
+        val durationPicker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_24H)
+            .setHour(hour)
+            .setMinute(minute)
+            .setTitleText("Select Service duration")
             .build()
 
         date.setStartIconOnClickListener {
@@ -106,13 +119,14 @@ class TimeSlotEditFragment : Fragment() {
         time.setStartIconOnClickListener {
             timePicker.show(this.parentFragmentManager, "")
             timePicker.addOnPositiveButtonClickListener {
-                var minutes = ""
-                if (timePicker.minute == 0){
-                    minutes = timePicker.minute.toString() + "0"
-                }
-                else minutes = timePicker.minute.toString()
-                val timeString = timePicker.hour.toString() + ":" + minutes
-                time.editText?.setText(timeString)
+                time.editText?.setText(String.format("%02d:%02d", timePicker.hour, timePicker.minute))
+            }
+        }
+
+        duration.setStartIconOnClickListener {
+            durationPicker.show(this.parentFragmentManager, "")
+            durationPicker.addOnPositiveButtonClickListener {
+                duration.editText?.setText(String.format("%d hours and %d minutes", durationPicker.hour, durationPicker.minute))
             }
         }
 
@@ -120,7 +134,7 @@ class TimeSlotEditFragment : Fragment() {
         description.setText(item.description)
         date.editText?.setText(item.date)
         time.editText?.setText(item.time)
-        duration.setText(item.duration)
+        duration.editText?.setText(item.duration)
         location.setText(item.location)
 
         activity?.onBackPressedDispatcher?.addCallback(
@@ -128,7 +142,7 @@ class TimeSlotEditFragment : Fragment() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if(title.text.toString().isEmpty() || description.text.toString().isEmpty() || date.editText?.text.toString().isEmpty()
-                        || time.editText?.text.toString().isEmpty() || duration.text.toString().isEmpty() || location.text.toString().isEmpty())
+                        || time.editText?.text.toString().isEmpty() || duration.editText?.text.toString().isEmpty() || location.text.toString().isEmpty())
                         Toast.makeText(context, "Please, fill the entire form.", Toast.LENGTH_SHORT).show()
                     else {
                         if (index>=0 && index <= vm.listServices.value?.size!!) {
@@ -137,7 +151,7 @@ class TimeSlotEditFragment : Fragment() {
                                 it?.description = description.text.toString()
                                 it?.date = date.editText?.text.toString()
                                 it?.time = time.editText?.text.toString()
-                                it?.duration = duration.text.toString()
+                                it?.duration = duration.editText?.text.toString()
                                 it?.location = location.text.toString()
                                 it?.index = index
                                 vm.saveServices(vm.listServices.value!!)
@@ -148,7 +162,7 @@ class TimeSlotEditFragment : Fragment() {
                             item.description = description.text.toString()
                             item.date = date.editText?.text.toString()
                             item.time = time.editText?.text.toString()
-                            item.duration = duration.text.toString()
+                            item.duration = duration.editText?.text.toString()
                             item.location = location.text.toString()
                             item.index = index
                             vm.saveServices(mutableListOf(item))
@@ -159,7 +173,7 @@ class TimeSlotEditFragment : Fragment() {
                             item.description = description.text.toString()
                             item.date = date.editText?.text.toString()
                             item.time = time.editText?.text.toString()
-                            item.duration = duration.text.toString()
+                            item.duration = duration.editText?.text.toString()
                             item.location = location.text.toString()
                             item.index = index
                             vm.listServices.value?.add(item)
