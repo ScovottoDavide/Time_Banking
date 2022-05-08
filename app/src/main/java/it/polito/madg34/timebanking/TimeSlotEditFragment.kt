@@ -10,14 +10,20 @@ import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.navGraphViewModels
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointForward
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.android.material.timepicker.MaterialTimePicker
+import com.google.android.material.timepicker.TimeFormat
 import java.text.SimpleDateFormat
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.math.min
 
 class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
 
@@ -47,32 +53,43 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
         date = view.findViewById(R.id.outlinedDate)
         time = view.findViewById(R.id.outlinedTime)
 
-        val myCalendar = Calendar.getInstance()
-        val datePicker = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-            myCalendar.set(Calendar.YEAR, year)
-            myCalendar.set(Calendar.MONTH, month)
-            myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-            updateLable(myCalendar)
-        }
 
-        val timerPicker = TimePickerDialog.OnTimeSetListener { _, selectedHour, selectedMinute ->
-            hour = selectedHour
-            minute = selectedMinute
-            time.editText?.setText(String.format(Locale.getDefault(), "%02d:%02d", hour, minute))
-        }
+        val datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Select date")
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+            .setCalendarConstraints(CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now()).build())
+            .build()
+
+        val timePicker = MaterialTimePicker.Builder()
+            .setTimeFormat(TimeFormat.CLOCK_24H)
+            .setHour(hour)
+            .setMinute(minute)
+            .setTitleText("Select Service time")
+            .build()
+
 
         date.setStartIconOnClickListener {
-            DatePickerDialog(
-                requireContext(),
-                datePicker,
-                myCalendar.get(Calendar.YEAR),
-                myCalendar.get(Calendar.MONTH),
-                myCalendar.get(Calendar.DAY_OF_MONTH)
-            ).show()
+            datePicker.show(this.parentFragmentManager, "")
+            datePicker.addOnPositiveButtonClickListener {
+                val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+                utc.timeInMillis = it
+                val format = SimpleDateFormat("dd-MM-yyyy", Locale.ITALY)
+                val formatted: String = format.format(utc.time)
+                date.editText?.setText(formatted)
+            }
         }
 
         time.setStartIconOnClickListener {
-            TimePickerDialog(requireContext(), timerPicker, hour, minute, true).show()
+            timePicker.show(this.parentFragmentManager, "")
+            timePicker.addOnPositiveButtonClickListener {
+                var minutes = ""
+                if (timePicker.minute == 0){
+                    minutes = timePicker.minute.toString() + "0"
+                }
+                else minutes = timePicker.minute.toString()
+                val timeString = timePicker.hour.toString() + ":" + minutes
+                time.editText?.setText(timeString)
+            }
         }
 
         val bundle = arguments
@@ -145,13 +162,6 @@ class TimeSlotEditFragment : Fragment(R.layout.timesloteditfragment_layout) {
                     }
                 }
             })
-    }
-
-    private fun updateLable(myCalendar: Calendar) {
-        val myFormat = "dd-MM-yyyy"
-        val sdf = SimpleDateFormat(myFormat, Locale.ITALY)
-        date.editText?.setText(sdf.format(myCalendar.time))
-
     }
 
     private fun halfWidth(view: View) {

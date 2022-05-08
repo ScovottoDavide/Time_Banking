@@ -89,9 +89,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        vmTimeSlot = ViewModelProvider(this).get()
+       vmTimeSlot = ViewModelProvider(this).get()
         vmTimeSlot.listServices.observe(this){
-            if(vmTimeSlot.listServices.value?.size == 0){
+            if(vmTimeSlot.listServices.value?.size == 0 && navController.currentDestination?.id == navController.graph.startDestinationId){
                 // Dirty way, trigger reacreation of fragment to show empty message
                 navController.navigate(R.id.timeSlotListFragment)
             }
