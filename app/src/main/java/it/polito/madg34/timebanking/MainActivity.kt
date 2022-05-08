@@ -75,17 +75,19 @@ class MainActivity : AppCompatActivity() {
         }
         vmProfile = ViewModelProvider(this).get()
 
-        if (vmProfile.profile.value != null) {
-            val header = navView.getHeaderView(0)
-            val name = header?.findViewById<TextView>(R.id.nomecognome)
-            if (!vmProfile.profile.value?.fullName?.isEmpty()!!)
-                name?.text = vmProfile.profile.value?.fullName
-            val email = header?.findViewById<TextView>(R.id.headerMail)
-            if (!vmProfile.profile.value?.email?.isEmpty()!!)
-                email?.text = vmProfile.profile.value?.email
-            val imgProfile = header.findViewById<CircleImageView>(R.id.nav_header_userImg)
-            if (vmProfile.profile.value?.img != null) {
-                imgProfile.setImageURI(Uri.parse(vmProfile.profile.value?.img))
+        vmProfile.profile.observe(this){
+            if (vmProfile.profile.value != null) {
+                val header = navView.getHeaderView(0)
+                val name = header?.findViewById<TextView>(R.id.nomecognome)
+                if (!vmProfile.profile.value?.fullName?.isEmpty()!!)
+                    name?.text = vmProfile.profile.value?.fullName
+                val email = header?.findViewById<TextView>(R.id.headerMail)
+                if (!vmProfile.profile.value?.email?.isEmpty()!!)
+                    email?.text = vmProfile.profile.value?.email
+                val imgProfile = header.findViewById<CircleImageView>(R.id.nav_header_userImg)
+                if (vmProfile.profile.value?.img != null) {
+                    imgProfile.setImageURI(Uri.parse(vmProfile.profile.value?.img))
+                }
             }
         }
 

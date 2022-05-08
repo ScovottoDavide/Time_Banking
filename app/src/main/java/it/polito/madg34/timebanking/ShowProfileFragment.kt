@@ -68,7 +68,7 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
             val imgProfile = header?.findViewById<CircleImageView>(R.id.nav_header_userImg)
             if(item?.img != null) {
                 img_view.setImageURI(Uri.parse(item.img))
-                imgProfile?.setImageURI(Uri.parse(item.img))
+                imgProfile?.setImageDrawable(img_view.drawable)
             }
 
             item?.skills?.forEach {
