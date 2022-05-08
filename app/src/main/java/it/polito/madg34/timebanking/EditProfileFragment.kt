@@ -157,6 +157,7 @@ class EditProfileFragment : Fragment() {
                     MediaStore.Images.Media.insertImage(activity?.contentResolver, bitmap, "xyz", null)
                 uri = Uri.parse(path)
                 userImage.setImageURI(uri)
+                item?.img = uri.toString()
             }
         }
 
