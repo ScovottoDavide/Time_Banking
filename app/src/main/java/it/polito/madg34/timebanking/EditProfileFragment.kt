@@ -174,7 +174,8 @@ class EditProfileFragment : Fragment() {
                         if(uri!=null) this.img = uri?.toString()
                     }
                     vm._profile.value = vm._profile.value
-                    vm.saveProfile(vm.profile.value!!)
+                    vm.modifyUser(vm.profile.value!!)
+                    //vm.saveProfile(vm.profile.value!!)
                     Snackbar.make(view, "Profile successfully edited", Snackbar.LENGTH_LONG).show()
                     if (isEnabled) {
                         isEnabled = false

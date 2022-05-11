@@ -3,6 +3,7 @@ package it.polito.madg34.timebanking
 import android.content.res.Configuration
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -60,6 +61,7 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
             val navView  = activity?.findViewById<NavigationView>(R.id.nav_view)
             val header = navView?.getHeaderView(0)
             val name = header?.findViewById<TextView>(R.id.nomecognome)
+            Log.d("sec", item?.fullName.toString())
             if(!item?.fullName?.isEmpty()!!)
                 name?.text = item.fullName
             val email = header?.findViewById<TextView>(R.id.headerMail)
