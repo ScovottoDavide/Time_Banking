@@ -9,6 +9,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -19,42 +21,60 @@ class ProfileViewModel(application: Application) : AndroidViewModel(application)
     var sharedPref: SharedPreferences = getApplication<Application>().getSharedPreferences("package it.polito.madg34.timebanking.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
     private var  gson : Gson = Gson()
 
-    private val db : FirebaseFirestore
-        init {
-            db = FirebaseFirestore.getInstance()
-        }
+
 
     //val p = clear()
 
-    var _profile = MutableLiveData<ProfileUser>().also{
+    var _profile : MutableLiveData<ProfileUser> = MutableLiveData<ProfileUser>() /*.also{
 
-         /*db
+        db
              .collection("users")
              .document("u1")
              .get()
              .addOnSuccessListener { res ->
-                val value = res.toObject(ProfileUser::class.java)
-
-
+                 val value = res.toObject(ProfileUser::class.java)
+                 value
 
              }
              .addOnFailureListener{
                  Toast.makeText(getApplication(), "No user", Toast.LENGTH_SHORT).show()
 
-             }*/
-        if(sharedPref.contains("ProfileUser")){
+             }
+
+        /*if(sharedPref.contains("ProfileUser")){
             val type : Type = object : TypeToken<ProfileUser>() {}.type
             it.value = gson.fromJson(sharedPref.getString("ProfileUser", null), type)
 
+        }*/
+    }*/
+    var profile : LiveData<ProfileUser> =  _profile
+    private val db :FirebaseFirestore
+    private val l : ListenerRegistration
+    init {
+        db = FirebaseFirestore.getInstance()
+        l = FirebaseFirestore.getInstance().collection("users").document("u1").addSnapshotListener{ r, e ->
+            if (r != null) {
+                _profile.value = if(e!=null) {
+                    emptyProfile()
+                    return@addSnapshotListener
+                }
+                else {
+                       r.toObject<ProfileUser>()
+
+                }
+            }
+
         }
     }
+    var d = {
+        Log.d("PORCO23", _profile.value.toString())
+        Log.d("PORCO32", profile.value.toString())
+    }
+    var y = d()
 
-    var profile : LiveData<ProfileUser> =  _profile
 
     fun modifyUser(v : ProfileUser){
-        db.collection("users").document("u1").set(mapOf("uri" to v.img,"FULLNAME" to v.fullName,"NICKNAME" to v.nickname,"EMAIL" to v.email, "LOCATION" to v.location, "ABOUT_ME" to v.aboutUser,
-        "Skills" to v.skills
-        ))
+        FirebaseFirestore.getInstance().collection("users").document("u1").set(v)
             .addOnSuccessListener {
                 Toast.makeText(getApplication(), "OK", Toast.LENGTH_SHORT).show()
         }

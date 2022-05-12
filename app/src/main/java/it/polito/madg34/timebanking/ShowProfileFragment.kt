@@ -42,7 +42,10 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
         super.onViewCreated(view, savedInstanceState)
 
         //vm._profile.value = prova
-        val item : ProfileUser? = vm.profile.value
+       // val item : ProfileUser? = vm.profile.value
+
+
+
 
         fullNameView = view.findViewById(R.id.fullName)
         nicknameView = view.findViewById(R.id.nickName)
@@ -52,28 +55,28 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
         img_view = view.findViewById(R.id.userImg)
 
         vm.profile.observe(this.viewLifecycleOwner){
-            fullNameView.text = item?.fullName
-            nicknameView.text = item?.nickname
-            emailView.text = item?.email
-            myLocationView.text = item?.location
-            userDesc.text = item?.aboutUser
+            fullNameView.text = it?.fullName
+            nicknameView.text = it?.nickname
+            emailView.text = it?.email
+            myLocationView.text = it?.location
+            userDesc.text = it?.aboutUser
 
             val navView  = activity?.findViewById<NavigationView>(R.id.nav_view)
             val header = navView?.getHeaderView(0)
             val name = header?.findViewById<TextView>(R.id.nomecognome)
-            Log.d("sec", item?.fullName.toString())
-            if(!item?.fullName?.isEmpty()!!)
-                name?.text = item.fullName
+            Log.d("sec", it?.fullName.toString())
+            if(!it?.fullName?.isEmpty()!!)
+                name?.text = it.fullName
             val email = header?.findViewById<TextView>(R.id.headerMail)
-            if(!item.email?.isEmpty()!!)
-                email?.text = item.email
+            if(!it.email?.isEmpty()!!)
+                email?.text = it.email
             val imgProfile = header?.findViewById<CircleImageView>(R.id.nav_header_userImg)
-            if(item?.img != null) {
-                img_view.setImageURI(Uri.parse(item.img))
+            if(it?.img != null) {
+                img_view.setImageURI(Uri.parse(it.img))
                 imgProfile?.setImageDrawable(img_view.drawable)
             }
 
-            item?.skills?.forEach {
+            it?.skills?.forEach {
                 setSkills(it.key, it.value, view)
             }
         }

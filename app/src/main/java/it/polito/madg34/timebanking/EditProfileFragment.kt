@@ -154,7 +154,7 @@ class EditProfileFragment : Fragment() {
                 ) // Used for compression rate of the Image : 100 means no compression
 
                 val path: String =
-                    MediaStore.Images.Media.insertImage(activity?.contentResolver, bitmap, "xyz", null)
+                    MediaStore.Images.Media.insertImage(activity?.contentResolver, bitmap, "xyz", "")
                 uri = Uri.parse(path)
                 userImage.setImageURI(uri)
                 item?.img = uri.toString()
