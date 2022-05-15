@@ -20,5 +20,5 @@ data class ProfileUser (
      )
 
 fun emptyProfile() : ProfileUser {
-     return  ProfileUser("android.resource://it.polito.madg34.timebanking/"+R.drawable.user_icon, "", "", "", "", "", mutableMapOf())
+     return  ProfileUser(null, "", "", "", "", "", mutableMapOf())
 }

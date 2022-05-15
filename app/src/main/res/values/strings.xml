@@ -2,6 +2,7 @@
     <string name="app_name">Time Earn</string>
     <string name="signin">Sign In</string>
     <string name="logout">Logout</string>
+    <string name="registration">Register Profile</string>
 
     <string name="picutureTest">Default User Picture</string>
 

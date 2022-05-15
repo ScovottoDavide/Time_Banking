@@ -2,19 +2,19 @@ package it.polito.madg34.timebanking
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
-import androidx.navigation.navGraphViewModels
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
 
 class EditSkillFragment : Fragment() {
 
-    val vm by navGraphViewModels<ProfileViewModel>(R.id.main)
+    val vm : ProfileViewModel by activityViewModels()
 
     var _index: Int = 0
     var _indexDesc: Int = 0
@@ -24,6 +24,7 @@ class EditSkillFragment : Fragment() {
 
     lateinit var tv : TextView
     lateinit var editDesc : EditText
+    lateinit var profile : ProfileUser
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +38,8 @@ class EditSkillFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        profile = vm.localProfile!!
 
         _skillName = arguments?.getString("skillName")
         _skillDescription = arguments?.getString("skillDescription")
@@ -57,23 +60,23 @@ class EditSkillFragment : Fragment() {
                     //PASSARE ARGOMENTI
                     if(tv.text.toString().isNotEmpty()){
                        if(tv.text.toString() != _skillName){
-                           vm.profile.value?.skills?.remove(_skillName)
+                           profile.skills?.remove(_skillName)
                            if(editDesc.text.toString() != "")
-                               vm.profile.value?.skills?.set(tv.text.toString(), editDesc.text.toString())
+                               profile.skills?.set(tv.text.toString(), editDesc.text.toString())
                            else
-                               vm.profile.value?.skills?.set(tv.text.toString(), "No Description")
+                               profile.skills?.set(tv.text.toString(), "No Description")
                        } else {
                            if(editDesc.text.toString() != "")
-                               vm.profile.value?.skills?.replace(_skillName!!, _skillDescription!!, editDesc.text.toString())
+                               profile.skills?.replace(_skillName!!, _skillDescription!!, editDesc.text.toString())
                            else
-                               vm.profile.value?.skills?.replace(_skillName!!, _skillDescription!!, "No Description")
+                               profile.skills?.replace(_skillName!!, _skillDescription!!, "No Description")
                        }
-                        vm.saveProfile(vm.profile.value!!)
+                        vm.modifyUserProfile(profile)
                         if (isEnabled) {
                             isEnabled = false
                             requireActivity().onBackPressed()
                         }
-                        if(vm.profile.value?.skills?.get(tv.text.toString()) == null)
+                        if(profile.skills?.get(tv.text.toString()) == null)
                             Snackbar.make(view, "Skill successfully removed!", Snackbar.LENGTH_LONG).show()
                         else
                             Snackbar.make(view, "Skill successfully edited!", Snackbar.LENGTH_LONG).show()
@@ -99,8 +102,12 @@ class EditSkillFragment : Fragment() {
                 true
             }
             R.id.cancel -> {
-                vm.profile.value?.skills?.remove(tv.text.toString())
-                vm.saveProfile(vm.profile.value!!)
+                val profile = vm.localProfile
+                Log.d("EDIT", "${profile}")
+                //vm.profile.value?.skills?.remove(tv.text.toString())
+                profile?.skills?.remove(tv.text.toString())
+                Log.d("EDIT", "${profile}")
+                vm.modifyUserProfile(profile!!)
                 Snackbar.make(requireView(), "Skill successfully removed!", Snackbar.LENGTH_LONG).show()
                 requireActivity().onBackPressed()
                 true

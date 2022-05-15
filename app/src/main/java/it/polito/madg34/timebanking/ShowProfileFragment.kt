@@ -8,16 +8,15 @@ import android.view.*
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
 import com.google.android.material.navigation.NavigationView
 import de.hdodenhof.circleimageview.CircleImageView
-import org.w3c.dom.Text
 
-class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
-    val vm by navGraphViewModels<ProfileViewModel>(R.id.main)
+class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
+    val vm: ProfileViewModel by activityViewModels()
 
     private var h = 0
     private var w = 0
@@ -26,12 +25,17 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
     lateinit var nicknameView: TextView
     lateinit var emailView: TextView
     lateinit var myLocationView: TextView
-    lateinit var userDesc : TextView
+    lateinit var userDesc: TextView
     lateinit var img_view: ImageView
+    private var profile : ProfileUser? = ProfileUser()
 
     //private val prova : ProfileUser = ProfileUser(null, "Ciao", "prova", "dddd", "dddd","CCC", mutableMapOf("Ciao" to "Ciao"))
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.showprofilefragment_layout, container, false)
         setHasOptionsMenu(true)
         return view
@@ -41,9 +45,6 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        //vm._profile.value = prova
-       // val item : ProfileUser? = vm.profile.value
-
         fullNameView = view.findViewById(R.id.fullName)
         nicknameView = view.findViewById(R.id.nickName)
         emailView = view.findViewById(R.id.email)
@@ -51,34 +52,42 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
         userDesc = view.findViewById(R.id.userDesc)
         img_view = view.findViewById(R.id.userImg)
 
-        vm.profile.observe(this.viewLifecycleOwner){
-            fullNameView.text = it?.fullName
-            nicknameView.text = it?.nickname
-            emailView.text = it?.email
-            myLocationView.text = it?.location
-            userDesc.text = it?.aboutUser
-
-            val navView  = activity?.findViewById<NavigationView>(R.id.nav_view)
-            val header = navView?.getHeaderView(0)
-            val name = header?.findViewById<TextView>(R.id.nomecognome)
-            Log.d("sec", it?.fullName.toString())
-            if(!it?.fullName?.isEmpty()!!)
-                name?.text = it.fullName
-            val email = header?.findViewById<TextView>(R.id.headerMail)
-            if(!it.email?.isEmpty()!!)
-                email?.text = it.email
-            val imgProfile = header?.findViewById<CircleImageView>(R.id.nav_header_userImg)
-            if(it?.img != null) {
-                img_view.setImageURI(Uri.parse(it.img))
-                imgProfile?.setImageDrawable(img_view.drawable)
-            }
-
-            it?.skills?.forEach {
-                setSkills(it.key, it.value, view)
+        vm.getDBUser().observe(viewLifecycleOwner) {
+            if (it == null)
+                Toast.makeText(context, "Firebase Failure!", Toast.LENGTH_LONG).show()
+            else {
+                profile = it
+                setProfile(view)
             }
         }
-
         constantScreenLayoutOnScrolling(view)
+    }
+
+    private fun setProfile(view : View) {
+        fullNameView.text = profile?.fullName
+        nicknameView.text = profile?.nickname
+        emailView.text = profile?.email
+        myLocationView.text = profile?.location
+        userDesc.text = profile?.aboutUser
+
+        val navView = activity?.findViewById<NavigationView>(R.id.nav_view)
+        val header = navView?.getHeaderView(0)
+        val name = header?.findViewById<TextView>(R.id.nomecognome)
+        Log.d("sec", profile?.fullName.toString())
+        if (!profile?.fullName?.isEmpty()!!)
+            name?.text = profile!!.fullName
+        val email = header?.findViewById<TextView>(R.id.headerMail)
+        if (!profile!!.email?.isEmpty()!!)
+            email?.text = profile!!.email
+        val imgProfile = header?.findViewById<CircleImageView>(R.id.nav_header_userImg)
+        if (!profile!!.img.isNullOrEmpty()!!) {
+            img_view.setImageURI(Uri.parse(profile!!.img))
+            imgProfile?.setImageDrawable(img_view.drawable)
+        }
+
+        profile?.skills?.forEach {
+            setSkills(it.key, it.value, view)
+        }
     }
 
     private fun setSkills(skill: String, description: String, view: View) {
@@ -106,12 +115,16 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
         }
         tv.text = skill
         tv.textSize = 20F
-        tv.setTextAppearance(activity, com.google.android.material.R.style.TextAppearance_AppCompat_Body2)
+        tv.setTextAppearance(
+            activity,
+            com.google.android.material.R.style.TextAppearance_AppCompat_Body2
+        )
 
         /** Prepare the arrow to be placed along with the text in the Expansion Header**/
         arrow.setImageResource(com.github.florent37.expansionpanel.R.drawable.ic_expansion_header_indicator_grey_24dp)
         /** Margin to place the arrows **/
-        val wid = if(resources.configuration.orientation==Configuration.ORIENTATION_LANDSCAPE) 2600 else 1850
+        val wid =
+            if (resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE) 2600 else 1850
         val arrowLayoutParams = LinearLayout.LayoutParams(
             wid,
             LinearLayout.LayoutParams.WRAP_CONTENT
@@ -139,7 +152,10 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply { marginStart = 5 }
         expansionText.id = layout.id
-        expansionText.setTextAppearance(activity, com.google.android.material.R.style.TextAppearance_AppCompat_Body1)
+        expansionText.setTextAppearance(
+            activity,
+            com.google.android.material.R.style.TextAppearance_AppCompat_Body1
+        )
         expansionText.textSize = 15F
         expansionText.text = description
 
@@ -168,7 +184,7 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
         sv.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                if(resources.configuration.orientation==Configuration.ORIENTATION_PORTRAIT){
+                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                     h = sv.height
                     w = sv.width
                     iv.post { iv.layoutParams = LinearLayout.LayoutParams(w, h / 3) }
@@ -187,10 +203,11 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
         inflater.inflate(R.menu.pencil_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.pencil -> {
-                //val bundle = arguments
+                vm.localProfile = profile
                 findNavController().navigate(R.id.action_showProfileFragment_to_editProfileFragment)
                 true
             }

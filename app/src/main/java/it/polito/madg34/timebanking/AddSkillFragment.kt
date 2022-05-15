@@ -8,12 +8,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 
 class AddSkillFragment: Fragment() {
-    val vm by navGraphViewModels<ProfileViewModel>(R.id.main)
+    val vm : ProfileViewModel by activityViewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.addskillfragment_layout, container, false)
@@ -24,7 +25,7 @@ class AddSkillFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val item : ProfileUser? = vm.profile.value
+        val item : ProfileUser? = vm.localProfile
 
         val skillName = view.findViewById<EditText>(R.id.skillName)
         val skillDesc = view.findViewById<EditText>(R.id.skillDescription)

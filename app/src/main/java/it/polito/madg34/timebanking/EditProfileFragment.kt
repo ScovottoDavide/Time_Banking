@@ -20,25 +20,36 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
+import de.hdodenhof.circleimageview.CircleImageView
 import java.io.*
 
 class EditProfileFragment : Fragment() {
-    val vm by navGraphViewModels<ProfileViewModel>(R.id.main)
+    val vm: ProfileViewModel by activityViewModels()
 
     private var h = 0
     private var w = 0
     private lateinit var bitmap: Bitmap
-    private  var uri: Uri? = null
-
-
+    private var uri: Uri? = null
 
     private lateinit var takePicture: ActivityResultLauncher<Intent>
     private lateinit var takePictureGallery: ActivityResultLauncher<String>
+
+    lateinit var item: ProfileUser
+
+    lateinit var fullName: EditText
+    lateinit var nickname: EditText
+    lateinit var email: EditText
+    lateinit var location: EditText
+    lateinit var userDesc: EditText
+    lateinit var userImage: CircleImageView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,10 +58,6 @@ class EditProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.editprofilefragment_layout, container, false)
         setHasOptionsMenu(true)
-
-        if (vm.profile.value == null) {
-            vm.saveProfile(emptyProfile())
-        }
 
         val buttonPopup = view.findViewById<ImageButton>(R.id.plus)
         buttonPopup.setOnClickListener(View.OnClickListener() {
@@ -76,58 +83,65 @@ class EditProfileFragment : Fragment() {
                 }
 
             })
-
-
             popupMenu.show()
         })
 
         return view
     }
 
-
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val item: ProfileUser? = vm.profile.value
+        item = vm.localProfile ?: emptyProfile()
 
-        val fullName = view.findViewById<EditText>(R.id.editTextTextPersonName)
-        val nickname = view.findViewById<EditText>(R.id.editTextTextPersonName3)
-        val email = view.findViewById<EditText>(R.id.editTextTextEmailAddress)
-        val location = view.findViewById<EditText>(R.id.editTextLocation)
-        val userDesc = view.findViewById<EditText>(R.id.userDesc)
-        val userImage = view.findViewById<ImageView>(R.id.userImage)
-
-        fullName.setText(item?.fullName)
-        nickname.setText(item?.nickname)
-        email.setText(item?.email)
-        location.setText(item?.location)
-        userDesc.setText(item?.aboutUser)
-        if(item?.img != null){
-            println("IMAGE")
-            userImage.setImageURI(Uri.parse(item.img))
+        var isRegistration = false
+        if (item.email.isNullOrEmpty()) {
+            isRegistration = true
         }
-        else userImage.setImageResource(R.drawable.user)
+
+        fullName = view.findViewById(R.id.editTextTextPersonName)
+        nickname = view.findViewById(R.id.editTextTextPersonName3)
+        email = view.findViewById(R.id.editTextTextEmailAddress)
+        location = view.findViewById(R.id.editTextLocation)
+        userDesc = view.findViewById(R.id.userDesc)
+        userImage = view.findViewById(R.id.userImage)
+
+        /*if(isRegistration){
+            val toolbar = view.findViewById<MaterialToolbar>(R.id.my_toolbar)
+            toolbar.setTitle(R.string.registration)
+            toolbar.navigationIcon = null
+        }*/
+
+        fullName.setText(item.fullName)
+        nickname.setText(item.nickname)
+        email.setText(item.email)
+        location.setText(item.location)
+        userDesc.setText(item.aboutUser)
+        if (!item.img.isNullOrEmpty()) {
+            userImage.setImageURI(Uri.parse(item.img))
+        } else userImage.setImageResource(R.drawable.user)
 
         var indexName = 100
         var indexDesc = -100
-        item?.skills?.toSortedMap()?.forEach {
+        item.skills?.toSortedMap()?.forEach {
             setSkills(it.key, it.value, indexName++, indexDesc--, view)
         }
 
 
         takePictureGallery = registerForActivityResult(ActivityResultContracts.GetContent()) {
-            if(it != null) uri = it
+            if (it != null) uri = it
             else return@registerForActivityResult
             /** SAVE THE IMAGE IN THE INTERNAL STORAGE **/
             bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
             val wrapper = ContextWrapper(activity?.applicationContext)
-            var file = wrapper.getDir("Images", AppCompatActivity.MODE_PRIVATE) // NEED ROOT ACCESS TO SEE IT ON THE PHONE
+            var file = wrapper.getDir(
+                "Images",
+                AppCompatActivity.MODE_PRIVATE
+            ) // NEED ROOT ACCESS TO SEE IT ON THE PHONE
 
-            file = File(file, "GalleryPhoto"+".jpg")
+            file = File(file, "GalleryPhoto" + ".jpg")
 
-            try{
+            try {
                 val stream: OutputStream?
                 stream = FileOutputStream(file)
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream)
@@ -136,57 +150,78 @@ class EditProfileFragment : Fragment() {
                 uri = Uri.parse(file.absolutePath)
                 userImage.setImageURI(null)
                 userImage.setImageURI(uri)
-                item?.img = uri.toString()
-            }catch (e : IOException){
+                item.img = uri.toString()
+            } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
 
 
-        takePicture =registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                bitmap = result?.data?.extras?.get("data") as Bitmap
-                val bytes = ByteArrayOutputStream()
-                bitmap.compress(
-                    Bitmap.CompressFormat.JPEG,
-                    100,
-                    bytes
-                ) // Used for compression rate of the Image : 100 means no compression
+        takePicture =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == Activity.RESULT_OK) {
+                    bitmap = result?.data?.extras?.get("data") as Bitmap
+                    val bytes = ByteArrayOutputStream()
+                    bitmap.compress(
+                        Bitmap.CompressFormat.JPEG,
+                        100,
+                        bytes
+                    ) // Used for compression rate of the Image : 100 means no compression
 
-                val path: String =
-                    MediaStore.Images.Media.insertImage(activity?.contentResolver, bitmap, "xyz", "")
-                uri = Uri.parse(path)
-                userImage.setImageURI(uri)
-                item?.img = uri.toString()
+                    val path: String =
+                        MediaStore.Images.Media.insertImage(
+                            activity?.contentResolver,
+                            bitmap,
+                            "xyz",
+                            ""
+                        )
+                    uri = Uri.parse(path)
+                    userImage.setImageURI(uri)
+                    item.img = uri.toString()
+                }
             }
-        }
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    vm.profile.value?.apply {
-                        this.fullName = fullName.text.toString()
-                        this.nickname = nickname.text.toString()
-                        this.email = email.text.toString()
-                        this.location = location.text.toString()
-                        this.aboutUser = userDesc.text.toString()
-                        if(uri!=null) this.img = uri?.toString()
-                    }
-                    vm._profile.value = vm._profile.value
-                    vm.modifyUser(vm.profile.value!!)
-                    //vm.saveProfile(vm.profile.value!!)
-                    Snackbar.make(view, "Profile successfully edited", Snackbar.LENGTH_LONG).show()
-                    if (isEnabled) {
-                        isEnabled = false
-                        requireActivity().onBackPressed()
-                    }
+                    item.fullName = fullName.text.toString()
+                    item.nickname = nickname.text.toString()
+                    item.email = email.text.toString()
+                    item.location = location.text.toString()
+                    item.aboutUser = userDesc.text.toString()
+                    if (uri != null) item.img = uri?.toString()
+                    if (!item.fullName.isNullOrEmpty() && !item.nickname.isNullOrEmpty() && !item.email.isNullOrEmpty()
+                        && !item.location.isNullOrEmpty() && !item.aboutUser.isNullOrEmpty()
+                    ) {
+
+                        vm.profile.value = item
+                        vm.localProfile = item
+                        vm.profile.value = vm.profile.value
+                        vm.modifyUserProfile(item)
+                        //vm.saveProfile(vm.profile.value!!)
+                        if (isRegistration)
+                            Snackbar.make(
+                                view,
+                                "Profile successfully created",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                        else
+                            Snackbar.make(view, "Profile successfully edited", Snackbar.LENGTH_LONG)
+                                .show()
+                        if (isEnabled) {
+                            isEnabled = false
+                            requireActivity().onBackPressed()
+                        }
+                    } else
+                        Snackbar.make(view, "Complete profile registration", Snackbar.LENGTH_SHORT).show()
                 }
             })
 
         constantScreenLayoutOnScrolling(view)
         val buttonAddSkill = view.findViewById<TextView>(R.id.textSkills)
         buttonAddSkill.setOnClickListener {
+            updateProfile()
             findNavController().navigate(R.id.action_editProfileFragment_to_addSkillFragment)
 
         }
@@ -305,7 +340,11 @@ class EditProfileFragment : Fragment() {
                 "skillDescription" to description
             )
 
-            findNavController().navigate(R.id.action_editProfileFragment_to_editSkillFragment, bundle)
+            vm.localProfile = item
+            findNavController().navigate(
+                R.id.action_editProfileFragment_to_editSkillFragment,
+                bundle
+            )
         }
 
     }
@@ -329,7 +368,6 @@ class EditProfileFragment : Fragment() {
         }
 
     }
-
 
     private fun constantScreenLayoutOnScrolling(view: View) {
         val sv = view.findViewById<ScrollView>(R.id.scrollViewShow)
@@ -371,11 +409,24 @@ class EditProfileFragment : Fragment() {
         }
     }
 
+    private fun updateProfile() {
+        vm.localProfile = ProfileUser(
+            fullName = fullName.text.toString(),
+            nickname = nickname.text.toString(),
+            email = item.email,
+            location = location.text.toString(),
+            img = item.img,
+            aboutUser = userDesc.text.toString()
+        )
+        item = vm.localProfile!!
+    }
+
     private fun closeKeyboard() {
         // this will give us the view which is currently focus in this layout
         val v: View? = this.view?.findFocus()
 
-        val manager: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val manager: InputMethodManager =
+            context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromWindow(v?.windowToken, 0)
     }
 }

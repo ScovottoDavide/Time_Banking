@@ -2,6 +2,7 @@ package it.polito.madg34.timebanking
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -26,9 +27,9 @@ class AuthActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         mAuth = Firebase.auth
-
         // Check if the user is already authenticated
         if (mAuth.currentUser == null) {
+
             // If not, build the authentication activity with the button to authenticate with Google
             setContentView(R.layout.auth_activity)
 
@@ -121,6 +122,7 @@ class AuthActivity : AppCompatActivity() {
     }
 
     companion object {
+        private const val TAG = "GoogleLogin"
         private const val RC_SIGN_IN = 3
     }
 }
