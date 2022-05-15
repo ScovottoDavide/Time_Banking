@@ -16,18 +16,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TimeBanking">
         <activity
-            android:name=".AddSkill"
-            android:exported="false" />
-        <activity
-            android:name=".EditSkill"
-            android:exported="false" />
-        <activity
-            android:name=".ShowProfileActivity"
-            android:exported="false" />
-        <activity
-            android:name=".EditProfileActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
