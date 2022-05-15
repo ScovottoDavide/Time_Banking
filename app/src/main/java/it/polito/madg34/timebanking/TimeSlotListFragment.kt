@@ -32,6 +32,7 @@ class TimeSlotListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         val addButton: FloatingActionButton = view.findViewById(R.id.add_button)
         if (vm.listServices.value?.size == 0 || vm.listServices.value?.size == null) {
             emptyView = view.findViewById(R.id.emptyListTV)

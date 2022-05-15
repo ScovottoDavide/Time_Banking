@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">Time Earn</string>
+    <string name="signin">Sign In</string>
+    <string name="logout">Logout</string>
+
     <string name="picutureTest">Default User Picture</string>
 
     <string name="fullName">Full Name :</string>

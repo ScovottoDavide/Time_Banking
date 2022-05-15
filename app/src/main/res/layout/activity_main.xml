@@ -45,7 +45,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:navGraph="@navigation/main"
-            tools:layout="@layout/timeslotlistfragment_layout" />
+            tools:layout="@layout/auth_activity" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -57,5 +57,17 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/navview_header"
-        app:menu="@menu/nav_menu"/>
+        app:menu="@menu/nav_menu">
+
+        <Button
+            android:id="@+id/logout_btn"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="@string/logout"
+            android:layout_gravity="bottom"
+            />
+    </com.google.android.material.navigation.NavigationView>
+
+
+
 </androidx.drawerlayout.widget.DrawerLayout>

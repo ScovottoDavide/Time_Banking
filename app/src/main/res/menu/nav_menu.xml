@@ -13,4 +13,5 @@
             android:icon="@drawable/menu_icon"
             android:title="List of my services" />
     </group>
+
 </menu>

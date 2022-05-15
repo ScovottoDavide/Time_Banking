@@ -44,9 +44,6 @@ class ShowProfileFragment: Fragment(R.layout.showprofilefragment_layout) {
         //vm._profile.value = prova
        // val item : ProfileUser? = vm.profile.value
 
-
-
-
         fullNameView = view.findViewById(R.id.fullName)
         nicknameView = view.findViewById(R.id.nickName)
         emailView = view.findViewById(R.id.email)

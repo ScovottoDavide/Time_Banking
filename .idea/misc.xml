@@ -50,11 +50,16 @@
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/TimeBankingApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.246" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout-land/editskillfragment_layout.xml" value="0.21516754850088182" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout-land/timesloteditfragment_layout.xml" value="0.21516754850088182" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/activity_main.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/auth_activity.xml" value="0.24230072463768115" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/card_layout.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/editskillfragment_layout.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/login_fragment.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/navview_header.xml" value="0.24230072463768115" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/timeslotdetailsfragment_layout.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/timesloteditfragment_layout.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/menu/cancel_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/menu/nav_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/menu/save_page.xml" value="0.25416666666666665" />
       </map>
     </option>

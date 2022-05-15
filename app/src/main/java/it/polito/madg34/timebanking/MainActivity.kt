@@ -1,33 +1,32 @@
 package it.polito.madg34.timebanking
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.View
+import android.widget.Button
 import android.widget.TextView
-import androidx.activity.viewModels
-import androidx.appcompat.app.ActionBarDrawerToggle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.lifecycle.ViewModelLazy
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.get
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.get
-import androidx.navigation.navGraphViewModels
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import de.hdodenhof.circleimageview.CircleImageView
-import org.w3c.dom.Text
 
 
 class MainActivity : AppCompatActivity() {
@@ -57,6 +56,10 @@ class MainActivity : AppCompatActivity() {
         toolbar.setupWithNavController(navController, appBarConfiguration)
 
         navView = findViewById(R.id.nav_view)
+        val logoutButton = findViewById<Button>(R.id.logout_btn)
+        logoutButton.setOnClickListener {
+            logOut()
+        }
         navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_profile -> {
@@ -103,5 +106,36 @@ class MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.fragmentContainerView)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+
+    /*
+        Function to perform the logout and to return to the Auth Activity
+    */
+    private fun logOut() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Log out")
+            .setMessage("Do you want to log out from the Car Pooling app?")
+            .setPositiveButton("Yes") { _, _ ->
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.web_client_id))
+                    .requestEmail()
+                    .build()
+
+                // Sign out from Google
+                GoogleSignIn.getClient(this, gso).signOut()
+                    .addOnCompleteListener(this) {
+                        if (it.isSuccessful) {
+                            // Sign out from Firebase
+                            Firebase.auth.signOut()
+                            Toast.makeText(this, "Successfully logged out!", Toast.LENGTH_SHORT).show()
+                            startActivity(Intent(this, AuthActivity::class.java))
+                            finish()
+                        }
+                    }
+            }
+            .setNegativeButton("No") { _, _ ->
+            }
+            .show()
     }
 }
