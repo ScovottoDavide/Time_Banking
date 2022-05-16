@@ -3,6 +3,7 @@ package it.polito.madg34.timebanking
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
+import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
@@ -18,6 +19,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.reflect.Type
+import java.net.URI
 
 class ProfileViewModel : ViewModel() {
 
@@ -51,6 +53,7 @@ class ProfileViewModel : ViewModel() {
         }*/
     }*/
 
+    var showed = false
     var localProfile : ProfileUser? = ProfileUser()
 
     val profile: MutableLiveData<ProfileUser> by lazy { MutableLiveData(ProfileUser()).also { loadProfile() } }

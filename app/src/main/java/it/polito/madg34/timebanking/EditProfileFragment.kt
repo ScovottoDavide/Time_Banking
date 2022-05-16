@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -24,8 +25,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.storage.FirebaseStorage
 import de.hdodenhof.circleimageview.CircleImageView
+import org.w3c.dom.Text
 import java.io.*
 
 class EditProfileFragment : Fragment() {
@@ -35,6 +40,7 @@ class EditProfileFragment : Fragment() {
     private var w = 0
     private lateinit var bitmap: Bitmap
     private var uri: Uri? = null
+    lateinit var file : File
 
     private lateinit var takePicture: ActivityResultLauncher<Intent>
     private lateinit var takePictureGallery: ActivityResultLauncher<String>
@@ -56,6 +62,8 @@ class EditProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.editprofilefragment_layout, container, false)
         setHasOptionsMenu(true)
+        // Disable the navigation icon
+        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         item = vm.localProfile!!
 
@@ -103,11 +111,20 @@ class EditProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*if(isRegistration){
-            val toolbar = view.findViewById<MaterialToolbar>(R.id.my_toolbar)
-            toolbar.setTitle(R.string.registration)
-            toolbar.navigationIcon = null
-        }*/
+        if (isRegistration) {
+            val title = view.findViewById<TextView>(R.id.AccountInfo)
+            title.setText(getString(R.string.registration))
+            if(!vm.showed){
+                MaterialAlertDialogBuilder(requireContext())
+                    .setTitle("Registration")
+                    .setMessage("Before continuing, compile the form to give us some important information about you." +
+                            "If you go back, you will be logged out.")
+                    .setPositiveButton("OK") { _, _ ->
+                    }
+                    .show()
+                vm.showed = true
+            }
+        }
 
         fullName.setText(item.fullName)
         nickname.setText(item.nickname)
@@ -130,12 +147,12 @@ class EditProfileFragment : Fragment() {
             /** SAVE THE IMAGE IN THE INTERNAL STORAGE **/
             bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, uri)
             val wrapper = ContextWrapper(activity?.applicationContext)
-            var file = wrapper.getDir(
+            file = wrapper.getDir(
                 "Images",
                 AppCompatActivity.MODE_PRIVATE
             ) // NEED ROOT ACCESS TO SEE IT ON THE PHONE
 
-            file = File(file, "GalleryPhoto" + ".jpg")
+            file = File(file, item.email + ".jpg")
 
             try {
                 val stream: OutputStream?
@@ -192,7 +209,7 @@ class EditProfileFragment : Fragment() {
                     ) {
 
                         vm.localProfile = item
-                        vm.modifyUserProfile(item)
+                        vm.modifyUserProfile(vm.localProfile!!)
                         if (isRegistration)
                             Snackbar.make(
                                 view,
@@ -207,7 +224,8 @@ class EditProfileFragment : Fragment() {
                             requireActivity().onBackPressed()
                         }
                     } else
-                        Snackbar.make(view, "Complete profile registration", Snackbar.LENGTH_SHORT).show()
+                        Snackbar.make(view, "Complete profile registration", Snackbar.LENGTH_SHORT)
+                            .show()
                 }
             })
 
@@ -395,6 +413,10 @@ class EditProfileFragment : Fragment() {
                 closeKeyboard()
                 // Backing is too fast--> the closing of keyboard is too slow!
                 Thread.sleep(100)
+                if(isRegistration){
+                    vm.needRegistration = false
+                }
+
                 requireActivity().onBackPressed()
                 true
             }

@@ -43,5 +43,9 @@
 
     <string name="barTitle">Time Banking</string>
 
+    <string name="welcome">Welcome to the TimeEarn App.</string>
+    <string name="welcome2">Do not forget, here time is money!</string>
+    <string name="welcome3">Sign in and register your new profile and start interacting with all our friends!</string>
+
     <string name="web_client_id">704043757142-su9qfek247vvrquhunelunu7binit5eg.apps.googleusercontent.com</string>
 </resources>

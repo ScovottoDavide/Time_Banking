@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -40,6 +41,11 @@ class AuthActivity : AppCompatActivity() {
 
             googleSignInClient = GoogleSignIn.getClient(this, gso)
             val signInButton = findViewById<SignInButton>(R.id.sign_in_button)
+            /* Customize sign in Button*/
+            signInButton.setSize(SignInButton.SIZE_STANDARD)
+            val signin_tv = signInButton.getChildAt(0) as TextView
+            signin_tv.setText("Sign in with Google")
+            /* End of customizing */
             signInButton.setOnClickListener {
                 signIn()
             }

@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.util.*
 
@@ -27,6 +28,10 @@ class TimeSlotListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.timeslotlistfragment_layout, container, false)
+        val toolbar = view.findViewById<MaterialToolbar>(R.id.my_toolbar)
+        if(toolbar.hasOnClickListeners())
+            toolbar.setNavigationOnClickListener(null)
+
         return view
     }
 

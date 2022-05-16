@@ -1,8 +1,10 @@
 package it.polito.madg34.timebanking
 
 import android.content.Intent
+import android.location.GnssAntennaInfo
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -55,6 +57,7 @@ class MainActivity : AppCompatActivity() {
         val toolbar: MaterialToolbar = findViewById(R.id.my_toolbar)
         setSupportActionBar(toolbar)
         toolbar.setupWithNavController(navController, appBarConfiguration)
+
 
         vmProfile.getDBUser().observe(this) {
             if (it == null && vmProfile.needRegistration){
@@ -123,7 +126,7 @@ class MainActivity : AppCompatActivity() {
     private fun logOut() {
         MaterialAlertDialogBuilder(this)
             .setTitle("Log out")
-            .setMessage("Do you want to log out from the Car Pooling app?")
+            .setMessage("Do you want to log out from the Time Earn app?")
             .setPositiveButton("Yes") { _, _ ->
                 val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                     .requestIdToken(getString(R.string.web_client_id))
