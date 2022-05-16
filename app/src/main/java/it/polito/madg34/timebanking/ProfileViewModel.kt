@@ -82,7 +82,6 @@ class ProfileViewModel : ViewModel() {
                 return@EventListener
             }
             profile.value = value?.toObject(ProfileUser::class.java)
-            Log.d("SHOW2", "${profile.value}")
         })
     }
 

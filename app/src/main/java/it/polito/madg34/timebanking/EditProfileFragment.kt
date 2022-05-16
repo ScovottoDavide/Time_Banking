@@ -22,11 +22,8 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.*
@@ -42,7 +39,8 @@ class EditProfileFragment : Fragment() {
     private lateinit var takePicture: ActivityResultLauncher<Intent>
     private lateinit var takePictureGallery: ActivityResultLauncher<String>
 
-    lateinit var item: ProfileUser
+    var item: ProfileUser = ProfileUser()
+    var isRegistration = false
 
     lateinit var fullName: EditText
     lateinit var nickname: EditText
@@ -58,6 +56,19 @@ class EditProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.editprofilefragment_layout, container, false)
         setHasOptionsMenu(true)
+
+        item = vm.localProfile!!
+
+        if (item.email.isNullOrEmpty()) {
+            isRegistration = true
+        }
+
+        fullName = view.findViewById(R.id.editTextTextPersonName)
+        nickname = view.findViewById(R.id.editTextTextPersonName3)
+        email = view.findViewById(R.id.editTextTextEmailAddress)
+        location = view.findViewById(R.id.editTextLocation)
+        userDesc = view.findViewById(R.id.userDesc)
+        userImage = view.findViewById(R.id.userImage)
 
         val buttonPopup = view.findViewById<ImageButton>(R.id.plus)
         buttonPopup.setOnClickListener(View.OnClickListener() {
@@ -92,20 +103,6 @@ class EditProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        item = vm.localProfile ?: emptyProfile()
-
-        var isRegistration = false
-        if (item.email.isNullOrEmpty()) {
-            isRegistration = true
-        }
-
-        fullName = view.findViewById(R.id.editTextTextPersonName)
-        nickname = view.findViewById(R.id.editTextTextPersonName3)
-        email = view.findViewById(R.id.editTextTextEmailAddress)
-        location = view.findViewById(R.id.editTextLocation)
-        userDesc = view.findViewById(R.id.userDesc)
-        userImage = view.findViewById(R.id.userImage)
-
         /*if(isRegistration){
             val toolbar = view.findViewById<MaterialToolbar>(R.id.my_toolbar)
             toolbar.setTitle(R.string.registration)
@@ -126,7 +123,6 @@ class EditProfileFragment : Fragment() {
         item.skills?.toSortedMap()?.forEach {
             setSkills(it.key, it.value, indexName++, indexDesc--, view)
         }
-
 
         takePictureGallery = registerForActivityResult(ActivityResultContracts.GetContent()) {
             if (it != null) uri = it
@@ -195,11 +191,8 @@ class EditProfileFragment : Fragment() {
                         && !item.location.isNullOrEmpty() && !item.aboutUser.isNullOrEmpty()
                     ) {
 
-                        vm.profile.value = item
                         vm.localProfile = item
-                        vm.profile.value = vm.profile.value
                         vm.modifyUserProfile(item)
-                        //vm.saveProfile(vm.profile.value!!)
                         if (isRegistration)
                             Snackbar.make(
                                 view,
@@ -413,12 +406,19 @@ class EditProfileFragment : Fragment() {
         vm.localProfile = ProfileUser(
             fullName = fullName.text.toString(),
             nickname = nickname.text.toString(),
-            email = item.email,
+            email = email.text.toString(),
             location = location.text.toString(),
             img = item.img,
-            aboutUser = userDesc.text.toString()
+            aboutUser = userDesc.text.toString(),
+            skills = item.skills
         )
         item = vm.localProfile!!
+    }
+
+    override fun onPause() {
+        super.onPause()
+        closeKeyboard()
+        updateProfile()
     }
 
     private fun closeKeyboard() {
