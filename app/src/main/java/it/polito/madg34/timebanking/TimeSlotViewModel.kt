@@ -5,14 +5,18 @@ import androidx.lifecycle.MutableLiveData
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.TypedArray
+import android.util.Log
 import androidx.lifecycle.*
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ListenerRegistration
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.lang.Exception
 import java.lang.reflect.Type
-import java.sql.Time
-import java.time.format.DateTimeFormatter
-import kotlin.reflect.typeOf
 
 
 class TimeSlotViewModel(application: Application) : AndroidViewModel(application) {
@@ -41,4 +45,71 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
     fun clear(){
         sharedPref.edit().clear().apply()
     }
+
+
+   /* val _listServices =
+        MutableLiveData<List<TimeSlot>?>() //by lazy { MutableLiveData<List<TimeSlot>>().also { loadList() } }
+    val listServices: LiveData<List<TimeSlot>?> = _listServices
+    private var fireStoreDB = FirebaseFirestore.getInstance()
+
+    companion object {
+        // Current Authenticated user
+        lateinit var currentUser: FirebaseUser
+    }
+
+    private var listener2: ListenerRegistration? = null
+
+
+    init {
+        listener2 = fireStoreDB.collection("listOfservice")
+            .whereEqualTo("email", FirestoreRepository.currentUser.email!!)
+            .addSnapshotListener(EventListener { value, e ->
+                if (e != null) {
+                    _listServices.value = null
+                    return@EventListener
+                }
+                _listServices.value = value!!.mapNotNull { d ->
+                    d.toTimeSlotObject()
+                }
+
+                Log.d("Prova", _listServices.value.toString())
+
+            })
+    }
+
+
+
+
+
+
+
+    private fun DocumentSnapshot.toTimeSlotObject(): TimeSlot? {
+        return try {
+            val title = get("title") as String
+            val description = get("description") as String
+            val date = get("date") as String
+            val time = get("time") as String
+            val duration = get("duration") as String
+            val location = get("location") as String
+            val index = get("index") as Long
+
+            TimeSlot(title, description, date, time, duration, location, index.toInt())
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Log.d("prova4", e.toString())
+            null
+        }
+
+
+    }*/
+
 }
+
+
+
+
+
+
+
+

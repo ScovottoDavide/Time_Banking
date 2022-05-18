@@ -61,6 +61,8 @@ class MainActivity : AppCompatActivity() {
 
         vmProfile.getDBUser().observe(this) {
             if (it == null && vmProfile.needRegistration){
+                //vmProfile.listenerNavigation = View.OnClickListener { logOut() }
+                //toolbar.setNavigationOnClickListener { vmProfile.listenerNavigation }
                 navController.navigate(R.id.editProfileFragment)
                 //loadNavigationHeader()
             }

@@ -23,6 +23,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
 import com.google.android.material.appbar.MaterialToolbar
@@ -63,7 +64,7 @@ class EditProfileFragment : Fragment() {
         val view = inflater.inflate(R.layout.editprofilefragment_layout, container, false)
         setHasOptionsMenu(true)
         // Disable the navigation icon
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        //(activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
         item = vm.localProfile!!
 
@@ -77,6 +78,11 @@ class EditProfileFragment : Fragment() {
         location = view.findViewById(R.id.editTextLocation)
         userDesc = view.findViewById(R.id.userDesc)
         userImage = view.findViewById(R.id.userImage)
+
+        vm.currentUrl.observe(viewLifecycleOwner){
+            item.img = vm.currentUrl.value
+            Log.d("PATH10", "${item.img}")
+        }
 
         val buttonPopup = view.findViewById<ImageButton>(R.id.plus)
         buttonPopup.setOnClickListener(View.OnClickListener() {
@@ -128,11 +134,15 @@ class EditProfileFragment : Fragment() {
 
         fullName.setText(item.fullName)
         nickname.setText(item.nickname)
-        email.setText(item.email)
+        //email.setText(item.email)
+        // To don't let user change his email (primary key)
+        email.setText(FirestoreRepository.currentUser.email.toString())
+        email.isEnabled = false
         location.setText(item.location)
         userDesc.setText(item.aboutUser)
         if (!item.img.isNullOrEmpty()) {
-            userImage.setImageURI(Uri.parse(item.img))
+            //userImage.setImageURI(Uri.parse(item.img))
+            Glide.with(this).load(item.img).into(userImage)
         } else userImage.setImageResource(R.drawable.user)
 
         var indexName = 100
@@ -163,7 +173,9 @@ class EditProfileFragment : Fragment() {
                 uri = Uri.parse(file.absolutePath)
                 userImage.setImageURI(null)
                 userImage.setImageURI(uri)
-                item.img = uri.toString()
+                vm.currentPhotoPath = file.path
+                Log.d("PATH2", "${vm.currentPhotoPath}")
+                //item.img = uri.toString()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -198,24 +210,32 @@ class EditProfileFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    item.fullName = fullName.text.toString()
+                    /*item.fullName = fullName.text.toString()
                     item.nickname = nickname.text.toString()
                     item.email = email.text.toString()
                     item.location = location.text.toString()
-                    item.aboutUser = userDesc.text.toString()
-                    if (uri != null) item.img = uri?.toString()
+                    item.aboutUser = userDesc.text.toString()*/
+                    /*vm.currentUrl.observe(viewLifecycleOwner) {
+                        uploadImage()
+                    }*/
+                    uploadImage()
+                    updateProfile()
+
                     if (!item.fullName.isNullOrEmpty() && !item.nickname.isNullOrEmpty() && !item.email.isNullOrEmpty()
                         && !item.location.isNullOrEmpty() && !item.aboutUser.isNullOrEmpty()
                     ) {
 
                         vm.localProfile = item
                         vm.modifyUserProfile(vm.localProfile!!)
-                        if (isRegistration)
+                        if (isRegistration){
                             Snackbar.make(
                                 view,
                                 "Profile successfully created",
                                 Snackbar.LENGTH_LONG
                             ).show()
+                            vm.listenerNavigation = null
+                        }
+
                         else
                             Snackbar.make(view, "Profile successfully edited", Snackbar.LENGTH_LONG)
                                 .show()
@@ -416,7 +436,6 @@ class EditProfileFragment : Fragment() {
                 if(isRegistration){
                     vm.needRegistration = false
                 }
-
                 requireActivity().onBackPressed()
                 true
             }
@@ -435,6 +454,38 @@ class EditProfileFragment : Fragment() {
             skills = item.skills
         )
         item = vm.localProfile!!
+    }
+
+    private fun uploadImage() {
+        // Create a storage reference from our app
+        val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://time-banking-g34.appspot.com")
+        var file = Uri.fromFile(File(vm.currentPhotoPath))
+        Log.d("PATH", "$file")
+        // Create a reference to 'images/mountains.jpg'
+        val profileImageRef = storageRef.child("images/${FirestoreRepository.currentUser.email.toString()}.jpg")
+        val uploadTask = profileImageRef.putFile(file)
+
+        // Register observers to listen for when the download is done or if it fails
+        uploadTask.addOnFailureListener {
+            // Handle unsuccessful uploads
+            Toast.makeText(context, "Failed to upload profile image", Toast.LENGTH_SHORT).show()
+        }.addOnSuccessListener {
+            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+            //Toast.makeText(context, "Successful upload profile image", Toast.LENGTH_SHORT).show()
+            val result = it.metadata!!.reference!!.downloadUrl
+            result.addOnSuccessListener {
+                vm.currentUrl.value = it.toString()
+                Log.d("PATH3", "${vm.currentUrl.value}")
+            }
+        }
+
+        /*profileImageRef.downloadUrl.addOnSuccessListener {
+//            Toast.makeText(context, "Successful download profile image", Toast.LENGTH_SHORT).show()
+            vm.changeUrl(it.toString())
+            Log.d("PATH3", "${vm.currentUrl.value}")
+        }.addOnFailureListener {
+            Toast.makeText(context, "Fail to download profile image", Toast.LENGTH_SHORT).show()
+        }*/
     }
 
     override fun onPause() {

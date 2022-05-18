@@ -5,11 +5,9 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.Uri
 import android.util.Log
+import android.view.View
 import android.widget.Toast
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
@@ -56,11 +54,19 @@ class ProfileViewModel : ViewModel() {
     var showed = false
     var localProfile : ProfileUser? = ProfileUser()
 
+    var currentPhotoPath = ""
+    val currentUrl = MutableLiveData<String>()
+
     val profile: MutableLiveData<ProfileUser> by lazy { MutableLiveData(ProfileUser()).also { loadProfile() } }
     var needRegistration = false
     //var profile : LiveData<ProfileUser> =  _profile
     //private val db :FirebaseFirestore
+    var listenerNavigation : View.OnClickListener? = null
     private var listener1 : ListenerRegistration? = null
+
+    init {
+        currentUrl.value = ""
+    }
     /*init {
         db = FirebaseFirestore.getInstance()
         l = FirebaseFirestore.getInstance().collection("users").document("u1").addSnapshotListener{ r, e ->

@@ -28,10 +28,6 @@ class TimeSlotListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.timeslotlistfragment_layout, container, false)
-        val toolbar = view.findViewById<MaterialToolbar>(R.id.my_toolbar)
-        if(toolbar.hasOnClickListeners())
-            toolbar.setNavigationOnClickListener(null)
-
         return view
     }
 

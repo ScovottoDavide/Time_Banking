@@ -10,6 +10,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
 import com.google.android.material.navigation.NavigationView
@@ -26,7 +27,7 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     lateinit var emailView: TextView
     lateinit var myLocationView: TextView
     lateinit var userDesc: TextView
-    lateinit var img_view: ImageView
+    lateinit var img_view: CircleImageView
     private var profile : ProfileUser? = ProfileUser()
 
     //private val prova : ProfileUser = ProfileUser(null, "Ciao", "prova", "dddd", "dddd","CCC", mutableMapOf("Ciao" to "Ciao"))
@@ -81,9 +82,12 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         if (!profile!!.email?.isEmpty()!!)
             email?.text = profile!!.email
         val imgProfile = header?.findViewById<CircleImageView>(R.id.nav_header_userImg)
-        if (!profile!!.img.isNullOrEmpty()!!) {
-            img_view.setImageURI(Uri.parse(profile!!.img))
-            imgProfile?.setImageDrawable(img_view.drawable)
+        if (!profile!!.img.isNullOrEmpty()) {
+            //img_view.setImageURI(Uri.parse(profile!!.img))
+            Glide.with(this).load(profile!!.img).into(img_view)
+            if (imgProfile != null)
+                Glide.with(this).load(profile?.img).into(imgProfile)
+            //imgProfile?.setImageDrawable(img_view.drawable)
         }
 
         profile?.skills?.forEach {
