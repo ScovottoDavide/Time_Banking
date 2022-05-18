@@ -4,17 +4,21 @@ import android.content.Intent
 import android.location.GnssAntennaInfo
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.get
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -59,14 +63,10 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.setupWithNavController(navController, appBarConfiguration)
 
-
         vmProfile.getDBUser().observe(this) {
-            if (it == null && vmProfile.needRegistration){
-                //vmProfile.listenerNavigation = View.OnClickListener { logOut() }
-                //toolbar.setNavigationOnClickListener { vmProfile.listenerNavigation }
-                navController.navigate(R.id.editProfileFragment)
-            }
-            else if (it == null)
+            if (it == null && vmProfile.needRegistration) {
+                navController.navigate(R.id.action_timeSlotListFragment_to_editProfileFragment)
+            } else if (it == null)
                 Toast.makeText(this, "Firebase failure", Toast.LENGTH_SHORT).show()
             else {
                 profile = it
@@ -118,7 +118,6 @@ class MainActivity : AppCompatActivity() {
         name?.text = profile.fullName
         email?.text = profile.email
         if (!profile.img.isNullOrEmpty()) {
-            //imgProfile.setImageURI(Uri.parse(profile.img))
             Glide.with(this).load(profile.img).into(imgProfile)
         } else imgProfile.setImageResource(R.drawable.user)
     }
@@ -153,5 +152,18 @@ class MainActivity : AppCompatActivity() {
             }
             .show()
     }
+
+    private fun discardChanges() {
+        AlertDialog.Builder(this)
+            .setTitle("Log out")
+            .setMessage("Do you want to log out from the Time Earn app?")
+            .setPositiveButton("Yes") { _, _ ->
+                navController.navigate(R.id.action_editProfileFragment_to_showProfileFragment)
+            }
+            .setNegativeButton("No") { _, _ ->
+            }
+            .show()
+    }
+
 }
 

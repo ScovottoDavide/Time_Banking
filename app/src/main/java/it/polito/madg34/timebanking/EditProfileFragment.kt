@@ -6,11 +6,12 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.res.Configuration
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -23,11 +24,17 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import de.hdodenhof.circleimageview.CircleImageView
 import java.io.*
@@ -38,8 +45,8 @@ class EditProfileFragment : Fragment() {
     private var h = 0
     private var w = 0
     private lateinit var bitmap: Bitmap
-    lateinit  var  uri : Uri
-    lateinit var file : File
+    lateinit var uri: Uri
+    lateinit var file: File
 
     private lateinit var takePicture: ActivityResultLauncher<Intent>
     private lateinit var takePictureGallery: ActivityResultLauncher<String>
@@ -55,6 +62,7 @@ class EditProfileFragment : Fragment() {
     lateinit var userDesc: EditText
     lateinit var userImage: CircleImageView
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,9 +70,12 @@ class EditProfileFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.editprofilefragment_layout, container, false)
         setHasOptionsMenu(true)
-        // Disable the navigation icon
-        //(activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
 
+        // Disable the navigation icon
+        if (vm.needRegistration)
+            (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        (activity as AppCompatActivity).supportActionBar?.setHomeButtonEnabled(true)
+        (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
         item = vm.localProfile!!
 
         if (item.email.isNullOrEmpty()) {
@@ -114,11 +125,13 @@ class EditProfileFragment : Fragment() {
         if (isRegistration) {
             val title = view.findViewById<TextView>(R.id.AccountInfo)
             title.setText(getString(R.string.registration))
-            if(!vm.showed){
+            if (!vm.showed) {
                 MaterialAlertDialogBuilder(requireContext())
                     .setTitle("Registration")
-                    .setMessage("Before continuing, compile the form to give us some important information about you." +
-                            "If you go back, you will be logged out.")
+                    .setMessage(
+                        "Before continuing, compile the form to give us some important information about you." +
+                                "If you go back, you will be logged out."
+                    )
                     .setPositiveButton("OK") { _, _ ->
                     }
                     .show()
@@ -134,10 +147,9 @@ class EditProfileFragment : Fragment() {
         email.isEnabled = false
         location.setText(item.location)
         userDesc.setText(item.aboutUser)
-        if(vm.currentPhotoPath.isNotEmpty()){
+        if (vm.currentPhotoPath.isNotEmpty()) {
             userImage.setImageURI(Uri.parse(item.img))
-        }
-        else if(vm.currentPhotoPath.isEmpty() && item.img?.isNotEmpty() == true){
+        } else if (vm.currentPhotoPath.isEmpty() && item.img?.isNotEmpty() == true) {
             Glide.with(this).load(item.img).into(userImage)
         } else
             userImage.setImageResource(R.drawable.user)
@@ -177,42 +189,21 @@ class EditProfileFragment : Fragment() {
             }
         }
 
-
         takePicture =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
                 if (result.resultCode == Activity.RESULT_OK) {
                     bitmap = result?.data?.extras?.get("data") as Bitmap
-                    val bytes = ByteArrayOutputStream()
-                    bitmap.compress(
-                        Bitmap.CompressFormat.JPEG,
-                        100,
-                        bytes
-                    ) // Used for compression rate of the Image : 100 means no compression
-
-                    val path: String =
-                        MediaStore.Images.Media.insertImage(
-                            activity?.applicationContext?.contentResolver,
-                            bitmap,
-                            "Title",
-                            null
-                        )
 
 
-                    //vm.currentPhotoPath = path
-                    uri = Uri.parse(path)
+                    val imagesDir =
+                        this.requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+                    val image = File.createTempFile("Title", ".jpg", imagesDir)
+                    val fos = FileOutputStream(image)
+                    fos.use { bitmap.compress(Bitmap.CompressFormat.JPEG, 30, it) }
 
-                    var _path = ""
-                    if (activity?.applicationContext?.contentResolver != null) {
-                        val cursor: Cursor? = activity?.applicationContext?.contentResolver!!.query(uri,null,null,null)
-                        if (cursor != null) {
-                            val idx = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
-                            cursor.moveToFirst()
+                    uri = Uri.parse(image.absolutePath)
 
-                            _path = cursor.getString(idx)
-                            cursor.close()
-                        }
-                    }
-                    vm.currentPhotoPath = _path
+                    vm.currentPhotoPath = uri.toString()
                     userImage.setImageURI(uri)
                     item.img = uri.toString()
                 }
@@ -223,35 +214,44 @@ class EditProfileFragment : Fragment() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     isFromBack = true
-                    uploadImage()
-                    updateProfile()
-
-                    if (!item.fullName.isNullOrEmpty() && !item.nickname.isNullOrEmpty() && !item.email.isNullOrEmpty()
-                        && !item.location.isNullOrEmpty() && !item.aboutUser.isNullOrEmpty()
-                    ) {
-
-                        vm.localProfile = item
-                        vm.modifyUserProfile(vm.localProfile!!)
-                        if (isRegistration){
+                    if (vm.needRegistration) {
+                        logOut()
+                    } else {
+                        updateProfile()
+                        if (!item.fullName.isNullOrEmpty() && !item.nickname.isNullOrEmpty()
+                            && !item.location.isNullOrEmpty() && !item.aboutUser.isNullOrEmpty()
+                        ) {
+                            uploadImage()
+                            vm.localProfile = item
+                            vm.modifyUserProfile(vm.localProfile!!)
+                            if (isRegistration) {
+                                Snackbar.make(
+                                    view,
+                                    "Profile successfully created",
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                                vm.listenerNavigation = null
+                            } else
+                                Snackbar.make(
+                                    view,
+                                    "Profile successfully edited",
+                                    Snackbar.LENGTH_LONG
+                                )
+                                    .show()
+                            if (isEnabled) {
+                                isEnabled = false
+                                requireActivity().onBackPressed()
+                            }
+                        } else
                             Snackbar.make(
                                 view,
-                                "Profile successfully created",
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                            vm.listenerNavigation = null
-                        }
-
-                        else
-                            Snackbar.make(view, "Profile successfully edited", Snackbar.LENGTH_LONG)
+                                "Profile must be complete",
+                                Snackbar.LENGTH_SHORT
+                            )
                                 .show()
-                        if (isEnabled) {
-                            isEnabled = false
-                            requireActivity().onBackPressed()
-                        }
-                    } else
-                        Snackbar.make(view, "Complete profile registration", Snackbar.LENGTH_SHORT)
-                            .show()
+                    }
                 }
+
             })
 
         constantScreenLayoutOnScrolling(view)
@@ -436,72 +436,92 @@ class EditProfileFragment : Fragment() {
         return when (item.itemId) {
             R.id.save -> {
                 closeKeyboard()
-                // Backing is too fast--> the closing of keyboard is too slow!
-                //Thread.sleep(100)
-                if(isRegistration){
+                if (isRegistration) {
                     vm.needRegistration = false
-                }
-                //requireActivity().onBackPressed()
-
+                    requireActivity().onBackPressed()
+                } else {
+                    updateProfile()
                     uploadImage()
-
-
-                updateProfile()
+                }
                 true
             }
-            else -> super.onOptionsItemSelected(item)
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
         }
     }
 
     private fun updateProfile() {
-        vm.localProfile = ProfileUser(
-            fullName = fullName.text.toString(),
-            nickname = nickname.text.toString(),
-            email = email.text.toString(),
-            location = location.text.toString(),
-            img = item.img,
-            aboutUser = userDesc.text.toString(),
-            skills = item.skills
-        )
-        item = vm.localProfile!!
+        if (fullName.text.isNotEmpty() || nickname.text.isNotEmpty() || location.text.isNotEmpty()
+            || userDesc.text.isNotEmpty()
+        ) {
+            vm.localProfile = ProfileUser(
+                fullName = fullName.text.toString(),
+                nickname = nickname.text.toString(),
+                email = email.text.toString(),
+                location = location.text.toString(),
+                img = item.img,
+                aboutUser = userDesc.text.toString(),
+                skills = item.skills
+            )
+            item = vm.localProfile!!
+        }
     }
 
-    private fun saveValues(){
-        vm.modifyUserProfile(item)
-            .addOnCompleteListener {
-                if(it.isSuccessful){
-                    if(vm.needRegistration)
-                        vm.needRegistration = false
-                    if(!isRegistration && !isFromBack){
-                        Snackbar.make(requireView(), "Profile successfully edited", Snackbar.LENGTH_LONG).show()
-                        findNavController().navigate(R.id.action_editProfileFragment_to_showProfileFragment)
+    private fun saveValues() {
+        if (!item.fullName.isNullOrEmpty() && !item.nickname.isNullOrEmpty()
+            && !item.location.isNullOrEmpty() && !item.aboutUser.isNullOrEmpty()
+        ) {
+            vm.modifyUserProfile(item)
+                .addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        if (vm.needRegistration)
+                            vm.needRegistration = false
+                        if (!isRegistration && !isFromBack) {
+                            Snackbar.make(
+                                requireView(),
+                                "Profile successfully edited",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                            findNavController().navigate(R.id.action_editProfileFragment_to_showProfileFragment)
+                        }
+                    } else {
+                        if (!isFromBack)
+                            Toast.makeText(context, "Failed saving profile!", Toast.LENGTH_SHORT)
+                                .show()
                     }
-                } else{
-                    if(!isFromBack)
-                        Toast.makeText(context, "Failed saving profile!", Toast.LENGTH_SHORT).show()
                 }
-            }
+        } else {
+            Snackbar.make(
+                requireView(),
+                "Profile must be complete",
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun uploadImage() {
         // Create a storage reference from our app
-        if(vm.currentPhotoPath.isEmpty()){
+        if (vm.currentPhotoPath.isEmpty()) {
             return saveValues()
         }
-        val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://time-banking-g34.appspot.com")
+        val storageRef =
+            FirebaseStorage.getInstance().getReferenceFromUrl("gs://time-banking-g34.appspot.com")
         val file = Uri.fromFile(File(vm.currentPhotoPath))
-        val profileImageRef = storageRef.child("images/${FirestoreRepository.currentUser.email.toString()}.jpg")
+        val profileImageRef =
+            storageRef.child("images/${FirestoreRepository.currentUser.email.toString()}.jpg")
         val uploadTask = profileImageRef.putFile(file)
 
-        uploadTask.addOnCompleteListener{
-            if(it.isSuccessful){
+        uploadTask.addOnCompleteListener {
+            if (it.isSuccessful) {
                 profileImageRef.downloadUrl.addOnSuccessListener { downloaded ->
                     item.img = downloaded.toString()
                     saveValues()
                 }
-            }else {
-                if(!isFromBack)
-                    Toast.makeText(context, "Failed saving profile photo!", Toast.LENGTH_SHORT).show()
+            } else {
+                if (!isFromBack)
+                    Toast.makeText(context, "Failed saving profile photo!", Toast.LENGTH_SHORT)
+                        .show()
                 saveValues()
             }
             vm.currentPhotoPath = ""
@@ -521,6 +541,41 @@ class EditProfileFragment : Fragment() {
         val manager: InputMethodManager =
             context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromWindow(v?.windowToken, 0)
+    }
+
+    /*
+       Function to perform the logout and to return to the Auth Activity
+   */
+    private fun logOut() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Log out")
+            .setMessage("Do you want to log out from the Time Earn app?")
+            .setPositiveButton("Yes") { _, _ ->
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.web_client_id))
+                    .requestEmail()
+                    .build()
+
+                // Sign out from Google
+                GoogleSignIn.getClient(requireActivity(), gso).signOut()
+                    .addOnCompleteListener(requireActivity()) {
+                        if (it.isSuccessful) {
+                            // Sign out from Firebase
+                            Firebase.auth.signOut()
+                            Toast.makeText(
+                                requireContext(),
+                                "Successfully logged out!",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                            startActivity(Intent(requireContext(), AuthActivity::class.java))
+                            requireActivity().finish()
+                        }
+                    }
+            }
+            .setNegativeButton("No") { _, _ ->
+            }
+            .show()
     }
 }
 
