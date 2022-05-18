@@ -55,7 +55,6 @@ class ProfileViewModel : ViewModel() {
     var localProfile : ProfileUser? = ProfileUser()
 
     var currentPhotoPath = ""
-    val currentUrl = MutableLiveData<String>()
 
     val profile: MutableLiveData<ProfileUser> by lazy { MutableLiveData(ProfileUser()).also { loadProfile() } }
     var needRegistration = false
@@ -64,9 +63,6 @@ class ProfileViewModel : ViewModel() {
     var listenerNavigation : View.OnClickListener? = null
     private var listener1 : ListenerRegistration? = null
 
-    init {
-        currentUrl.value = ""
-    }
     /*init {
         db = FirebaseFirestore.getInstance()
         l = FirebaseFirestore.getInstance().collection("users").document("u1").addSnapshotListener{ r, e ->

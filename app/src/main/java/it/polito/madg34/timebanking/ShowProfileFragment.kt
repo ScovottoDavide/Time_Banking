@@ -28,7 +28,7 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     lateinit var myLocationView: TextView
     lateinit var userDesc: TextView
     lateinit var img_view: CircleImageView
-    private var profile : ProfileUser? = ProfileUser()
+    private var profile: ProfileUser? = ProfileUser()
 
     //private val prova : ProfileUser = ProfileUser(null, "Ciao", "prova", "dddd", "dddd","CCC", mutableMapOf("Ciao" to "Ciao"))
 
@@ -58,14 +58,13 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
                 Toast.makeText(context, "Firebase Failure!", Toast.LENGTH_LONG).show()
             else {
                 profile = it
-                Log.d("SHOW", "$profile")
                 setProfile(view)
             }
         }
         constantScreenLayoutOnScrolling(view)
     }
 
-    private fun setProfile(view : View) {
+    private fun setProfile(view: View) {
         fullNameView.text = profile?.fullName
         nicknameView.text = profile?.nickname
         emailView.text = profile?.email
@@ -75,7 +74,6 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         val navView = activity?.findViewById<NavigationView>(R.id.nav_view)
         val header = navView?.getHeaderView(0)
         val name = header?.findViewById<TextView>(R.id.nomecognome)
-        Log.d("sec", profile?.fullName.toString())
         if (!profile?.fullName?.isEmpty()!!)
             name?.text = profile!!.fullName
         val email = header?.findViewById<TextView>(R.id.headerMail)
@@ -85,8 +83,7 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         if (!profile!!.img.isNullOrEmpty()) {
             //img_view.setImageURI(Uri.parse(profile!!.img))
             Glide.with(this).load(profile!!.img).into(img_view)
-            if (imgProfile != null)
-                Glide.with(this).load(profile?.img).into(imgProfile)
+            Glide.with(this).load(profile!!.img).into(imgProfile!!)
             //imgProfile?.setImageDrawable(img_view.drawable)
         }
 

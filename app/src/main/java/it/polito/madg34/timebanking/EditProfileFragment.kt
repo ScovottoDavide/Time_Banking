@@ -26,12 +26,10 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.storage.FirebaseStorage
 import de.hdodenhof.circleimageview.CircleImageView
-import org.w3c.dom.Text
 import java.io.*
 
 class EditProfileFragment : Fragment() {
@@ -78,11 +76,6 @@ class EditProfileFragment : Fragment() {
         location = view.findViewById(R.id.editTextLocation)
         userDesc = view.findViewById(R.id.userDesc)
         userImage = view.findViewById(R.id.userImage)
-
-        vm.currentUrl.observe(viewLifecycleOwner){
-            item.img = vm.currentUrl.value
-            Log.d("PATH10", "${item.img}")
-        }
 
         val buttonPopup = view.findViewById<ImageButton>(R.id.plus)
         buttonPopup.setOnClickListener(View.OnClickListener() {
@@ -171,11 +164,10 @@ class EditProfileFragment : Fragment() {
                 stream.flush()
                 stream.close()
                 uri = Uri.parse(file.absolutePath)
+                vm.currentPhotoPath = file.path
+                item.img = uri.toString()
                 userImage.setImageURI(null)
                 userImage.setImageURI(uri)
-                vm.currentPhotoPath = file.path
-                Log.d("PATH2", "${vm.currentPhotoPath}")
-                //item.img = uri.toString()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -210,14 +202,6 @@ class EditProfileFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    /*item.fullName = fullName.text.toString()
-                    item.nickname = nickname.text.toString()
-                    item.email = email.text.toString()
-                    item.location = location.text.toString()
-                    item.aboutUser = userDesc.text.toString()*/
-                    /*vm.currentUrl.observe(viewLifecycleOwner) {
-                        uploadImage()
-                    }*/
                     uploadImage()
                     updateProfile()
 
@@ -456,36 +440,38 @@ class EditProfileFragment : Fragment() {
         item = vm.localProfile!!
     }
 
+    private fun saveValues(){
+        vm.modifyUserProfile(item)
+            .addOnCompleteListener {
+                if(it.isSuccessful){
+                    if(vm.needRegistration)
+                        vm.needRegistration = false
+                } else{
+                    Toast.makeText(context, "Failed saving profile!", Toast.LENGTH_SHORT).show()
+                }
+            }
+    }
+
     private fun uploadImage() {
         // Create a storage reference from our app
         val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://time-banking-g34.appspot.com")
-        var file = Uri.fromFile(File(vm.currentPhotoPath))
-        Log.d("PATH", "$file")
-        // Create a reference to 'images/mountains.jpg'
+        val file = Uri.fromFile(File(vm.currentPhotoPath))
         val profileImageRef = storageRef.child("images/${FirestoreRepository.currentUser.email.toString()}.jpg")
         val uploadTask = profileImageRef.putFile(file)
 
-        // Register observers to listen for when the download is done or if it fails
-        uploadTask.addOnFailureListener {
-            // Handle unsuccessful uploads
-            Toast.makeText(context, "Failed to upload profile image", Toast.LENGTH_SHORT).show()
-        }.addOnSuccessListener {
-            // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
-            //Toast.makeText(context, "Successful upload profile image", Toast.LENGTH_SHORT).show()
-            val result = it.metadata!!.reference!!.downloadUrl
-            result.addOnSuccessListener {
-                vm.currentUrl.value = it.toString()
-                Log.d("PATH3", "${vm.currentUrl.value}")
+        uploadTask.addOnCompleteListener{
+            if(it.isSuccessful){
+                profileImageRef.downloadUrl.addOnSuccessListener { downloaded ->
+                    item.img = downloaded.toString()
+                    saveValues()
+                }
+            }else {
+                Toast.makeText(context, "Failed saving profile photo!", Toast.LENGTH_SHORT)
+                    .show()
+                saveValues()
             }
+            vm.currentPhotoPath = ""
         }
-
-        /*profileImageRef.downloadUrl.addOnSuccessListener {
-//            Toast.makeText(context, "Successful download profile image", Toast.LENGTH_SHORT).show()
-            vm.changeUrl(it.toString())
-            Log.d("PATH3", "${vm.currentUrl.value}")
-        }.addOnFailureListener {
-            Toast.makeText(context, "Fail to download profile image", Toast.LENGTH_SHORT).show()
-        }*/
     }
 
     override fun onPause() {

@@ -19,6 +19,7 @@ import androidx.navigation.get
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupWithNavController
+import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.appbar.MaterialToolbar
@@ -64,7 +65,6 @@ class MainActivity : AppCompatActivity() {
                 //vmProfile.listenerNavigation = View.OnClickListener { logOut() }
                 //toolbar.setNavigationOnClickListener { vmProfile.listenerNavigation }
                 navController.navigate(R.id.editProfileFragment)
-                //loadNavigationHeader()
             }
             else if (it == null)
                 Toast.makeText(this, "Firebase failure", Toast.LENGTH_SHORT).show()
@@ -118,7 +118,8 @@ class MainActivity : AppCompatActivity() {
         name?.text = profile.fullName
         email?.text = profile.email
         if (!profile.img.isNullOrEmpty()) {
-            imgProfile.setImageURI(Uri.parse(profile.img))
+            //imgProfile.setImageURI(Uri.parse(profile.img))
+            Glide.with(this).load(profile.img).into(imgProfile)
         } else imgProfile.setImageResource(R.drawable.user)
     }
 
