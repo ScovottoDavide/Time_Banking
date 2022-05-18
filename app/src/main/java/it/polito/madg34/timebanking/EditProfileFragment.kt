@@ -6,11 +6,11 @@ import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.content.res.Configuration
+import android.database.Cursor
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -38,7 +38,7 @@ class EditProfileFragment : Fragment() {
     private var h = 0
     private var w = 0
     private lateinit var bitmap: Bitmap
-    private var uri: Uri? = null
+    lateinit  var  uri : Uri
     lateinit var file : File
 
     private lateinit var takePicture: ActivityResultLauncher<Intent>
@@ -196,8 +196,22 @@ class EditProfileFragment : Fragment() {
                             "xyz",
                             ""
                         )
-                    vm.currentPhotoPath = path
+
+
+                    //vm.currentPhotoPath = path
                     uri = Uri.parse(path)
+
+                    var _path = ""
+                    if (activity?.applicationContext?.contentResolver != null) {
+                        val cursor: Cursor? = activity?.applicationContext?.contentResolver!!.query(uri,null,null,null)
+                        if (cursor != null) {
+                            cursor.moveToFirst()
+                            val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+                            _path = cursor.getString(idx)
+                            cursor.close()
+                        }
+                    }
+                    vm.currentPhotoPath = _path
                     userImage.setImageURI(uri)
                     item.img = uri.toString()
                 }
