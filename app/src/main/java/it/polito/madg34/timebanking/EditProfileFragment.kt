@@ -191,10 +191,10 @@ class EditProfileFragment : Fragment() {
 
                     val path: String =
                         MediaStore.Images.Media.insertImage(
-                            activity?.contentResolver,
+                            activity?.applicationContext?.contentResolver,
                             bitmap,
-                            "xyz",
-                            ""
+                            "Title",
+                            null
                         )
 
 
@@ -205,8 +205,9 @@ class EditProfileFragment : Fragment() {
                     if (activity?.applicationContext?.contentResolver != null) {
                         val cursor: Cursor? = activity?.applicationContext?.contentResolver!!.query(uri,null,null,null)
                         if (cursor != null) {
+                            val idx = cursor.getColumnIndex(MediaStore.Images.Media.DATA)
                             cursor.moveToFirst()
-                            val idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA)
+
                             _path = cursor.getString(idx)
                             cursor.close()
                         }
@@ -441,7 +442,10 @@ class EditProfileFragment : Fragment() {
                     vm.needRegistration = false
                 }
                 //requireActivity().onBackPressed()
-                uploadImage()
+
+                    uploadImage()
+
+
                 updateProfile()
                 true
             }
@@ -481,6 +485,9 @@ class EditProfileFragment : Fragment() {
 
     private fun uploadImage() {
         // Create a storage reference from our app
+        if(vm.currentPhotoPath.isEmpty()){
+            return saveValues()
+        }
         val storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://time-banking-g34.appspot.com")
         val file = Uri.fromFile(File(vm.currentPhotoPath))
         val profileImageRef = storageRef.child("images/${FirestoreRepository.currentUser.email.toString()}.jpg")
