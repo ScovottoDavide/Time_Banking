@@ -46,6 +46,7 @@ class EditProfileFragment : Fragment() {
 
     var item: ProfileUser = ProfileUser()
     var isRegistration = false
+    var isFromBack = false
 
     lateinit var fullName: EditText
     lateinit var nickname: EditText
@@ -133,10 +134,13 @@ class EditProfileFragment : Fragment() {
         email.isEnabled = false
         location.setText(item.location)
         userDesc.setText(item.aboutUser)
-        if (!item.img.isNullOrEmpty()) {
-            //userImage.setImageURI(Uri.parse(item.img))
+        if(vm.currentPhotoPath.isNotEmpty()){
+            userImage.setImageURI(Uri.parse(item.img))
+        }
+        else if(vm.currentPhotoPath.isEmpty() && item.img?.isNotEmpty() == true){
             Glide.with(this).load(item.img).into(userImage)
-        } else userImage.setImageResource(R.drawable.user)
+        } else
+            userImage.setImageResource(R.drawable.user)
 
         var indexName = 100
         var indexDesc = -100
@@ -167,7 +171,7 @@ class EditProfileFragment : Fragment() {
                 vm.currentPhotoPath = file.path
                 item.img = uri.toString()
                 userImage.setImageURI(null)
-                userImage.setImageURI(uri)
+                userImage.setImageURI(Uri.parse(item.img))
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -192,6 +196,7 @@ class EditProfileFragment : Fragment() {
                             "xyz",
                             ""
                         )
+                    vm.currentPhotoPath = path
                     uri = Uri.parse(path)
                     userImage.setImageURI(uri)
                     item.img = uri.toString()
@@ -202,6 +207,7 @@ class EditProfileFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
+                    isFromBack = true
                     uploadImage()
                     updateProfile()
 
@@ -416,11 +422,13 @@ class EditProfileFragment : Fragment() {
             R.id.save -> {
                 closeKeyboard()
                 // Backing is too fast--> the closing of keyboard is too slow!
-                Thread.sleep(100)
+                //Thread.sleep(100)
                 if(isRegistration){
                     vm.needRegistration = false
                 }
-                requireActivity().onBackPressed()
+                //requireActivity().onBackPressed()
+                uploadImage()
+                updateProfile()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -446,8 +454,13 @@ class EditProfileFragment : Fragment() {
                 if(it.isSuccessful){
                     if(vm.needRegistration)
                         vm.needRegistration = false
+                    if(!isRegistration && !isFromBack){
+                        Snackbar.make(requireView(), "Profile successfully edited", Snackbar.LENGTH_LONG).show()
+                        findNavController().navigate(R.id.action_editProfileFragment_to_showProfileFragment)
+                    }
                 } else{
-                    Toast.makeText(context, "Failed saving profile!", Toast.LENGTH_SHORT).show()
+                    if(!isFromBack)
+                        Toast.makeText(context, "Failed saving profile!", Toast.LENGTH_SHORT).show()
                 }
             }
     }
@@ -466,8 +479,8 @@ class EditProfileFragment : Fragment() {
                     saveValues()
                 }
             }else {
-                Toast.makeText(context, "Failed saving profile photo!", Toast.LENGTH_SHORT)
-                    .show()
+                if(!isFromBack)
+                    Toast.makeText(context, "Failed saving profile photo!", Toast.LENGTH_SHORT).show()
                 saveValues()
             }
             vm.currentPhotoPath = ""

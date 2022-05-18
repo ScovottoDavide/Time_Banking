@@ -55,6 +55,7 @@ class ProfileViewModel : ViewModel() {
     var localProfile : ProfileUser? = ProfileUser()
 
     var currentPhotoPath = ""
+    var currentPhotoUri = ""
 
     val profile: MutableLiveData<ProfileUser> by lazy { MutableLiveData(ProfileUser()).also { loadProfile() } }
     var needRegistration = false
