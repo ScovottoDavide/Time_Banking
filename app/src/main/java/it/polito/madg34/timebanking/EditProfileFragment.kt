@@ -71,8 +71,7 @@ class EditProfileFragment : Fragment() {
         // Disable the navigation icon
         if (vm.needRegistration)
             (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-        (activity as AppCompatActivity).supportActionBar?.setHomeButtonEnabled(true)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
+
         item = vm.localProfile!!
 
         if (item.email.isNullOrEmpty()) {
@@ -153,7 +152,7 @@ class EditProfileFragment : Fragment() {
 
         var indexName = 100
         var indexDesc = -100
-        item.skills?.toSortedMap()?.forEach {
+        item.skills.toSortedMap().forEach {
             setSkills(it.key, it.value, indexName++, indexDesc--, view)
         }
 

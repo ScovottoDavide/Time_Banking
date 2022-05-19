@@ -64,6 +64,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.setupWithNavController(navController, appBarConfiguration)
 
+
         vmProfile.getDBUser().observe(this) {
             if (it == null && vmProfile.needRegistration) {
                 navController.navigate(R.id.action_timeSlotListFragment_to_editProfileFragment)
@@ -176,6 +177,5 @@ class MainActivity : AppCompatActivity() {
             }
             .show()
     }
-
 }
 

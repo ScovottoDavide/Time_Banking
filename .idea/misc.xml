@@ -57,6 +57,7 @@
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/card_layout.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/editprofilefragment_layout.xml" value="0.24230072463768115" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/editskillfragment_layout.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/list_skills.xml" value="0.24818840579710144" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/login_fragment.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/navview_header.xml" value="0.24230072463768115" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/layout/showprofilefragment_layout.xml" value="0.1484375" />
@@ -65,10 +66,6 @@
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/menu/cancel_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/menu/nav_menu.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/david/Desktop/Magistrale/MAD/Time_Banking/app/src/main/res/menu/save_page.xml" value="0.25416666666666665" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout/card_layout.xml" value="0.36770833333333336" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout/list_skills.xml" value="0.36770833333333336" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout/timeslotdetailsfragment_layout.xml" value="0.36770833333333336" />
-        <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout/timesloteditfragment_layout.xml" value="0.36770833333333336" />
       </map>
     </option>
   </component>

@@ -1,10 +1,12 @@
 package it.polito.madg34.timebanking
 
+import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -49,16 +51,20 @@ class TimeSlotEditFragment : Fragment() {
     private lateinit var date: TextInputLayout
     private lateinit var time: TextInputLayout
     private lateinit var email: TextInputEditText
-    private lateinit var menuSkills : TextInputLayout
-    private lateinit var item :TimeSlot
-    private lateinit var pageTitle : TextView
+    private lateinit var menuSkills: TextInputLayout
+    private lateinit var item: TimeSlot
+    private lateinit var pageTitle: TextView
 
     private var hour = 0;
     private var minute = 0;
 
     val skills = mutableListOf<String>()
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.timesloteditfragment_layout, container, false)
         setHasOptionsMenu(true)
         return view
@@ -78,16 +84,14 @@ class TimeSlotEditFragment : Fragment() {
 
         val bundle = arguments
         val index = bundle?.getInt("index") ?: item.index
-        if(index == -1){
+        if (index == -1) {
             item = emptyTimeSlot()
             pageTitle = view.findViewById(R.id.titleEditService)
             pageTitle.setText(R.string.AddService)
-        }
-        else {
-            if(index>=0 && index < vm.listServices.value?.size!!){
+        } else {
+            if (index >= 0 && index < vm.listServices.value?.size!!) {
                 item = vm.listServices.value?.get(index)!!
-            }
-            else if (index > vm.listServices.value?.size!!){
+            } else if (index > vm.listServices.value?.size!!) {
                 item = emptyTimeSlot()
                 pageTitle = view.findViewById(R.id.titleEditService)
                 pageTitle.setText(R.string.AddService)
@@ -97,7 +101,9 @@ class TimeSlotEditFragment : Fragment() {
         val datePicker = MaterialDatePicker.Builder.datePicker()
             .setTitleText("Select date")
             .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-            .setCalendarConstraints(CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now()).build())
+            .setCalendarConstraints(
+                CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now()).build()
+            )
             .build()
 
         val timePicker = MaterialTimePicker.Builder()
@@ -128,14 +134,26 @@ class TimeSlotEditFragment : Fragment() {
         time.setStartIconOnClickListener {
             timePicker.show(this.parentFragmentManager, "")
             timePicker.addOnPositiveButtonClickListener {
-                time.editText?.setText(String.format("%02d:%02d", timePicker.hour, timePicker.minute))
+                time.editText?.setText(
+                    String.format(
+                        "%02d:%02d",
+                        timePicker.hour,
+                        timePicker.minute
+                    )
+                )
             }
         }
 
         duration.setStartIconOnClickListener {
             durationPicker.show(this.parentFragmentManager, "")
             durationPicker.addOnPositiveButtonClickListener {
-                duration.editText?.setText(String.format("%d hours and %d minutes", durationPicker.hour, durationPicker.minute))
+                duration.editText?.setText(
+                    String.format(
+                        "%d hours and %d minutes",
+                        durationPicker.hour,
+                        durationPicker.minute
+                    )
+                )
             }
         }
 
@@ -157,48 +175,83 @@ class TimeSlotEditFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    if(title.text.toString().isEmpty() || description.text.toString().isEmpty() || date.editText?.text.toString().isEmpty()
-                        || time.editText?.text.toString().isEmpty() || duration.editText?.text.toString().isEmpty() || location.text.toString().isEmpty())
-                        Toast.makeText(context, "Please, fill the entire form.", Toast.LENGTH_SHORT).show()
-                    else {
-                        if (index>=0 && index <= vm.listServices.value?.size!!) {
-                            vm.listServices.value?.get(index).also {
-                                it?.title = title.text.toString()
-                                it?.description = description.text.toString()
-                                it?.date = date.editText?.text.toString()
-                                it?.time = time.editText?.text.toString()
-                                it?.duration = duration.editText?.text.toString()
-                                it?.location = location.text.toString()
-                                it?.index = index
-                                vm.saveServices(vm.listServices.value!!)
-                                Snackbar.make(view, "Service successfully edited!", Snackbar.LENGTH_LONG).show()
+                    if (vmProfile.profile.value?.skills?.isEmpty() == true) {
+                        AlertDialog.Builder(requireContext())
+                            .setTitle("Indications")
+                            .setMessage(
+                                "In order to publish an advertisement, at least one skill " +
+                                        "has to be set in your profile. Go back in your profile and add one."
+                            )
+                            .setPositiveButton("OK") { _, _ ->
                             }
-                        } else if(index==-1){
-                            item.title = title.text.toString()
-                            item.description = description.text.toString()
-                            item.date = date.editText?.text.toString()
-                            item.time = time.editText?.text.toString()
-                            item.duration = duration.editText?.text.toString()
-                            item.location = location.text.toString()
-                            item.index = index
-                            vm.saveServices(mutableListOf(item))
-                            Snackbar.make(view, "Service successfully added!", Snackbar.LENGTH_LONG).show()
-                        }
+                            .show()
+                    } else {
+                        if (title.text.toString().isEmpty() || description.text.toString()
+                                .isEmpty() || date.editText?.text.toString().isEmpty()
+                            || time.editText?.text.toString()
+                                .isEmpty() || duration.editText?.text.toString()
+                                .isEmpty() || location.text.toString().isEmpty()
+                            || menuSkills.editText?.text.isNullOrEmpty()
+                        )
+                            Toast.makeText(
+                                context,
+                                "Please, fill the entire form.",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         else {
-                            item.title = title.text.toString()
-                            item.description = description.text.toString()
-                            item.date = date.editText?.text.toString()
-                            item.time = time.editText?.text.toString()
-                            item.duration = duration.editText?.text.toString()
-                            item.location = location.text.toString()
-                            item.index = index
-                            vm.listServices.value?.add(item)
-                            vm.saveServices(vm.listServices.value!!)
-                            Snackbar.make(view, "Service successfully added!", Snackbar.LENGTH_LONG).show()
-                        }
-                        if (isEnabled) {
-                            isEnabled = false
-                            requireActivity().onBackPressed()
+                            if (index >= 0 && index <= vm.listServices.value?.size!!) {
+                                vm.listServices.value?.get(index).also {
+                                    it?.title = title.text.toString()
+                                    it?.description = description.text.toString()
+                                    it?.date = date.editText?.text.toString()
+                                    it?.time = time.editText?.text.toString()
+                                    it?.duration = duration.editText?.text.toString()
+                                    it?.location = location.text.toString()
+                                    it?.related_skill = menuSkills.editText?.text.toString()
+                                    it?.index = index
+                                    vm.saveServices(vm.listServices.value!!)
+                                    Snackbar.make(
+                                        view,
+                                        "Service successfully edited!",
+                                        Snackbar.LENGTH_LONG
+                                    ).show()
+                                }
+                            } else if (index == -1) {
+                                item.title = title.text.toString()
+                                item.description = description.text.toString()
+                                item.date = date.editText?.text.toString()
+                                item.time = time.editText?.text.toString()
+                                item.duration = duration.editText?.text.toString()
+                                item.location = location.text.toString()
+                                item.index = index
+                                Log.d("ADD", item.toString())
+                                vm._listServices.value = vm._listServices.value
+                                vm.saveServices(mutableListOf(item))
+                                Snackbar.make(
+                                    view,
+                                    "Service successfully added!",
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                            } else {
+                                item.title = title.text.toString()
+                                item.description = description.text.toString()
+                                item.date = date.editText?.text.toString()
+                                item.time = time.editText?.text.toString()
+                                item.duration = duration.editText?.text.toString()
+                                item.location = location.text.toString()
+                                item.index = index
+                                vm.listServices.value?.add(item)
+                                vm.saveServices(vm.listServices.value!!)
+                                Snackbar.make(
+                                    view,
+                                    "Service successfully added!",
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                            }
+                            if (isEnabled) {
+                                isEnabled = false
+                                requireActivity().onBackPressed()
+                            }
                         }
                     }
                 }
@@ -237,8 +290,20 @@ class TimeSlotEditFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.save -> {
-                closeKeyboard()
-                requireActivity().onBackPressed()
+                if (vmProfile.profile.value?.skills?.isEmpty() == false) {
+                    closeKeyboard()
+                    requireActivity().onBackPressed()
+                } else {
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Indications")
+                        .setMessage(
+                            "In order to publish an advertisement, at least one skill " +
+                                    "has to be set in your profile. Go back in your profile and add one."
+                        )
+                        .setPositiveButton("OK") { _, _ ->
+                        }
+                        .show()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -249,7 +314,8 @@ class TimeSlotEditFragment : Fragment() {
         // this will give us the view which is currently focus in this layout
         val v: View? = this.view?.findFocus()
 
-        val manager: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val manager: InputMethodManager =
+            context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromWindow(v?.windowToken, 0)
     }
 }
