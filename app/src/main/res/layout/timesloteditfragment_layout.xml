@@ -222,7 +222,7 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/menu_skills">
+                >
 
                 <AutoCompleteTextView
                     android:id="@+id/skillsAutocomplete"

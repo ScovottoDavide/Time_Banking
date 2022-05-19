@@ -8,6 +8,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
@@ -21,6 +22,7 @@ class EditSkillFragment : Fragment() {
     var _skillDescription: String? = ""
     var _skillName: String? = ""
     var _skillOld: String? = ""
+    var fromCancel = false
 
     lateinit var tv : TextView
     lateinit var editDesc : EditText
@@ -60,6 +62,9 @@ class EditSkillFragment : Fragment() {
                     //PASSARE ARGOMENTI
                     if(tv.text.toString().isNotEmpty()){
                        if(tv.text.toString() != _skillName){
+                           //POP_UP -> si ->CHIAMARE SETUSER -> continua
+                               if(!fromCancel)
+                               warningPopup()
                            profile.skills?.remove(_skillName)
                            if(editDesc.text.toString() != "")
                                profile.skills?.set(tv.text.toString(), editDesc.text.toString())
@@ -102,14 +107,22 @@ class EditSkillFragment : Fragment() {
                 true
             }
             R.id.cancel -> {
-                val profile = vm.localProfile
-                Log.d("EDIT", "${profile}")
-                //vm.profile.value?.skills?.remove(tv.text.toString())
-                profile?.skills?.remove(tv.text.toString())
-                Log.d("EDIT", "${profile}")
-                vm.modifyUserProfile(profile!!)
-                Snackbar.make(requireView(), "Skill successfully removed!", Snackbar.LENGTH_LONG).show()
-                requireActivity().onBackPressed()
+                AlertDialog.Builder(requireContext())
+                    .setTitle("Warning")
+                    .setMessage("You have modified the skill name. This will cause" +
+                            "the deletion of all the advertisement related to this skill." +
+                            "Do you want to continue?")
+                    .setPositiveButton("Yes") { _, _ ->
+                        val profile = vm.localProfile
+                        profile?.skills?.remove(tv.text.toString())
+                        vm.modifyUserProfile(profile!!)
+                        Snackbar.make(requireView(), "Skill successfully removed!", Snackbar.LENGTH_LONG).show()
+                        fromCancel = true
+                        requireActivity().onBackPressed()
+                    }
+                    .setNegativeButton("No") { _, _ ->
+                    }
+                    .show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -122,5 +135,19 @@ class EditSkillFragment : Fragment() {
 
         val manager: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromWindow(v?.windowToken, 0)
+    }
+
+    private fun warningPopup(){
+        AlertDialog.Builder(requireContext())
+            .setTitle("Warning")
+            .setMessage("You have modified the skill name. This will cause" +
+                    "the deletion of all the advertisement related to this skill." +
+                    "Do you want to continue?")
+            .setPositiveButton("Yes") { _, _ ->
+                requireActivity().onBackPressed()
+            }
+            .setNegativeButton("No") { _, _ ->
+            }
+            .show()
     }
 }

@@ -164,12 +164,20 @@ class TimeSlotEditFragment : Fragment() {
         duration.editText?.setText(item.duration)
         location.setText(item.location)
         email.setText(FirestoreRepository.currentUser.email)
+
         vmProfile.profile.value?.skills?.forEach {
             skills.add(it.key)
         }
         val adapter = ArrayAdapter(requireContext(), R.layout.list_skills, skills)
         (menuSkills.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
+        if(item.related_skill.isNotEmpty()) {
+            menuSkills.editText?.hint = item.related_skill
+            menuSkills.editText?.isEnabled = false
+            menuSkills.isEndIconVisible = false
+        }else{
+            menuSkills.editText?.hint = getString(R.string.menu_skills)
+        }
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
