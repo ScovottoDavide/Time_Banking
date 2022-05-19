@@ -14,6 +14,7 @@
 
     <string name="email">Email :</string>
     <string name="email_hint">mariorossi@general.it</string>
+    <string name="emailHint2">Email</string>
 
     <string name="location">Location :</string>
     <string name="location_hint">Corso Castelfidardo, 39, Torino TO</string>
@@ -21,6 +22,7 @@
     <string name="aboutMe">About me :</string>
 
     <string name="skills">My skills :</string>
+    <string name="menu_skills">Choose skill</string>
 
     <string name="accInfo">My account</string>
 

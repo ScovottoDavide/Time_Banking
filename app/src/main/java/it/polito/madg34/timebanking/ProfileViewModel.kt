@@ -1,86 +1,33 @@
 package it.polito.madg34.timebanking
 
-import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
-import android.net.Uri
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.*
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.lang.reflect.Type
-import java.net.URI
+import java.lang.Exception
 
 class ProfileViewModel : ViewModel() {
 
-    /*var sharedPref: SharedPreferences = getApplication<Application>().getSharedPreferences("package it.polito.madg34.timebanking.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
-    private var  gson : Gson = Gson()*/
-
-
-
-    //val p = clear()
-
-    /*var _profile : MutableLiveData<ProfileUser> = MutableLiveData<ProfileUser>() .also{
-
-        db
-             .collection("users")
-             .document("u1")
-             .get()
-             .addOnSuccessListener { res ->
-                 val value = res.toObject(ProfileUser::class.java)
-                 value
-
-             }
-             .addOnFailureListener{
-                 Toast.makeText(getApplication(), "No user", Toast.LENGTH_SHORT).show()
-
-             }
-
-        /*if(sharedPref.contains("ProfileUser")){
-            val type : Type = object : TypeToken<ProfileUser>() {}.type
-            it.value = gson.fromJson(sharedPref.getString("ProfileUser", null), type)
-
-        }*/
-    }*/
-
     var showed = false
-    var localProfile : ProfileUser? = ProfileUser()
-
-    var currentPhotoPath = ""
-    var currentPhotoUri = ""
-
-    val profile: MutableLiveData<ProfileUser> by lazy { MutableLiveData(ProfileUser()).also { loadProfile() } }
     var needRegistration = false
-    //var profile : LiveData<ProfileUser> =  _profile
-    //private val db :FirebaseFirestore
-    var listenerNavigation : View.OnClickListener? = null
-    private var listener1 : ListenerRegistration? = null
 
-    /*init {
-        db = FirebaseFirestore.getInstance()
-        l = FirebaseFirestore.getInstance().collection("users").document("u1").addSnapshotListener{ r, e ->
-            if (r != null) {
-                _profile.value = if(e!=null) {
-                    emptyProfile()
-                    return@addSnapshotListener
-                }
-                else {
-                       r.toObject<ProfileUser>()
+    var localProfile: ProfileUser? = ProfileUser()
+    val localSkills: MutableList<String> = mutableListOf()
+    var currentPhotoPath = ""
 
-                }
-            }
+    val allProfiles: MutableLiveData<List<ProfileUser>> by lazy { MutableLiveData<List<ProfileUser>>().also { getAllUsersFromDb() } }
+    val profile: MutableLiveData<ProfileUser> by lazy { MutableLiveData(ProfileUser()).also { loadProfile() } }
 
-        }
-    }*/
+    var listenerNavigation: View.OnClickListener? = null
+    private var listener1: ListenerRegistration? = null
+    private var listener2: ListenerRegistration? = null
 
+    /*
+    * Load Profile current user
+    * */
     private fun loadProfile() {
         listener1 = FirestoreRepository().getUser().addSnapshotListener(EventListener { value, e ->
             if (e != null) {
@@ -91,39 +38,52 @@ class ProfileViewModel : ViewModel() {
         })
     }
 
-    fun getDBUser() : LiveData<ProfileUser>{
+    /*
+    * Load all Profiles to get all the skills
+    * */
+    private fun getAllUsersFromDb() {
+        listener2 =
+            FirestoreRepository().getOthersUser().addSnapshotListener(EventListener { value, e ->
+                if (e != null) {
+                    profile.value = null
+                    return@EventListener
+                }
+                allProfiles.value = value!!.mapNotNull { d ->
+                    d.toProfileUser()
+                }
+            })
+    }
+
+    fun getDBUser(): LiveData<ProfileUser> {
         return profile
     }
-    /*var d = {
-        Log.d("PORCO23", _profile.value.toString())
-        Log.d("PORCO32", profile.value.toString())
-    }
-    var y = d()*/
 
-
-    /*fun modifyUser(v : ProfileUser){
-        FirebaseFirestore.getInstance().collection("users").document("u1").set(v)
-            .addOnSuccessListener {
-                Toast.makeText(getApplication(), "OK", Toast.LENGTH_SHORT).show()
-        }
-            .addOnFailureListener{
-                Toast.makeText(getApplication(), "Fail", Toast.LENGTH_SHORT).show()
-
-            }
-
-    }*/
-    fun modifyUserProfile(value : ProfileUser) : Task<Void> {
+    fun modifyUserProfile(value: ProfileUser): Task<Void> {
         return FirestoreRepository().setUser(value)
     }
 
-    /*fun saveProfile(v : ProfileUser){
-        _profile.value = v
-        val serialized = gson.toJson(v)
-        println("SAVING")
-        sharedPref.edit().putString("ProfileUser", serialized).apply()
+    fun getAllUsers(): LiveData<List<ProfileUser>> {
+        return allProfiles
     }
 
-    fun clear(){
-        sharedPref.edit().clear().apply()
-    }*/
+
+}
+
+private fun DocumentSnapshot.toProfileUser(): ProfileUser {
+    return try {
+        val fullName = get("FULLNAME") as String
+        val nickname = get("NICKNAME") as String
+        val email = get("EMAIL") as String
+        val location = get("LOCATION") as String
+        val useDesc = get("ABOUT_ME") as String
+        val img = get("uri") as String
+        val skills = get("Skills") as MutableMap<String, String>
+        ProfileUser(img, fullName, nickname, email, location, useDesc, skills)
+
+
+    } catch (e: Exception) {
+        e.printStackTrace()
+        emptyProfile()
+    }
+
 }

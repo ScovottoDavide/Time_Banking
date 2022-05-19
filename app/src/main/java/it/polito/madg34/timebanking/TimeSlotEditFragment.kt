@@ -10,6 +10,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.datepicker.CalendarConstraints
@@ -34,7 +35,9 @@ import kotlin.time.Duration.Companion.minutes
 
 class TimeSlotEditFragment : Fragment() {
 
-    val vm by navGraphViewModels<TimeSlotViewModel>(R.id.main)
+    val vm: TimeSlotViewModel by activityViewModels()
+    val vmProfile: ProfileViewModel by activityViewModels()
+
 
     private var h: Int = 0
     private var w: Int = 0
@@ -45,11 +48,15 @@ class TimeSlotEditFragment : Fragment() {
     private lateinit var location: TextInputEditText
     private lateinit var date: TextInputLayout
     private lateinit var time: TextInputLayout
+    private lateinit var email: TextInputEditText
+    private lateinit var menuSkills : TextInputLayout
     private lateinit var item :TimeSlot
     private lateinit var pageTitle : TextView
 
     private var hour = 0;
     private var minute = 0;
+
+    val skills = mutableListOf<String>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.timesloteditfragment_layout, container, false)
@@ -66,6 +73,8 @@ class TimeSlotEditFragment : Fragment() {
         location = view.findViewById(R.id.outlinedLocationFixed)
         date = view.findViewById(R.id.outlinedDate)
         time = view.findViewById(R.id.outlinedTime)
+        email = view.findViewById(R.id.outlinedMailFixed)
+        menuSkills = view.findViewById(R.id.menuSkills)
 
         val bundle = arguments
         val index = bundle?.getInt("index") ?: item.index
@@ -136,6 +145,13 @@ class TimeSlotEditFragment : Fragment() {
         time.editText?.setText(item.time)
         duration.editText?.setText(item.duration)
         location.setText(item.location)
+        email.setText(FirestoreRepository.currentUser.email)
+        vmProfile.profile.value?.skills?.forEach {
+            skills.add(it.key)
+        }
+        val adapter = ArrayAdapter(requireContext(), R.layout.list_skills, skills)
+        (menuSkills.editText as? AutoCompleteTextView)?.setAdapter(adapter)
+
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,

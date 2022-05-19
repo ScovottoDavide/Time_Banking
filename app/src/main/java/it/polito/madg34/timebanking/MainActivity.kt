@@ -15,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -71,6 +72,17 @@ class MainActivity : AppCompatActivity() {
             else {
                 profile = it
                 loadNavigationHeader()
+            }
+        }
+
+        vmProfile.getAllUsers().observe(this){
+            if(!it.isNullOrEmpty()){
+                it.forEach { profile ->
+                    profile.skills.forEach{ skill ->
+                        vmProfile.localSkills.add(skill.key)
+                    }
+                }
+
             }
         }
 

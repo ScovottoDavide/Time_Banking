@@ -1,9 +1,7 @@
 package it.polito.madg34.timebanking
 
 import android.content.res.Configuration
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
