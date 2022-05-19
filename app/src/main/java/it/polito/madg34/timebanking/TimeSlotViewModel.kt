@@ -17,6 +17,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.lang.Exception
 import java.lang.reflect.Type
+import java.sql.Time
 
 
 class TimeSlotViewModel(application: Application) : AndroidViewModel(application) {
@@ -47,53 +48,62 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
     }
 
 
-   /* val _listServices =
-        MutableLiveData<List<TimeSlot>?>() //by lazy { MutableLiveData<List<TimeSlot>>().also { loadList() } }
-    val listServices: LiveData<List<TimeSlot>?> = _listServices
-    private var fireStoreDB = FirebaseFirestore.getInstance()
+    val currentUserAdvs : MutableLiveData<List<TimeSlot>> = MutableLiveData<List<TimeSlot>>().also { loadAdvs() }
+    var currentIndexAdv : MutableLiveData<String> = MutableLiveData(String()).also { loadLastAdv() }
 
-    companion object {
-        // Current Authenticated user
-        lateinit var currentUser: FirebaseUser
-    }
+    private var listener1 : ListenerRegistration? = null
+    private var listener2 : ListenerRegistration? = null
 
-    private var listener2: ListenerRegistration? = null
-
-
-    init {
-        listener2 = fireStoreDB.collection("listOfservice")
-            .whereEqualTo("email", FirestoreRepository.currentUser.email!!)
+   fun loadAdvs() {
+        listener1 = FirestoreRepository().getAdvs()
             .addSnapshotListener(EventListener { value, e ->
                 if (e != null) {
-                    _listServices.value = null
+                    currentUserAdvs.value = emptyList()
                     return@EventListener
                 }
-                _listServices.value = value!!.mapNotNull { d ->
+                currentUserAdvs.value = value!!.mapNotNull { d ->
                     d.toTimeSlotObject()
                 }
-
-                Log.d("Prova", _listServices.value.toString())
-
+                Log.d("Prova", currentUserAdvs.value.toString())
             })
     }
 
 
+    private fun loadLastAdv() {
+        listener2 = FirestoreRepository().getAllAdvs().addSnapshotListener(EventListener{ value, e ->
+            if(e != null){
+                currentIndexAdv.value = ""
+                return@EventListener
+            }
+            currentIndexAdv.value = value!!.documents.size.toString()
+            Log.d("index", currentIndexAdv.value.toString())
+        })
 
+    }
 
+    fun getDBTimeSlots() : LiveData<List<TimeSlot>>{
+        return currentUserAdvs
+    }
 
-
+    fun saveAdv(value : TimeSlot) : Task<Void> {
+        return FirestoreRepository().saveAdvDB(value, "Adv-"+(currentIndexAdv.value?.toInt()?.plus(1)).toString())
+    }
 
     private fun DocumentSnapshot.toTimeSlotObject(): TimeSlot? {
         return try {
-            val title = get("title") as String
-            val description = get("description") as String
-            val date = get("date") as String
-            val time = get("time") as String
-            val duration = get("duration") as String
-            val location = get("location") as String
-            val index = get("index") as Long
+            val title = get("TITLE") as String
+            val description = get("DESCRIPTION") as String
+            val date = get("DATE") as String
+            val time = get("TIME") as String
+            val duration = get("DURATION") as String
+            val location = get("LOCATION") as String
+            val email = get("PUBLISHED_BY") as String
+            val related_skill = get("RELATED_SKILL") as String
+            val index = get("INDEX") as Long
 
-            TimeSlot(title, description, date, time, duration, location, index.toInt())
+            TimeSlot(title, description, date, time, duration, location, email, related_skill,
+                index.toInt()
+            )
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -102,7 +112,7 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
         }
 
 
-    }*/
+    }
 
 }
 

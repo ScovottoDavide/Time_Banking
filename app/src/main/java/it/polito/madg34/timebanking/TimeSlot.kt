@@ -15,7 +15,7 @@ data class TimeSlot(
     @get: PropertyName("LOCATION") @set: PropertyName("LOCATION") var location: String = "",
     @get: PropertyName("PUBLISHED_BY") @set: PropertyName("PUBLISHED_BY") var published_by: String = "",
     @get: PropertyName("RELATED_SKILL") @set: PropertyName("RELATED_SKILL") var related_skill: String = "",
-    var index: Int
+    @get: PropertyName("INDEX") @set: PropertyName("INDEX") var index: Int
 )
 
 fun emptyTimeSlot(): TimeSlot {

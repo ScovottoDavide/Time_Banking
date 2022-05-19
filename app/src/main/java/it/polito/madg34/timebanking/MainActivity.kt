@@ -39,10 +39,12 @@ class MainActivity : AppCompatActivity() {
     val vmProfile: ProfileViewModel by viewModels()
     val vmTimeSlot: TimeSlotViewModel by viewModels()
     var profile: ProfileUser = emptyProfile()
+    var timeSlots : List<TimeSlot> = emptyList()
     lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var navController: NavController
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

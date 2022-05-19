@@ -41,8 +41,16 @@ class FirestoreRepository {
         fireStoreDB.collection("skills").document(value).set("lista di advs")
     }
 
-    fun saveAdv(value : TimeSlot, index : String): Task<Void> {
-        return fireStoreDB.collection("advertisement").document(index).set(value)
+    fun getAdvs(): Query{
+        return fireStoreDB.collection("advertisements").whereEqualTo("PUBLISHED_BY", currentUser.email!!)
+    }
+
+    fun getAllAdvs(): CollectionReference{
+        return fireStoreDB.collection("advertisements")
+    }
+
+    fun saveAdvDB(value : TimeSlot, index : String): Task<Void> {
+        return fireStoreDB.collection("advertisements").document(index).set(value)
     }
 
 

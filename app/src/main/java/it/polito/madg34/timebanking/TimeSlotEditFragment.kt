@@ -199,8 +199,8 @@ class TimeSlotEditFragment : Fragment() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         else {
-                            if (index >= 0 && index <= vm.listServices.value?.size!!) {
-                                vm.listServices.value?.get(index).also {
+                            if (index >= 0 && index <= vm.currentUserAdvs.value?.size!!) {
+                                vm.currentUserAdvs.value?.get(index).also {
                                     it?.title = title.text.toString()
                                     it?.description = description.text.toString()
                                     it?.date = date.editText?.text.toString()
@@ -209,7 +209,7 @@ class TimeSlotEditFragment : Fragment() {
                                     it?.location = location.text.toString()
                                     it?.related_skill = menuSkills.editText?.text.toString()
                                     it?.index = index
-                                    vm.saveServices(vm.listServices.value!!)
+                                    vm.saveAdv(vm.listServices.value?.get(index)!!)
                                     Snackbar.make(
                                         view,
                                         "Service successfully edited!",
@@ -223,10 +223,10 @@ class TimeSlotEditFragment : Fragment() {
                                 item.time = time.editText?.text.toString()
                                 item.duration = duration.editText?.text.toString()
                                 item.location = location.text.toString()
+                                item.published_by = email.text.toString()
+                                item.related_skill = menuSkills.editText?.text.toString()
                                 item.index = index
-                                Log.d("ADD", item.toString())
-                                vm._listServices.value = vm._listServices.value
-                                vm.saveServices(mutableListOf(item))
+                                vm.saveAdv(item)
                                 Snackbar.make(
                                     view,
                                     "Service successfully added!",
@@ -239,9 +239,10 @@ class TimeSlotEditFragment : Fragment() {
                                 item.time = time.editText?.text.toString()
                                 item.duration = duration.editText?.text.toString()
                                 item.location = location.text.toString()
+                                item.published_by = email.text.toString()
+                                item.related_skill = menuSkills.editText?.text.toString()
                                 item.index = index
-                                vm.listServices.value?.add(item)
-                                vm.saveServices(vm.listServices.value!!)
+                                vm.saveAdv(item)
                                 Snackbar.make(
                                     view,
                                     "Service successfully added!",
