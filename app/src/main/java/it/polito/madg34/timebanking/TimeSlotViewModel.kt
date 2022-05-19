@@ -22,7 +22,7 @@ import java.sql.Time
 
 class TimeSlotViewModel(application: Application) : AndroidViewModel(application) {
 
-    var sharedPref: SharedPreferences = getApplication<Application>().getSharedPreferences("package it.polito.madg34.timebanking.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
+    /*var sharedPref: SharedPreferences = getApplication<Application>().getSharedPreferences("package it.polito.madg34.timebanking.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
     private var  gson : Gson = Gson()
 
     //val p = clear()
@@ -45,16 +45,18 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
 
     fun clear(){
         sharedPref.edit().clear().apply()
-    }
+    }*/
 
 
-    val currentUserAdvs : MutableLiveData<List<TimeSlot>> = MutableLiveData<List<TimeSlot>>().also { loadAdvs() }
-    var currentIndexAdv : MutableLiveData<String> = MutableLiveData(String()).also { loadLastAdv() }
+    val currentUserAdvs: MutableLiveData<List<TimeSlot>> = MutableLiveData<List<TimeSlot>>().also { loadAdvs() }
+    var currentIndexAdv: MutableLiveData<String> = MutableLiveData(String()).also { loadLastAdv() }
 
-    private var listener1 : ListenerRegistration? = null
-    private var listener2 : ListenerRegistration? = null
+    var currentShownAdv : TimeSlot? = null
 
-   fun loadAdvs() {
+    private var listener1: ListenerRegistration? = null
+    private var listener2: ListenerRegistration? = null
+
+    fun loadAdvs() {
         listener1 = FirestoreRepository().getAdvs()
             .addSnapshotListener(EventListener { value, e ->
                 if (e != null) {
@@ -70,27 +72,41 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
 
 
     private fun loadLastAdv() {
-        listener2 = FirestoreRepository().getAllAdvs().addSnapshotListener(EventListener{ value, e ->
-            if(e != null){
-                currentIndexAdv.value = ""
-                return@EventListener
-            }
-            currentIndexAdv.value = value!!.documents.size.toString()
-            Log.d("index", currentIndexAdv.value.toString())
-        })
+        listener2 =
+            FirestoreRepository().getAllAdvs().addSnapshotListener(EventListener { value, e ->
+                if (e != null) {
+                    currentIndexAdv.value = ""
+                    return@EventListener
+                }
+                if (value!!.documents.size > 0)
+                    currentIndexAdv.value = value.documents.get(value.documents.size - 1).id
+                else currentIndexAdv.value = "Adv-0"
+            })
 
     }
 
-    fun getDBTimeSlots() : LiveData<List<TimeSlot>>{
+    fun getDBTimeSlots(): LiveData<List<TimeSlot>> {
         return currentUserAdvs
     }
 
-    fun saveAdv(value : TimeSlot) : Task<Void> {
-        return FirestoreRepository().saveAdvDB(value, "Adv-"+(currentIndexAdv.value?.toInt()?.plus(1)).toString())
+    fun saveAdv(value: TimeSlot): Task<Void> {
+        val id1 = currentIndexAdv.value?.split("-")?.get(1)?.toInt()
+        val id2 = "Adv-" + (id1!! + 1).toString()
+        value.id = id2
+        return FirestoreRepository().saveAdvDB(value)
+    }
+
+    fun updateAdv(value: TimeSlot): Task<Void> {
+        return FirestoreRepository().updateAdvDB(value)
+    }
+
+    fun removeAdv(value: TimeSlot): Task<Void> {
+        return FirestoreRepository().removeAdvDB(value)
     }
 
     private fun DocumentSnapshot.toTimeSlotObject(): TimeSlot? {
         return try {
+            val id = get("ID") as String
             val title = get("TITLE") as String
             val description = get("DESCRIPTION") as String
             val date = get("DATE") as String
@@ -101,7 +117,8 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
             val related_skill = get("RELATED_SKILL") as String
             val index = get("INDEX") as Long
 
-            TimeSlot(title, description, date, time, duration, location, email, related_skill,
+            TimeSlot(
+                id, title, description, date, time, duration, location, email, related_skill,
                 index.toInt()
             )
 

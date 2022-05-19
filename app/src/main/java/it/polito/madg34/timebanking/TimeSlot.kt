@@ -7,6 +7,7 @@ import com.google.firebase.firestore.PropertyName
 @Keep
 @IgnoreExtraProperties
 data class TimeSlot(
+    @get: PropertyName("ID") @set: PropertyName("ID") var id: String = "",
     @get: PropertyName("TITLE") @set: PropertyName("TITLE") var title: String = "",
     @get: PropertyName("DESCRIPTION") @set: PropertyName("DESCRIPTION") var description: String = "",
     @get: PropertyName("DATE") @set: PropertyName("DATE") var date: String = "",
@@ -19,5 +20,5 @@ data class TimeSlot(
 )
 
 fun emptyTimeSlot(): TimeSlot {
-    return TimeSlot("", "", "", "", "", "", "", "", -1)
+    return TimeSlot("", "", "", "", "", "", "", "", "", -1)
 }

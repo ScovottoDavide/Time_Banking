@@ -1,11 +1,10 @@
 package it.polito.madg34.timebanking
 
+import android.util.Log
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.*
 
 class FirestoreRepository {
     private var fireStoreDB = FirebaseFirestore.getInstance()
@@ -49,8 +48,16 @@ class FirestoreRepository {
         return fireStoreDB.collection("advertisements")
     }
 
-    fun saveAdvDB(value : TimeSlot, index : String): Task<Void> {
-        return fireStoreDB.collection("advertisements").document(index).set(value)
+    fun saveAdvDB(value : TimeSlot): Task<Void> {
+        return fireStoreDB.collection("advertisements").document(value.id).set(value)
+    }
+
+    fun updateAdvDB(value : TimeSlot) : Task<Void>{
+        return fireStoreDB.collection("advertisements").document(value.id).set(value)
+    }
+
+    fun removeAdvDB(value : TimeSlot) : Task<Void> {
+        return fireStoreDB.collection("advertisements").document(value.id).delete()
     }
 
 

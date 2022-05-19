@@ -29,28 +29,30 @@ class TimeSlotAdapter(val data : MutableList<TimeSlot>) : RecyclerView.Adapter<T
         val item = data[position] // access data item
         holder.bind(item)
 
+        vmTimeSlot = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
+
         // Click Listener on the whole Card
         holder.itemView.setOnClickListener{
             val bundle = Bundle()
             bundle.putInt("index", position)
+            vmTimeSlot.currentShownAdv = data[position]
+            Log.d("CLICK", vmTimeSlot.currentShownAdv.toString())
             Navigation.findNavController(holder.itemView).navigate(R.id.action_timeSlotListFragment_to_timeSlotDetailsFragment2, bundle)
         }
 
-        vmTimeSlot = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
         val deleteButton = holder.itemView.findViewById<ImageButton>(R.id.deleteCard)
         deleteButton.setOnClickListener {
+            vmTimeSlot.removeAdv(data[position])
             data.removeAt(position)
             notifyItemRemoved(position)
             notifyItemRangeChanged(position, itemCount)
-            // trigger observers
-            vmTimeSlot._listServices.value = vmTimeSlot.listServices.value
-            vmTimeSlot.saveServices(data)
             Snackbar.make(holder.itemView, "Service successfully removed!", Snackbar.LENGTH_LONG).show()
         }
 
         val editCardViewButton : ImageButton = holder.itemView.findViewById(R.id.editCard)
         // Click Listener on the edit Button of the Card
         editCardViewButton.setOnClickListener {
+            vmTimeSlot.currentShownAdv = data[position]
             Navigation.findNavController(holder.itemView).navigate(R.id.action_timeSlotListFragment_to_timeSlotEditFragment2, bundleOf("index" to position))
         }
     }

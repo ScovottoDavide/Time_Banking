@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter
 
 class TimeSlotDetailsFragment : Fragment() {
 
-    val vm by navGraphViewModels<TimeSlotViewModel>(R.id.main)
+    val vm : TimeSlotViewModel by activityViewModels()
 
     private var h: Int = 0
     private var w: Int = 0
@@ -42,8 +42,7 @@ class TimeSlotDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         halfWidth(view)
 
-        val bundle : Bundle? = arguments
-        val item : TimeSlot? = vm.listServices.value?.get(bundle?.getInt("index")!!)
+        val item : TimeSlot? = vm.currentShownAdv
 
         val title = view.findViewById<TextInputEditText>(R.id.outlinedTitleFixed)
         val description = view.findViewById<TextInputEditText>(R.id.outlinedDescriptionFixed)
@@ -51,20 +50,23 @@ class TimeSlotDetailsFragment : Fragment() {
         val time = view.findViewById<TextInputEditText>(R.id.outlinedTimeFixed)
         val duration = view.findViewById<TextInputEditText>(R.id.outlinedDurationFixed)
         val location = view.findViewById<TextInputEditText>(R.id.outlinedLocationFixed)
+        val email = view.findViewById<TextInputEditText>(R.id.outlinedMailFixed)
+        val skill = view.findViewById<TextInputEditText>(R.id.outlinedSkillFixed)
 
         // Observe in order to get automatically the updated values
-        vm.listServices.observe(this.viewLifecycleOwner){
+        vm.getDBTimeSlots().observe(this.viewLifecycleOwner){
             title.setText(item?.title)
             description.setText(item?.description)
             date.setText(item?.date)
             time.setText(item?.time)
             duration.setText(item?.duration)
             location.setText(item?.location)
+            email.setText(item?.published_by)
+            skill.setText(item?.related_skill)
         }
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                vm.saveServices(vm.listServices.value!!)
                 if (isEnabled) {
                     isEnabled = false
                     requireActivity().onBackPressed()
@@ -112,5 +114,4 @@ class TimeSlotDetailsFragment : Fragment() {
             }
         })
     }
-
 }
