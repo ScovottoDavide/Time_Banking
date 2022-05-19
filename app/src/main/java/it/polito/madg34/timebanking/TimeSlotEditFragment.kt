@@ -89,9 +89,9 @@ class TimeSlotEditFragment : Fragment() {
             pageTitle = view.findViewById(R.id.titleEditService)
             pageTitle.setText(R.string.AddService)
         } else {
-            if (index >= 0 && index < vm.listServices.value?.size!!) {
-                item = vm.listServices.value?.get(index)!!
-            } else if (index > vm.listServices.value?.size!!) {
+            if (index >= 0 && index < vm.currentUserAdvs.value?.size!!) {
+                item = vm.currentUserAdvs.value?.get(index)!!
+            } else if (index > vm.currentUserAdvs.value?.size!!) {
                 item = emptyTimeSlot()
                 pageTitle = view.findViewById(R.id.titleEditService)
                 pageTitle.setText(R.string.AddService)
@@ -208,7 +208,7 @@ class TimeSlotEditFragment : Fragment() {
                                     it?.duration = duration.editText?.text.toString()
                                     it?.location = location.text.toString()
                                     it?.related_skill = menuSkills.editText?.text.toString()
-                                    it?.index = index
+                                    //it?.index = vm.currentUserAdvs.value?.size!!
                                     vm.saveAdv(vm.listServices.value?.get(index)!!)
                                     Snackbar.make(
                                         view,
@@ -225,7 +225,7 @@ class TimeSlotEditFragment : Fragment() {
                                 item.location = location.text.toString()
                                 item.published_by = email.text.toString()
                                 item.related_skill = menuSkills.editText?.text.toString()
-                                item.index = index
+                                item.index = vm.currentUserAdvs.value?.size!!
                                 vm.saveAdv(item)
                                 Snackbar.make(
                                     view,
@@ -241,7 +241,7 @@ class TimeSlotEditFragment : Fragment() {
                                 item.location = location.text.toString()
                                 item.published_by = email.text.toString()
                                 item.related_skill = menuSkills.editText?.text.toString()
-                                item.index = index
+                                item.index = vm.currentUserAdvs.value?.size!!
                                 vm.saveAdv(item)
                                 Snackbar.make(
                                     view,

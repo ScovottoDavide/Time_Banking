@@ -51,7 +51,8 @@ class TimeSlotListFragment : Fragment() {
                     )
                 }
             } else {
-                Log.d("time2", timeSlots.toString())
+                emptyView = view.findViewById(R.id.emptyListTV)
+                emptyView.visibility = View.GONE
                 timeSlotsRV = view.findViewById(R.id.ServicesList)
                 timeSlotsRV.layoutManager = LinearLayoutManager(this.context)
                 timeSlotsRV.adapter = TimeSlotAdapter(timeSlots)

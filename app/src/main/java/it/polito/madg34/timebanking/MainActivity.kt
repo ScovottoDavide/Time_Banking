@@ -112,8 +112,8 @@ class MainActivity : AppCompatActivity() {
             logOut()
         }
 
-        vmTimeSlot.listServices.observe(this) {
-            if (vmTimeSlot.listServices.value?.size == 0 && navController.currentDestination?.id == navController.graph.startDestinationId) {
+        vmTimeSlot.currentUserAdvs.observe(this) {
+            if (vmTimeSlot.currentUserAdvs.value?.size == 0 && navController.currentDestination?.id == navController.graph.startDestinationId) {
                 // Dirty way, trigger reacreation of fragment to show empty message
                 navController.navigate(R.id.timeSlotListFragment)
             }
