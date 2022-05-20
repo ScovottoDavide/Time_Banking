@@ -46,9 +46,6 @@ class TimeSlotListFragment : Fragment() {
 
         vmSkills.fromHome.observe(viewLifecycleOwner) {
             if (it) {
-                Log.d("IN", "SSS")
-//                (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-//                (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
                 addButton.hide()
                 vmSkills.getAdvsToDisplayFromSkill().observe(viewLifecycleOwner) {
                     if (!it.isNullOrEmpty()) {

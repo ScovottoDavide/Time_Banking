@@ -27,6 +27,7 @@ import java.time.format.DateTimeFormatter
 class TimeSlotDetailsFragment : Fragment() {
 
     val vm : TimeSlotViewModel by activityViewModels()
+    val vmSkills : SkillsViewModel by activityViewModels()
 
     private var h: Int = 0
     private var w: Int = 0
@@ -76,7 +77,8 @@ class TimeSlotDetailsFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.pencil_menu, menu)
+        if(!vmSkills.fromHome.value!!)
+            inflater.inflate(R.menu.pencil_menu, menu)
         return super.onCreateOptionsMenu(menu, inflater)
     }
 
