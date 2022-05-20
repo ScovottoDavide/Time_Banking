@@ -19,6 +19,7 @@ class TimeSlotAdapter(val data : MutableList<TimeSlot>) : RecyclerView.Adapter<T
 
     lateinit var v : View
     lateinit var vmTimeSlot : TimeSlotViewModel
+    lateinit var vmSkills : SkillsViewModel
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeSlotViewHolder {
         v = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
@@ -30,6 +31,7 @@ class TimeSlotAdapter(val data : MutableList<TimeSlot>) : RecyclerView.Adapter<T
         holder.bind(item)
 
         vmTimeSlot = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
+        vmSkills = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
 
         // Click Listener on the whole Card
         holder.itemView.setOnClickListener{
@@ -40,19 +42,29 @@ class TimeSlotAdapter(val data : MutableList<TimeSlot>) : RecyclerView.Adapter<T
         }
 
         val deleteButton = holder.itemView.findViewById<ImageButton>(R.id.deleteCard)
-        deleteButton.setOnClickListener {
-            vmTimeSlot.removeAdv(data[position])
-            data.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, itemCount)
-            Snackbar.make(holder.itemView, "Service successfully removed!", Snackbar.LENGTH_LONG).show()
+        if(vmSkills.fromHome.value!!){
+            deleteButton.visibility = View.GONE
+        } else{
+            deleteButton.visibility = View.VISIBLE
+            deleteButton.setOnClickListener {
+                vmTimeSlot.removeAdv(data[position])
+                data.removeAt(position)
+                notifyItemRemoved(position)
+                notifyItemRangeChanged(position, itemCount)
+                Snackbar.make(holder.itemView, "Service successfully removed!", Snackbar.LENGTH_LONG).show()
+            }
         }
 
         val editCardViewButton : ImageButton = holder.itemView.findViewById(R.id.editCard)
-        // Click Listener on the edit Button of the Card
-        editCardViewButton.setOnClickListener {
-            vmTimeSlot.currentShownAdv = data[position]
-            Navigation.findNavController(holder.itemView).navigate(R.id.action_timeSlotListFragment_to_timeSlotEditFragment2, bundleOf("index" to position))
+        if(vmSkills.fromHome.value!!){
+            editCardViewButton.visibility = View.GONE
+        }else{
+            editCardViewButton.visibility = View.VISIBLE
+            // Click Listener on the edit Button of the Card
+            editCardViewButton.setOnClickListener {
+                vmTimeSlot.currentShownAdv = data[position]
+                Navigation.findNavController(holder.itemView).navigate(R.id.action_timeSlotListFragment_to_timeSlotEditFragment2, bundleOf("index" to position))
+            }
         }
     }
 

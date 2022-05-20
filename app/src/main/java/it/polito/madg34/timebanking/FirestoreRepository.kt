@@ -125,6 +125,12 @@ class FirestoreRepository {
         return fireStoreDB.collection("advertisements").whereEqualTo("PUBLISHED_BY", currentUser.email!!)
     }
 
+    fun getAdvFromDocId(docId : String) : DocumentReference? {
+        if(docId.isEmpty())
+            return null
+        return fireStoreDB.collection("advertisements").document(docId)
+    }
+
     fun getAllAdvs(): CollectionReference{
         return fireStoreDB.collection("advertisements")
     }

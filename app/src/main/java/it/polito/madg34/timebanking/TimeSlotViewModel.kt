@@ -43,7 +43,6 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
             })
     }
 
-
     private fun loadLastAdv() {
         listener2 =
             FirestoreRepository().getAllAdvs().addSnapshotListener(EventListener { value, e ->
@@ -100,8 +99,6 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
             Log.d("prova4", e.toString())
             null
         }
-
-
     }
 
 }

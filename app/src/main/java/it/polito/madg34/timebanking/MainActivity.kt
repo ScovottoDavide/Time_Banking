@@ -38,6 +38,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 class MainActivity : AppCompatActivity() {
     val vmProfile: ProfileViewModel by viewModels()
     val vmTimeSlot: TimeSlotViewModel by viewModels()
+    val vmSkills: SkillsViewModel by viewModels()
     var profile: ProfileUser = emptyProfile()
     var timeSlots: List<TimeSlot> = emptyList()
     lateinit var appBarConfiguration: AppBarConfiguration
@@ -75,6 +76,9 @@ class MainActivity : AppCompatActivity() {
                 || navController.currentDestination?.id == navController.graph[R.id.timeSlotEditFragment].id
             ) {
                 discardChanges()
+            }else if(navController.currentDestination?.id == navController.graph[R.id.timeSlotListFragment].id
+                && vmSkills.fromHome.value!!){
+                    this.onBackPressed()
             } else {
                 drawerLayout.openDrawer(GravityCompat.START)
             }
@@ -111,8 +115,12 @@ class MainActivity : AppCompatActivity() {
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_listServices -> {
-                    if (navController.currentDestination?.id != navController.graph[R.id.timeSlotListFragment].id)
+                    if (navController.currentDestination?.id != navController.graph[R.id.timeSlotListFragment].id && !vmSkills.fromHome.value!!){
                         navController.navigate(R.id.timeSlotListFragment)
+                    } else if(navController.currentDestination?.id == navController.graph[R.id.timeSlotListFragment].id && vmSkills.fromHome.value!!){
+                        vmSkills.fromHome.value = false
+                        navController.navigate(R.id.timeSlotListFragment)
+                    }
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_listSkills ->  {
@@ -123,6 +131,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             true
+        }
+
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.id == R.id.timeSlotListFragment && vmSkills.fromHome.value!!){
+                supportActionBar?.setHomeAsUpIndicator(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+            }
         }
 
         val logoutButton = findViewById<Button>(R.id.logout_btn)

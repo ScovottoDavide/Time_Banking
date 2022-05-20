@@ -45,8 +45,9 @@ class SkillsFragment : Fragment() {
                     skillsRV = view.findViewById(R.id.SkillsList)
                     skillsRV.layoutManager = LinearLayoutManager(this.context)
                     Log.d("Skills", skills.keys.toString())
-                    val ss : MutableList<String> = skills.keys.toMutableList()
-                    skillsRV.adapter = SkillsAdapter(ss)
+                    val localSkills : MutableList<String> = skills.keys.toMutableList()
+                    val advs : MutableList<Skills> = skills.values.toMutableList()
+                    skillsRV.adapter = SkillsAdapter(localSkills,advs)
                 }
             }
         }
