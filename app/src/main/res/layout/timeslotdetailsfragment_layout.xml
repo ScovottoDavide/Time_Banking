@@ -90,7 +90,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:enabled="false"
                 android:hint="@string/Title"
                 app:boxStrokeWidth="1dp"
                 app:startIconDrawable="@drawable/format_title"
@@ -100,7 +99,8 @@
                     android:id="@+id/outlinedTitleFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#757575" />
+                    android:textColor="#757575"
+                    android:enabled="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -109,7 +109,6 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:enabled="false"
                 android:hint="@string/Description"
                 app:startIconDrawable="@drawable/text_long"
                 app:startIconTint="@color/Black">
@@ -120,7 +119,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
                     android:textColor="#757575"
-                    tools:ignore="DuplicateSpeakableTextCheck" />
+                    tools:ignore="DuplicateSpeakableTextCheck"
+                    android:enabled="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -135,7 +135,6 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="190dp"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:hint="@string/Date"
                     app:startIconDrawable="@android:drawable/ic_menu_my_calendar"
                     app:startIconTint="@color/black">
@@ -144,7 +143,8 @@
                         android:id="@+id/outlinedDateFixed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="#757575" />
+                        android:textColor="#757575"
+                        android:enabled="false"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -153,7 +153,6 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:hint="@string/Time"
                     app:startIconDrawable="@android:drawable/ic_menu_recent_history"
                     app:startIconTint="@color/black">
@@ -162,7 +161,8 @@
                         android:id="@+id/outlinedTimeFixed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="#757575" />
+                        android:textColor="#757575"
+                        android:enabled="false"/>
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -174,7 +174,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:enabled="false"
                 android:hint="@string/Duration"
                 app:startIconDrawable="@drawable/timer_sand"
                 app:startIconTint="@color/Black">
@@ -183,7 +182,8 @@
                     android:id="@+id/outlinedDurationFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#757575" />
+                    android:textColor="#757575"
+                    android:enabled="false"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -193,7 +193,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:enabled="false"
                 android:hint="@string/Location"
                 app:startIconDrawable="@drawable/outline_location_on_24"
                 app:startIconTint="@color/black">

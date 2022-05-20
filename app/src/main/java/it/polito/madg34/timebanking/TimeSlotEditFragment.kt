@@ -176,7 +176,7 @@ class TimeSlotEditFragment : Fragment() {
             menuSkills.editText?.isEnabled = false
             menuSkills.isEndIconVisible = false
         }else{
-            menuSkills.editText?.setText(getString(R.string.menu_skills))
+            menuSkills.editText?.hint = getString(R.string.menu_skills)
         }
 
         activity?.onBackPressedDispatcher?.addCallback(
