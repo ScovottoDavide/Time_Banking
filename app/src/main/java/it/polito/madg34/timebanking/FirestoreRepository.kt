@@ -6,6 +6,8 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.getField
+import com.google.firebase.firestore.model.mutation.MutationBatch
+import java.lang.ref.Reference
 import java.util.*
 
 class FirestoreRepository {
@@ -34,18 +36,26 @@ class FirestoreRepository {
         Function to set the document of the current user
     */
     fun setUser(value : ProfileUser): Task<Void> {
-        val old_user = getUser()
-        old_user.get().addOnCompleteListener(OnCompleteListener {
-            var old_skills: Set<String>? = null
-            if(it.isSuccessful){
-                old_skills = it.result.get("Skills") as Set<String>?
-                old_skills?.forEachIndexed { index, s ->
-                    if(s != value.skills.keys.elementAt(index) ){
-                        removeAdvSkillFromProfile(s)
+        var old_skills : MutableList<String> = mutableListOf()
+        fireStoreDB.collection("users").document(currentUser.email!!).get()
+            .addOnSuccessListener { it ->
+                if(it != null){
+                    it.data?.forEach {
+                        if( it.key == "Skills" ){
+                            old_skills = (it.value as Map<String, String>).keys.toMutableList()
+                            old_skills.forEachIndexed { index, s ->
+                                // Skill deleted
+                                if(!value.skills.keys.contains(s)){
+                                    removeAdvSkillFromProfile(s)
+                                } else if (s != value.skills.keys.elementAt(index) ){ // Skill name modified
+                                    removeAdvSkillFromProfile(s)
+                                }
+                            }
+                        }
                     }
                 }
             }
-        })
+
         return fireStoreDB.collection("users").document(currentUser.email!!).set(value)
     }
 
@@ -75,7 +85,7 @@ class FirestoreRepository {
         })
     }
 
-    fun removeSkill(value : String, id : String){
+    fun removeSkills(value : String, id : MutableList<String>){
         fireStoreDB.collection("skills").document(value).get().addOnCompleteListener(
             OnCompleteListener{
                 var old_string = ""
@@ -84,16 +94,22 @@ class FirestoreRepository {
                     if(it.result.getString("RELATED_ADVS") != null){
                         old_string = it.result.getString("RELATED_ADVS")!!
                     }
-                    val listAdvs = old_string.split(",").filter {  it != id }
+                    val listAdvs = old_string.split(",") as MutableList<String>
+                    Log.d("SKILL1", listAdvs.toString())
+                    Log.d("SKILL10", id.toString())
                     var newString = ""
-                    listAdvs.forEachIndexed { index, s ->
-                        if(index == 0){
-                            newString = s
-                        }else{
-                            newString = "$newString,$s"
+                    id.forEach { s ->
+                        if(listAdvs.contains(s)){
+                            listAdvs.removeAt(listAdvs.indexOf(s))
                         }
                     }
+                    listAdvs.forEachIndexed { index, s ->
+                        if(index == 0)
+                            newString = s
+                        else newString = "$newString,$s"
+                    }
                     skill.relatedAdvs = newString
+                    Log.d("SKILL2", skill.toString())
                     fireStoreDB.collection("skills").document(value).set(skill)
                 }
             })
@@ -120,7 +136,7 @@ class FirestoreRepository {
     * Remove adv from advertisements collection and remove RELATED_ADVS when deleted from listFragment
     * */
     fun removeAdvDB(value : TimeSlot) : Task<Void> {
-        removeSkill(value.related_skill, value.id)
+        removeSkills(value.related_skill, mutableListOf(value.id))
         return fireStoreDB.collection("advertisements").document(value.id).delete()
     }
 
@@ -128,6 +144,7 @@ class FirestoreRepository {
     * Remove adv from advertisements collection and remove RELATED_ADVS when skill is deleted/updated from profile
     * */
     fun removeAdvSkillFromProfile(skill : String){
+        val listIds : MutableList<String> = mutableListOf()
         fireStoreDB.collection("advertisements")
             .whereEqualTo("PUBLISHED_BY", currentUser.email)
             .whereEqualTo("RELATED_SKILL",skill).get()
@@ -135,10 +152,12 @@ class FirestoreRepository {
                 if(task.isSuccessful){
                     if(task.result != null){
                         task.result.documents.forEach{
-                            removeSkill(skill, it.id)
+                            //removeSkill(skill, it.id)
+                            listIds.add(it.id)
                             fireStoreDB.collection("advertisements")
                                 .document(it.id).delete()
                         }
+                        removeSkills(skill, listIds)
                     }
                 }
             })

@@ -9,13 +9,14 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
 
 class EditSkillFragment : Fragment() {
 
-    val vm : ProfileViewModel by activityViewModels()
+    val vm: ProfileViewModel by activityViewModels()
 
     var _index: Int = 0
     var _indexDesc: Int = 0
@@ -23,10 +24,11 @@ class EditSkillFragment : Fragment() {
     var _skillName: String? = ""
     var _skillOld: String? = ""
     var fromCancel = false
+    var fromSave = false
 
-    lateinit var tv : TextView
-    lateinit var editDesc : EditText
-    lateinit var profile : ProfileUser
+    lateinit var tv: TextView
+    lateinit var editDesc: EditText
+    lateinit var profile: ProfileUser
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,6 +37,7 @@ class EditSkillFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.editskillfragment_layout, container, false)
         setHasOptionsMenu(true)
+        //(activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         return view
     }
 
@@ -60,34 +63,65 @@ class EditSkillFragment : Fragment() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     //PASSARE ARGOMENTI
-                    if(tv.text.toString().isNotEmpty()){
-                       if(tv.text.toString() != _skillName){
-                           //POP_UP -> si ->CHIAMARE SETUSER -> continua
-                               if(!fromCancel)
-                               warningPopup()
-                           profile.skills?.remove(_skillName)
-                           if(editDesc.text.toString() != "")
-                               profile.skills?.set(tv.text.toString(), editDesc.text.toString())
-                           else
-                               profile.skills?.set(tv.text.toString(), "No Description")
-                       } else {
-                           if(editDesc.text.toString() != "")
-                               profile.skills?.replace(_skillName!!, _skillDescription!!, editDesc.text.toString())
-                           else
-                               profile.skills?.replace(_skillName!!, _skillDescription!!, "No Description")
-                       }
-                        vm.modifyUserProfile(profile)
-                        if (isEnabled) {
-                            isEnabled = false
-                            requireActivity().onBackPressed()
+                    if (fromSave || fromCancel) {
+                        if (tv.text.toString().isNotEmpty()) {
+                            if (tv.text.toString() != _skillName) {
+                                profile.skills?.remove(_skillName)
+                                if (editDesc.text.toString() != "")
+                                    profile.skills?.set(
+                                        tv.text.toString(),
+                                        editDesc.text.toString()
+                                    )
+                                else
+                                    profile.skills?.set(tv.text.toString(), "No Description")
+                            } else {
+                                if (editDesc.text.toString() != "")
+                                    profile.skills?.replace(
+                                        _skillName!!,
+                                        _skillDescription!!,
+                                        editDesc.text.toString()
+                                    )
+                                else
+                                    profile.skills?.replace(
+                                        _skillName!!,
+                                        _skillDescription!!,
+                                        "No Description"
+                                    )
+                            }
+                            vm.modifyUserProfile(profile)
+                            if (isEnabled) {
+                                isEnabled = false
+                                requireActivity().onBackPressed()
+                            }
+                            if (profile.skills?.get(tv.text.toString()) == null)
+                                Snackbar.make(
+                                    view,
+                                    "Skill successfully removed!",
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                            else
+                                Snackbar.make(
+                                    view,
+                                    "Skill successfully edited!",
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                        } else {
+                            Snackbar.make(view, "Skill name cannot be empty!", Snackbar.LENGTH_LONG)
+                                .show()
                         }
-                        if(profile.skills?.get(tv.text.toString()) == null)
-                            Snackbar.make(view, "Skill successfully removed!", Snackbar.LENGTH_LONG).show()
-                        else
-                            Snackbar.make(view, "Skill successfully edited!", Snackbar.LENGTH_LONG).show()
-                    }
-                    else {
-                        Snackbar.make(view, "Skill name cannot be empty!", Snackbar.LENGTH_LONG).show()
+                    } else {
+                        AlertDialog.Builder(requireContext())
+                            .setTitle("Warning")
+                            .setMessage("Do you want to discard the changes?")
+                            .setPositiveButton("Yes") { _, _ ->
+                                if (isEnabled) {
+                                    isEnabled = false
+                                    requireActivity().onBackPressed()
+                                }
+                            }
+                            .setNegativeButton("No") { _, _ ->
+                            }
+                            .show()
                     }
                 }
             })
@@ -103,20 +137,28 @@ class EditSkillFragment : Fragment() {
         return when (item.itemId) {
             R.id.save -> {
                 closeKeyboard()
-                requireActivity().onBackPressed()
+                //requireActivity().onBackPressed()
+                fromSave = true
+                warningPopup()
                 true
             }
             R.id.cancel -> {
                 AlertDialog.Builder(requireContext())
                     .setTitle("Warning")
-                    .setMessage("You have modified the skill name. This will cause" +
-                            "the deletion of all the advertisement related to this skill." +
-                            "Do you want to continue?")
+                    .setMessage(
+                        "You have modified the skill name. This will cause" +
+                                "the deletion of all the advertisement related to this skill." +
+                                "Do you want to continue?"
+                    )
                     .setPositiveButton("Yes") { _, _ ->
                         val profile = vm.localProfile
                         profile?.skills?.remove(tv.text.toString())
                         vm.modifyUserProfile(profile!!)
-                        Snackbar.make(requireView(), "Skill successfully removed!", Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(
+                            requireView(),
+                            "Skill successfully removed!",
+                            Snackbar.LENGTH_LONG
+                        ).show()
                         fromCancel = true
                         requireActivity().onBackPressed()
                     }
@@ -133,18 +175,22 @@ class EditSkillFragment : Fragment() {
         // this will give us the view which is currently focus in this layout
         val v: View? = this.view?.findFocus()
 
-        val manager: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val manager: InputMethodManager =
+            context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromWindow(v?.windowToken, 0)
     }
 
-    private fun warningPopup(){
+    private fun warningPopup() {
         AlertDialog.Builder(requireContext())
             .setTitle("Warning")
-            .setMessage("You have modified the skill name. This will cause" +
-                    "the deletion of all the advertisement related to this skill." +
-                    "Do you want to continue?")
+            .setMessage(
+                "You have modified the skill name. This will cause" +
+                        "the deletion of all the advertisement related to this skill." +
+                        "Do you want to continue?"
+            )
             .setPositiveButton("Yes") { _, _ ->
-                requireActivity().onBackPressed()
+                if (fromSave)
+                    requireActivity().onBackPressed()
             }
             .setNegativeButton("No") { _, _ ->
             }

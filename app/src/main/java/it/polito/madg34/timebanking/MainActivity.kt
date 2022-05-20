@@ -66,6 +66,15 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         toolbar.setupWithNavController(navController, appBarConfiguration)
 
+        toolbar.setNavigationOnClickListener {
+            if(navController.currentDestination?.id == navController.graph[R.id.editSkillFragment].id
+                || navController.currentDestination?.id == navController.graph[R.id.editProfileFragment].id
+                || navController.currentDestination?.id == navController.graph[R.id.addSkillFragment].id){
+                discardChanges()
+            } else {
+                drawerLayout.openDrawer(GravityCompat.START)
+            }
+        }
 
         vmProfile.getDBUser().observe(this) {
             if (it == null && vmProfile.needRegistration) {
@@ -170,10 +179,15 @@ class MainActivity : AppCompatActivity() {
 
     private fun discardChanges() {
         AlertDialog.Builder(this)
-            .setTitle("Log out")
-            .setMessage("Do you want to log out from the Time Earn app?")
+            .setTitle("Warning!")
+            .setMessage("Do you want to discard the changes?")
             .setPositiveButton("Yes") { _, _ ->
-                navController.navigate(R.id.action_editProfileFragment_to_showProfileFragment)
+                if(navController.currentDestination?.id == navController.graph[R.id.editSkillFragment].id)
+                    navController.navigate(R.id.action_editSkillFragment_to_editProfileFragment)
+                else if(navController.currentDestination?.id == navController.graph[R.id.addSkillFragment].id)
+                    navController.navigate(R.id.action_addSkillFragment_to_editProfileFragment)
+                else if(navController.currentDestination?.id == navController.graph[R.id.editProfileFragment].id)
+                    navController.navigate(R.id.action_editProfileFragment_to_showProfileFragment)
             }
             .setNegativeButton("No") { _, _ ->
             }
