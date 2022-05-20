@@ -98,7 +98,6 @@ class MainActivity : AppCompatActivity() {
                         vmProfile.localSkills.add(skill.key)
                     }
                 }
-
             }
         }
 
@@ -132,7 +131,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         vmTimeSlot.currentUserAdvs.observe(this) {
-            if (vmTimeSlot.currentUserAdvs.value?.size == 0 && navController.currentDestination?.id == navController.graph.startDestinationId) {
+            if (vmTimeSlot.currentUserAdvs.value?.size == 0 && navController.currentDestination?.id == navController.graph[R.id.timeSlotListFragment].id) {
                 // Dirty way, trigger reacreation of fragment to show empty message
                 navController.navigate(R.id.timeSlotListFragment)
             }

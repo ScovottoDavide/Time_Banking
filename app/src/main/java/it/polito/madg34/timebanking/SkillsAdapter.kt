@@ -1,5 +1,6 @@
 package it.polito.madg34.timebanking
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ class SkillsAdapter(val data : MutableList<String>) : RecyclerView.Adapter<Skill
 
     override fun onBindViewHolder(holder: SkillsViewHolder, position: Int) {
         val item = data[position] // access data item
+        Log.d("SKILLSSS", data.toString())
         holder.bind(item)
 
         holder.itemView.setOnClickListener {

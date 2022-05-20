@@ -1,5 +1,6 @@
 package it.polito.madg34.timebanking
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,7 @@ import com.google.firebase.firestore.ListenerRegistration
 class SkillsViewModel : ViewModel(){
 
     val allSkills : MutableLiveData<MutableMap<String, Skills>> by lazy { MutableLiveData<MutableMap<String, Skills>>().also { loadAllSkills() } }
+    val localSkills : MutableMap<String, Skills> = mutableMapOf()
 
     private var listener1: ListenerRegistration? = null
 
@@ -19,11 +21,13 @@ class SkillsViewModel : ViewModel(){
                 return@EventListener
             }
             value?.documents?.forEach {
-                val tmp = it.getString("RELATED_ADVS")?.let { it1 -> Skills(it1) }
+                val tmp = it.getString("RELATED_ADVS")
                 if (tmp != null) {
-                    allSkills.value?.set(it.id, tmp)
+                    localSkills.set(it.id, Skills(tmp))
                 }
             }
+            allSkills.value = localSkills
+            allSkills.value?.keys.toString()?.let { it1 -> Log.d("VM", it1) }
         })
     }
 

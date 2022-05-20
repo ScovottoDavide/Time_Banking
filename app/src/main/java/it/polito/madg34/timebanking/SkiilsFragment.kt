@@ -32,12 +32,10 @@ class SkillsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("SKill", "arrivoooo")
 
         vmSkills.getAllSkillsVM().observe(viewLifecycleOwner) {
             if(!it.isNullOrEmpty()){
                 skills = it
-                Log.d("SKILLSSS", it.toString())
                 if (skills.isEmpty()) {
                     emptyView = view.findViewById(R.id.emptyListTV)
                     emptyView.visibility = View.VISIBLE
@@ -46,7 +44,9 @@ class SkillsFragment : Fragment() {
                     emptyView.visibility = View.GONE
                     skillsRV = view.findViewById(R.id.SkillsList)
                     skillsRV.layoutManager = LinearLayoutManager(this.context)
-                    skillsRV.adapter = SkillsAdapter(skills.keys.toMutableList())
+                    Log.d("Skills", skills.keys.toString())
+                    val ss : MutableList<String> = skills.keys.toMutableList()
+                    skillsRV.adapter = SkillsAdapter(ss)
                 }
             }
         }

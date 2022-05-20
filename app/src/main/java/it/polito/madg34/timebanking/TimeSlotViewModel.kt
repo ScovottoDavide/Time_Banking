@@ -21,33 +21,6 @@ import java.sql.Time
 
 
 class TimeSlotViewModel(application: Application) : AndroidViewModel(application) {
-
-    /*var sharedPref: SharedPreferences = getApplication<Application>().getSharedPreferences("package it.polito.madg34.timebanking.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE)
-    private var  gson : Gson = Gson()
-
-    //val p = clear()
-
-    var _listServices = MutableLiveData<MutableList<TimeSlot>>().also{
-        if(sharedPref.contains("listServices")){
-            val type : Type = object : TypeToken<MutableList<TimeSlot>>() {}.type
-            it.value = gson.fromJson(sharedPref.getString("listServices", null), type)
-        }
-    }
-
-    var listServices : LiveData<MutableList<TimeSlot>> = _listServices
-    fun saveServices(v : MutableList<TimeSlot>){
-        _listServices.value = v
-        val serialized = gson.toJson(v)
-        println("SAVING")
-        sharedPref.edit().putString("listServices", serialized).apply()
-    }
-
-
-    fun clear(){
-        sharedPref.edit().clear().apply()
-    }*/
-
-
     val currentUserAdvs: MutableLiveData<List<TimeSlot>> = MutableLiveData<List<TimeSlot>>().also { loadAdvs() }
     var currentIndexAdv: MutableLiveData<String> = MutableLiveData(String()).also { loadLastAdv() }
 
