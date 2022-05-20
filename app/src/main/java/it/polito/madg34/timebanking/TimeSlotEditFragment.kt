@@ -172,11 +172,11 @@ class TimeSlotEditFragment : Fragment() {
         (menuSkills.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
         if(item.related_skill.isNotEmpty()) {
-            menuSkills.editText?.hint = item.related_skill
+            menuSkills.editText?.setText(item.related_skill)
             menuSkills.editText?.isEnabled = false
             menuSkills.isEndIconVisible = false
         }else{
-            menuSkills.editText?.hint = getString(R.string.menu_skills)
+            menuSkills.editText?.setText(getString(R.string.menu_skills))
         }
 
         activity?.onBackPressedDispatcher?.addCallback(

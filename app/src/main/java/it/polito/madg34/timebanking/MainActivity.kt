@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     val vmProfile: ProfileViewModel by viewModels()
     val vmTimeSlot: TimeSlotViewModel by viewModels()
     var profile: ProfileUser = emptyProfile()
-    var timeSlots : List<TimeSlot> = emptyList()
+    var timeSlots: List<TimeSlot> = emptyList()
     lateinit var appBarConfiguration: AppBarConfiguration
     lateinit var navController: NavController
     lateinit var drawerLayout: DrawerLayout
@@ -67,9 +67,13 @@ class MainActivity : AppCompatActivity() {
         toolbar.setupWithNavController(navController, appBarConfiguration)
 
         toolbar.setNavigationOnClickListener {
-            if(navController.currentDestination?.id == navController.graph[R.id.editSkillFragment].id
+            if (navController.currentDestination?.id == navController.graph[R.id.timeSlotDetailsFragment].id)
+                onBackPressed()
+            else if (navController.currentDestination?.id == navController.graph[R.id.editSkillFragment].id
                 || navController.currentDestination?.id == navController.graph[R.id.editProfileFragment].id
-                || navController.currentDestination?.id == navController.graph[R.id.addSkillFragment].id){
+                || navController.currentDestination?.id == navController.graph[R.id.addSkillFragment].id
+                || navController.currentDestination?.id == navController.graph[R.id.timeSlotEditFragment].id
+            ) {
                 discardChanges()
             } else {
                 drawerLayout.openDrawer(GravityCompat.START)
@@ -87,10 +91,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        vmProfile.getAllUsers().observe(this){
-            if(!it.isNullOrEmpty()){
+        vmProfile.getAllUsers().observe(this) {
+            if (!it.isNullOrEmpty()) {
                 it.forEach { profile ->
-                    profile.skills.forEach{ skill ->
+                    profile.skills.forEach { skill ->
                         vmProfile.localSkills.add(skill.key)
                     }
                 }
@@ -182,12 +186,16 @@ class MainActivity : AppCompatActivity() {
             .setTitle("Warning!")
             .setMessage("Do you want to discard the changes?")
             .setPositiveButton("Yes") { _, _ ->
-                if(navController.currentDestination?.id == navController.graph[R.id.editSkillFragment].id)
+                if (navController.currentDestination?.id == navController.graph[R.id.editSkillFragment].id)
                     navController.navigate(R.id.action_editSkillFragment_to_editProfileFragment)
-                else if(navController.currentDestination?.id == navController.graph[R.id.addSkillFragment].id)
+                else if (navController.currentDestination?.id == navController.graph[R.id.addSkillFragment].id)
                     navController.navigate(R.id.action_addSkillFragment_to_editProfileFragment)
-                else if(navController.currentDestination?.id == navController.graph[R.id.editProfileFragment].id)
+                else if (navController.currentDestination?.id == navController.graph[R.id.editProfileFragment].id)
                     navController.navigate(R.id.action_editProfileFragment_to_showProfileFragment)
+                else if (navController.currentDestination?.id == navController.graph[R.id.timeSlotEditFragment].id) {
+                    navController.navigate(R.id.action_timeSlotEditFragment_to_timeSlotListFragment)
+                }
+
             }
             .setNegativeButton("No") { _, _ ->
             }

@@ -220,7 +220,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:hint="@string/Skill"
-                app:startIconDrawable="@drawable/outline_email_24"
+                app:startIconDrawable="@drawable/account_cog_outline"
                 app:startIconTint="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText

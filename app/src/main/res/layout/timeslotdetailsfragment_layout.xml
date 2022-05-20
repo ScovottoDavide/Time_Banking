@@ -202,7 +202,9 @@
                     android:id="@+id/outlinedLocationFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#757575" />
+                    android:textColor="#757575"
+                    android:enabled="false"
+                    tools:ignore="TextContrastCheck"/>
 
             </com.google.android.material.textfield.TextInputLayout>
             <com.google.android.material.textfield.TextInputLayout
@@ -232,7 +234,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:hint="@string/Skill"
-                app:startIconDrawable="@drawable/outline_email_24"
+                app:startIconDrawable="@drawable/account_cog_outline"
                 app:startIconTint="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
