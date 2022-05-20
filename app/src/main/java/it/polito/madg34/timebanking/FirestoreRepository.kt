@@ -95,21 +95,23 @@ class FirestoreRepository {
                         old_string = it.result.getString("RELATED_ADVS")!!
                     }
                     val listAdvs = old_string.split(",") as MutableList<String>
-                    Log.d("SKILL1", listAdvs.toString())
-                    Log.d("SKILL10", id.toString())
+                    Log.d("ADVS", listAdvs.toString())
                     var newString = ""
-                    id.forEach { s ->
-                        if(listAdvs.contains(s)){
-                            listAdvs.removeAt(listAdvs.indexOf(s))
+                    if(listAdvs.size > 1 ){
+                        id.forEach { s ->
+                            if(listAdvs.contains(s)){
+                                listAdvs.removeAt(listAdvs.indexOf(s))
+                            }
                         }
-                    }
-                    listAdvs.forEachIndexed { index, s ->
-                        if(index == 0)
-                            newString = s
-                        else newString = "$newString,$s"
+                        listAdvs.forEachIndexed { index, s ->
+                            if(index == 0)
+                                newString = s
+                            else newString = "$newString,$s"
+                        }
+                    }else{
+                        newString = ""
                     }
                     skill.relatedAdvs = newString
-                    Log.d("SKILL2", skill.toString())
                     fireStoreDB.collection("skills").document(value).set(skill)
                 }
             })
