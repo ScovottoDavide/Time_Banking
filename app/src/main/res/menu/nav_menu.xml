@@ -16,6 +16,12 @@
             android:id="@+id/nav_listSkills"
             android:icon="@drawable/menu_icon"
             android:title="Online Skills" />
+        <item
+            android:id="@+id/void1"
+            android:title="" />
+        <item
+            android:id="@+id/void2"
+            android:title="" />
     </group>
 
 </menu>
