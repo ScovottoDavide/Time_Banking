@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
-    app:startDestination="@id/timeSlotListFragment">
+    app:startDestination="@id/skillsFragment">
 
     <fragment
         android:id="@+id/timeSlotDetailsFragment"
@@ -125,5 +125,13 @@
             app:enterAnim="@anim/slide_in"
             app:popEnterAnim="@anim/fade_in"
             app:popExitAnim="@anim/slide_out"/>
+    </fragment>
+    <fragment
+        android:id="@+id/skillsFragment"
+        android:name="it.polito.madg34.timebanking.SkillsFragment"
+        android:label="SkillsFragment" >
+        <action
+            android:id="@+id/action_skillsFragment_to_timeSlotListFragment"
+            app:destination="@id/timeSlotListFragment" />
     </fragment>
 </navigation>

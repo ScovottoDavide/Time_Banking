@@ -58,7 +58,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.timeSlotListFragment, R.id.showProfileFragment),
+            setOf(R.id.timeSlotListFragment, R.id.showProfileFragment, R.id.skillsFragment),
             drawerLayout
         )
 
@@ -107,13 +107,19 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_profile -> {
                     if (navController.currentDestination?.id != navController.graph[R.id.showProfileFragment].id) {
-                        navController.navigate(R.id.action_timeSlotListFragment_to_showProfileFragment)
+                        navController.navigate(R.id.showProfileFragment)
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_listServices -> {
-                    if (navController.currentDestination?.id != navController.graph.startDestinationId)
-                        navController.navigate(R.id.action_showProfileFragment_to_timeSlotListFragment)
+                    if (navController.currentDestination?.id != navController.graph[R.id.timeSlotListFragment].id)
+                        navController.navigate(R.id.timeSlotListFragment)
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                }
+                R.id.nav_listSkills ->  {
+                    if (navController.currentDestination?.id != navController.graph[R.id.skillsFragment].id) {
+                        navController.navigate(R.id.skillsFragment)
+                    }
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
             }

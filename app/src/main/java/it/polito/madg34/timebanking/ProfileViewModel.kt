@@ -66,7 +66,6 @@ class ProfileViewModel : ViewModel() {
         return allProfiles
     }
 
-
 }
 
 private fun DocumentSnapshot.toProfileUser(): ProfileUser {

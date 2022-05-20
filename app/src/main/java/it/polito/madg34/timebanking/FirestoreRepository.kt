@@ -117,6 +117,10 @@ class FirestoreRepository {
             })
     }
 
+    fun getAllSkills() : CollectionReference {
+        return fireStoreDB.collection("skills")
+    }
+
     fun getAdvs(): Query{
         return fireStoreDB.collection("advertisements").whereEqualTo("PUBLISHED_BY", currentUser.email!!)
     }

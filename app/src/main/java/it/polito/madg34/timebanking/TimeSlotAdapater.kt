@@ -36,7 +36,6 @@ class TimeSlotAdapter(val data : MutableList<TimeSlot>) : RecyclerView.Adapter<T
             val bundle = Bundle()
             bundle.putInt("index", position)
             vmTimeSlot.currentShownAdv = data[position]
-            Log.d("CLICK", vmTimeSlot.currentShownAdv.toString())
             Navigation.findNavController(holder.itemView).navigate(R.id.action_timeSlotListFragment_to_timeSlotDetailsFragment2, bundle)
         }
 
