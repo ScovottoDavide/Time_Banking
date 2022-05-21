@@ -1,14 +1,14 @@
 package it.polito.madg34.timebanking
 
+import android.annotation.SuppressLint
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
@@ -49,9 +49,15 @@ class SkillsFragment : Fragment() {
                     emptyView.visibility = View.GONE
                     skillsRV = view.findViewById(R.id.SkillsList)
                     skillsRV.layoutManager = LinearLayoutManager(this.context)
-                    localSkills = skills.keys.toMutableList()
-                    advs = skills.values.toMutableList()
-                    skillsRV.adapter = SkillsAdapter(localSkills,advs)
+                    vmSkills.filtered.observe(viewLifecycleOwner){
+                        if(!it){
+                            localSkills = skills.keys.toMutableList()
+                            advs = skills.values.toMutableList()
+                            skillsRV.adapter = SkillsAdapter(localSkills,advs)
+                        }else {
+                            skillsRV.adapter = SkillsAdapter(vmSkills.filteredSkills, vmSkills.filteredAdvs)
+                        }
+                    }
                 }
             }
         }
@@ -59,9 +65,41 @@ class SkillsFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.homepage_menu, menu)
+        // Associate searchable configuration with the SearchView
+        val searchManager = requireContext().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val search = menu.findItem(R.id.search).actionView as SearchView
+        search.isIconifiedByDefault = false
+        search.setSearchableInfo(searchManager.getSearchableInfo(activity?.componentName))
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                return true
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onQueryTextChange(newText: String?): Boolean {
+                //gets the filtered list based on user entered text in search box
+                val filteredList = newText?.let { filter(localSkills, it) }
+                skillsRV.adapter = SkillsAdapter(filteredList as MutableList<String>, advs)
+                skillsRV.adapter?.notifyDataSetChanged()
+                return true
+            }
+
+        })
         return super.onCreateOptionsMenu(menu, inflater)
     }
 
+    // filters the existing list that's provided to the List Adapter
+    private fun filter(mList: List<String>, newText: String): List<String>? {
+        val filteredList: MutableList<String> = ArrayList()
+        for (item in mList) {
+            if (item.lowercase().contains(newText.lowercase())) {
+                filteredList.add(item)
+            }
+        }
+        return filteredList
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.filter -> {
@@ -72,7 +110,19 @@ class SkillsFragment : Fragment() {
                         when (item.itemId) {
                             R.id.sort -> {
                                 sortByName()
+                                vmSkills.filtered.value = true
                                 skillsRV.adapter?.notifyDataSetChanged()
+                                true
+                            }
+                            R.id.popularity -> {
+                                sortByPopularity()
+                                vmSkills.filtered.value = true
+                                skillsRV.adapter = SkillsAdapter(vmSkills.filteredSkills, vmSkills.filteredAdvs)
+                                skillsRV.adapter?.notifyDataSetChanged()
+                                true
+                            }
+                            R.id.nothing -> {
+                                vmSkills.filtered.value = false
                                 true
                             }
                             else -> super.onOptionsItemSelected(item)
@@ -91,8 +141,38 @@ class SkillsFragment : Fragment() {
     }
 
     private fun sortByName() {
-        localSkills.sortWith(
-            compareBy(String.CASE_INSENSITIVE_ORDER) { it }
-        )
+        val local = skills
+        val together = local.map {
+            it.key + ":" + it.value.relatedAdvs
+        }
+        val sorted = together.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.split(":")[0] })
+        localSkills = mutableListOf()
+        advs = mutableListOf()
+        sorted.forEach {
+            val splitted = it.split(":")
+            localSkills.add(splitted[0])
+            advs.add(Skills(splitted[1]))
+        }
+        vmSkills.filteredSkills = localSkills
+        vmSkills.filteredAdvs = advs
+
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun sortByPopularity() {
+        val local = skills
+        val together = local.map {
+            it.key + ":" + it.value.relatedAdvs
+        }
+        val sorted = together.sortedByDescending { it.length }
+        localSkills = mutableListOf()
+        advs = mutableListOf()
+        sorted.forEach {
+            val splitted = it.split(":")
+            localSkills.add(splitted[0])
+            advs.add(Skills(splitted[1]))
+        }
+        vmSkills.filteredSkills = localSkills
+        vmSkills.filteredAdvs = advs
     }
 }

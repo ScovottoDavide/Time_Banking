@@ -5,4 +5,14 @@
         android:title="Sort by name"
         app:showAsAction="always"
         />
+
+    <item android:id= "@+id/popularity"
+        android:title="Sort by popularity"
+        app:showAsAction="always"
+        />
+
+    <item android:id= "@+id/nothing"
+        android:title="No sorting"
+        app:showAsAction="always"
+        />
 </menu>

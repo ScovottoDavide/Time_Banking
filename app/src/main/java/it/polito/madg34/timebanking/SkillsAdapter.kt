@@ -11,7 +11,7 @@ import androidx.lifecycle.get
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 
-class SkillsAdapter(val data : MutableList<String>, val listStringsAdvs : MutableList<Skills>) : RecyclerView.Adapter<SkillsViewHolder>() {
+class SkillsAdapter(var data : MutableList<String>, val listStringsAdvs : MutableList<Skills>) : RecyclerView.Adapter<SkillsViewHolder>() {
 
     lateinit var v : View
     lateinit var vmSkills : SkillsViewModel

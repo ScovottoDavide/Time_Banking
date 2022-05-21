@@ -26,7 +26,6 @@ class ProfileViewModel : ViewModel() {
 
     var listenerNavigation: View.OnClickListener? = null
     private var listener1: ListenerRegistration? = null
-    private var listener2: ListenerRegistration? = null
 
     /*
     * Load Profile current user

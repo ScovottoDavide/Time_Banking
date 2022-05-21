@@ -63,7 +63,6 @@ class FirestoreRepository {
                     }
                 }
             }
-
         return fireStoreDB.collection("users").document(currentUser.email!!).set(value)
     }
 
@@ -132,7 +131,7 @@ class FirestoreRepository {
     }
 
     fun getAllSkills() : CollectionReference {
-        Log.d("DELETE", "skillsbbbbb")
+
         return fireStoreDB.collection("skills")
     }
 

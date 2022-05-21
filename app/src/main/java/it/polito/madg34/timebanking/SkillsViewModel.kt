@@ -20,6 +20,10 @@ class SkillsViewModel : ViewModel(){
 
     var fromHome : MutableLiveData<Boolean> = MutableLiveData(false)
 
+    var filtered : MutableLiveData<Boolean> = MutableLiveData(false)
+    var filteredSkills : MutableList<String> = mutableListOf()
+    var filteredAdvs : MutableList<Skills> = mutableListOf()
+
     private var listener1: ListenerRegistration? = null
     private var listener2: ListenerRegistration? = null
 
