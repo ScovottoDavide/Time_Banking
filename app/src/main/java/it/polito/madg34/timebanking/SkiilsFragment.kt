@@ -20,6 +20,9 @@ class SkillsFragment : Fragment() {
     lateinit var emptyView: TextView
     lateinit var skillsRV: RecyclerView
 
+    var advs : MutableList<Skills> = mutableListOf()
+    var localSkills : MutableList<String> = mutableListOf()
+
     lateinit var  optionButton : ImageButton
 
         override fun onCreateView(
@@ -46,8 +49,8 @@ class SkillsFragment : Fragment() {
                     emptyView.visibility = View.GONE
                     skillsRV = view.findViewById(R.id.SkillsList)
                     skillsRV.layoutManager = LinearLayoutManager(this.context)
-                    val localSkills : MutableList<String> = skills.keys.toMutableList()
-                    val advs : MutableList<Skills> = skills.values.toMutableList()
+                    localSkills = skills.keys.toMutableList()
+                    advs = skills.values.toMutableList()
                     skillsRV.adapter = SkillsAdapter(localSkills,advs)
                 }
             }
@@ -56,18 +59,28 @@ class SkillsFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.homepage_menu, menu)
-        //optionButton = menu.findItem(R.id.filter).actionView as ImageButton
-        //optionButton.setImageDrawable(resources.getDrawable(R.drawable.filter_variant))
-        //optionButton.setBackgroundColor(resources.getColor(R.color.Goldenrod))
         return super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.filter -> {
-                Toast.makeText(requireContext(), "ciao", Toast.LENGTH_SHORT).show()
-                val popupMenu = PopupMenu(context, view)
+                val popupMenu = PopupMenu(context, view?.findViewById(R.id.anchor))
                 popupMenu.menuInflater.inflate(R.menu.filter_menu, popupMenu.menu)
+                popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
+                    if (item != null) {
+                        when (item.itemId) {
+                            R.id.sort -> {
+                                sortByName()
+                                skillsRV.adapter?.notifyDataSetChanged()
+                                true
+                            }
+                            else -> super.onOptionsItemSelected(item)
+                        }
+                    } else {
+                        false
+                    }
+                })
                 popupMenu.show()
                 true
             }
@@ -75,5 +88,11 @@ class SkillsFragment : Fragment() {
                 super.onOptionsItemSelected(item)
             }
         }
+    }
+
+    private fun sortByName() {
+        localSkills.sortWith(
+            compareBy(String.CASE_INSENSITIVE_ORDER) { it }
+        )
     }
 }

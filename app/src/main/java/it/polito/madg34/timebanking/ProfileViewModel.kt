@@ -17,8 +17,9 @@ class ProfileViewModel : ViewModel() {
     var nicknameOk = false
 
     var localProfile: ProfileUser? = ProfileUser()
+    var profileToShow : ProfileUser? = ProfileUser()
     var currentPhotoPath = ""
-    var clickedEmail = ""
+    var clickedEmail : MutableLiveData<String> = MutableLiveData("")
 
     val profile: MutableLiveData<ProfileUser> by lazy { MutableLiveData(ProfileUser()).also { loadProfile() } }
     val viewProfile: MutableLiveData<ProfileUser> by lazy { MutableLiveData(ProfileUser()).also { loadViewProfile() } }
@@ -40,10 +41,11 @@ class ProfileViewModel : ViewModel() {
         })
     }
 
-    fun loadViewProfile() {
-        FirestoreRepository().getViewUser(clickedEmail).get().addOnSuccessListener {
+    fun loadViewProfile() : Task<DocumentSnapshot> {
+        return FirestoreRepository().getViewUser(clickedEmail.value!!).get().addOnSuccessListener {
             if(it != null){
                 viewProfile.value = it.toObject(ProfileUser::class.java)
+                profileToShow = it.toObject(ProfileUser::class.java)
                 Log.d("carica", viewProfile.value.toString())
             }
         }

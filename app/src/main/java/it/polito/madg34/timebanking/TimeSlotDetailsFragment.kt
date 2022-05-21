@@ -5,6 +5,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Html
 import android.text.method.LinkMovementMethod
+import android.util.Log
 import android.view.*
 import android.widget.TableRow
 import android.widget.TextView
@@ -18,15 +19,19 @@ import com.google.android.material.textfield.TextInputLayout
 
 class TimeSlotDetailsFragment : Fragment() {
 
-    val vm : TimeSlotViewModel by activityViewModels()
-    val vmSkills : SkillsViewModel by activityViewModels()
-    val vmProfile : ProfileViewModel by activityViewModels()
+    val vm: TimeSlotViewModel by activityViewModels()
+    val vmSkills: SkillsViewModel by activityViewModels()
+    val vmProfile: ProfileViewModel by activityViewModels()
 
 
     private var h: Int = 0
     private var w: Int = 0
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         val view = inflater.inflate(R.layout.timeslotdetailsfragment_layout, container, false)
         setHasOptionsMenu(true)
         halfWidth(view)
@@ -37,7 +42,7 @@ class TimeSlotDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         halfWidth(view)
 
-        val item : TimeSlot? = vm.currentShownAdv
+        val item: TimeSlot? = vm.currentShownAdv
 
         val title = view.findViewById<TextInputEditText>(R.id.outlinedTitleFixed)
         val description = view.findViewById<TextInputEditText>(R.id.outlinedDescriptionFixed)
@@ -49,7 +54,7 @@ class TimeSlotDetailsFragment : Fragment() {
         val skill = view.findViewById<TextInputEditText>(R.id.outlinedSkillFixed)
 
         // Observe in order to get automatically the updated values
-        vm.getDBTimeSlots().observe(this.viewLifecycleOwner){
+        vm.getDBTimeSlots().observe(this.viewLifecycleOwner) {
             title.setText(item?.title)
             description.setText(item?.description)
             date.setText(item?.date)
@@ -66,8 +71,9 @@ class TimeSlotDetailsFragment : Fragment() {
                 .setTitle("Message")
                 .setMessage("Do you want to visit ${item?.published_by} profile? ")
                 .setPositiveButton("Yes") { _, _ ->
-                    vmProfile.clickedEmail = item?.published_by.toString()
+                    vmProfile.clickedEmail.value = item?.published_by.toString()
                     vmSkills.fromHome.value = true
+                    //vmProfile.loadViewProfile()
                     findNavController().navigate(R.id.showProfileFragment)
                 }
                 .setNegativeButton("No") { _, _ ->
@@ -75,18 +81,20 @@ class TimeSlotDetailsFragment : Fragment() {
                 .show()
         }
 
-        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (isEnabled) {
-                    isEnabled = false
-                    requireActivity().onBackPressed()
+        activity?.onBackPressedDispatcher?.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (isEnabled) {
+                        isEnabled = false
+                        requireActivity().onBackPressed()
+                    }
                 }
-            }
-        })
+            })
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        if(!vmSkills.fromHome.value!!)
+        if (!vmSkills.fromHome.value!!)
             inflater.inflate(R.menu.pencil_menu, menu)
         return super.onCreateOptionsMenu(menu, inflater)
     }
@@ -95,14 +103,17 @@ class TimeSlotDetailsFragment : Fragment() {
         return when (item.itemId) {
             R.id.pencil -> {
                 val bundle = arguments
-                findNavController().navigate(R.id.action_timeSlotDetailsFragment_to_timeSlotEditFragment, bundle)
+                findNavController().navigate(
+                    R.id.action_timeSlotDetailsFragment_to_timeSlotEditFragment,
+                    bundle
+                )
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun halfWidth(view: View){
+    private fun halfWidth(view: View) {
         val row = view.findViewById<TableRow>(R.id.RowDateTime)
         val date = view.findViewById<TextInputLayout>(R.id.outlinedDate)
         val time = view.findViewById<TextInputLayout>(R.id.outlinedTime)
@@ -110,16 +121,16 @@ class TimeSlotDetailsFragment : Fragment() {
         row.viewTreeObserver.addOnGlobalLayoutListener(object :
             ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
-                if(resources.configuration.orientation== Configuration.ORIENTATION_PORTRAIT){
+                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                     h = row.height
                     w = row.width
-                    date.post { date.layoutParams = TableRow.LayoutParams(w /2 , h) }
-                    time.post { time.layoutParams = TableRow.LayoutParams(w /2 , h) }
+                    date.post { date.layoutParams = TableRow.LayoutParams(w / 2, h) }
+                    time.post { time.layoutParams = TableRow.LayoutParams(w / 2, h) }
                 } else {
                     h = row.height
                     w = row.width
-                    date.post { date.layoutParams = TableRow.LayoutParams(w / 2 , h) }
-                    time.post { time.layoutParams = TableRow.LayoutParams(w / 2 , h) }
+                    date.post { date.layoutParams = TableRow.LayoutParams(w / 2, h) }
+                    time.post { time.layoutParams = TableRow.LayoutParams(w / 2, h) }
                 }
                 row.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }

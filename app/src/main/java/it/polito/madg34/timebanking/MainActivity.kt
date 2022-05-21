@@ -76,15 +76,17 @@ class MainActivity : AppCompatActivity() {
                 || navController.currentDestination?.id == navController.graph[R.id.timeSlotEditFragment].id
             ) {
                 discardChanges()
-            }else if(navController.currentDestination?.id == navController.graph[R.id.timeSlotListFragment].id
-                && vmSkills.fromHome.value!!){
-                    this.onBackPressed()
-            } else if(navController.currentDestination?.id == navController.graph[R.id.showProfileFragment].id
-                && vmProfile.clickedEmail != FirestoreRepository.currentUser.email){
-                    vmProfile.clickedEmail = FirestoreRepository.currentUser.email.toString()
-                    vmProfile.profile.value = vmProfile.profile.value
-                    this.onBackPressed()
-            }else if(navController.currentDestination?.id == navController.graph[R.id.skillsFragment].id){
+            } else if (navController.currentDestination?.id == navController.graph[R.id.timeSlotListFragment].id
+                && vmSkills.fromHome.value!!
+            ) {
+                this.onBackPressed()
+            } else if (navController.currentDestination?.id == navController.graph[R.id.showProfileFragment].id
+                && vmProfile.clickedEmail.value != FirestoreRepository.currentUser.email
+            ) {
+                vmProfile.clickedEmail.value = FirestoreRepository.currentUser.email.toString()
+                vmProfile.profile.value = vmProfile.profile.value
+                this.onBackPressed()
+            } else if (navController.currentDestination?.id == navController.graph[R.id.skillsFragment].id) {
                 loadNavigationHeader()
                 drawerLayout.openDrawer(GravityCompat.START)
             } else {
@@ -108,24 +110,25 @@ class MainActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.nav_profile -> {
                     if (navController.currentDestination?.id != navController.graph[R.id.showProfileFragment].id) {
-                        vmProfile.clickedEmail = FirestoreRepository.currentUser.email.toString()
+                        vmProfile.clickedEmail.value =
+                            FirestoreRepository.currentUser.email.toString()
                         navController.navigate(R.id.showProfileFragment)
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.nav_listServices -> {
-                    if (navController.currentDestination?.id != navController.graph[R.id.timeSlotListFragment].id && !vmSkills.fromHome.value!!){
+                    if (navController.currentDestination?.id != navController.graph[R.id.timeSlotListFragment].id && !vmSkills.fromHome.value!!) {
                         navController.navigate(R.id.timeSlotListFragment)
-                    } else if(navController.currentDestination?.id == navController.graph[R.id.timeSlotListFragment].id && vmSkills.fromHome.value!!){
+                    } else if (navController.currentDestination?.id == navController.graph[R.id.timeSlotListFragment].id && vmSkills.fromHome.value!!) {
                         vmSkills.fromHome.value = false
                         navController.navigate(R.id.timeSlotListFragment)
-                    } else if(navController.currentDestination?.id == navController.graph[R.id.showProfileFragment].id && vmSkills.fromHome.value!!){
+                    } else if (navController.currentDestination?.id == navController.graph[R.id.showProfileFragment].id && vmSkills.fromHome.value!!) {
                         vmSkills.fromHome.value = false
                         navController.navigate(R.id.timeSlotListFragment)
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
-                R.id.nav_listSkills ->  {
+                R.id.nav_listSkills -> {
                     if (navController.currentDestination?.id != navController.graph[R.id.skillsFragment].id) {
                         vmSkills.loadAllSkills()
                         navController.navigate(R.id.skillsFragment)
@@ -137,9 +140,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            if (destination.id == R.id.timeSlotListFragment && vmSkills.fromHome.value!!){
+            if (destination.id == R.id.timeSlotListFragment && vmSkills.fromHome.value!!) {
                 supportActionBar?.setHomeAsUpIndicator(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-            }else if(destination.id == R.id.showProfileFragment && vmProfile.clickedEmail != FirestoreRepository.currentUser.email)
+            } else if (destination.id == R.id.showProfileFragment && vmProfile.clickedEmail.value != FirestoreRepository.currentUser.email)
                 supportActionBar?.setHomeAsUpIndicator(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
         }
 

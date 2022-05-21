@@ -2,6 +2,7 @@ package it.polito.madg34.timebanking
 
 import android.content.res.Configuration
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
@@ -53,13 +54,15 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         img_view = view.findViewById(R.id.userImg)
 
 
-        if(vm.clickedEmail != FirestoreRepository.currentUser.email){
-            vm.getViewProfile().observe(viewLifecycleOwner){
+        if(vm.clickedEmail.value != FirestoreRepository.currentUser.email){
+           vm.clickedEmail.observe(viewLifecycleOwner){
                 if (it == null)
                     Toast.makeText(context, "Firebase Failure!", Toast.LENGTH_LONG).show()
                 else {
-                    profile = it
-                    setProfile(view)
+                    vm.loadViewProfile().addOnSuccessListener {
+                        profile = vm.profileToShow
+                        setProfile(view)
+                    }
                 }
             }
         }else{
@@ -97,6 +100,8 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
             Glide.with(this).load(profile!!.img).into(img_view)
             Glide.with(this).load(profile!!.img).into(imgProfile!!)
             //imgProfile?.setImageDrawable(img_view.drawable)
+        }else {
+            img_view.setImageDrawable(resources.getDrawable(R.drawable.user_icon))
         }
 
         profile?.skills?.forEach {
@@ -214,7 +219,7 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        if(vm.clickedEmail == FirestoreRepository.currentUser.email ){
+        if(vm.clickedEmail.value == FirestoreRepository.currentUser.email ){
             inflater.inflate(R.menu.pencil_menu, menu)
         }
         super.onCreateOptionsMenu(menu, inflater)
