@@ -12,7 +12,7 @@ import java.lang.Exception
 class SkillsViewModel : ViewModel(){
 
     val allSkills : MutableLiveData<MutableMap<String, Skills>> by lazy { MutableLiveData<MutableMap<String, Skills>>().also { loadAllSkills() } }
-    val localSkills : MutableMap<String, Skills> = mutableMapOf()
+    var localSkills : MutableMap<String, Skills> = mutableMapOf()
 
     /** Advs to be displayed after click on skill of home page */
     var stringAdvs : String = ""
@@ -23,21 +23,22 @@ class SkillsViewModel : ViewModel(){
     private var listener1: ListenerRegistration? = null
     private var listener2: ListenerRegistration? = null
 
-    private fun loadAllSkills() {
-        listener1 = FirestoreRepository().getAllSkills().addSnapshotListener(EventListener{value, e ->
+    fun loadAllSkills() {
+        listener1 = FirestoreRepository().getAllSkills().addSnapshotListener{value, e ->
             if (e != null) {
                 allSkills.value = null
-                return@EventListener
+                return@addSnapshotListener
             }
+            // reinitialize the map, otherwise also cancelled skills remain!!
+            localSkills = mutableMapOf()
             value?.documents?.forEach {
                 val tmp = it.getString("RELATED_ADVS")
                 if (tmp != null) {
                     localSkills.set(it.id, Skills(tmp))
                 }
+                allSkills.value = localSkills
             }
-            allSkills.value = localSkills
-            allSkills.value?.keys.toString()?.let { it1 -> Log.d("VM", it1) }
-        })
+        }
     }
 
     fun loadSkillAdvs() {

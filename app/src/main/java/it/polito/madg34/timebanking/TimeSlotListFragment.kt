@@ -44,8 +44,8 @@ class TimeSlotListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val addButton: FloatingActionButton = view.findViewById(R.id.add_button)
 
-        vmSkills.fromHome.observe(viewLifecycleOwner) {
-            if (it) {
+        vmSkills.fromHome.observe(viewLifecycleOwner) { fromHome ->
+            if (fromHome) {
                 addButton.hide()
                 vmSkills.getAdvsToDisplayFromSkill().observe(viewLifecycleOwner) {
                     if (!it.isNullOrEmpty()) {

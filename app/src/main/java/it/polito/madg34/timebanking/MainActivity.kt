@@ -125,6 +125,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_listSkills ->  {
                     if (navController.currentDestination?.id != navController.graph[R.id.skillsFragment].id) {
+                        vmSkills.loadAllSkills()
                         navController.navigate(R.id.skillsFragment)
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)

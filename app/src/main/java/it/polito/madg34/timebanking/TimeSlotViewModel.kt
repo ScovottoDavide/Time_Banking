@@ -39,7 +39,6 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
                 currentUserAdvs.value = value!!.mapNotNull { d ->
                     d.toTimeSlotObject()
                 }
-                Log.d("Prova", currentUserAdvs.value.toString())
             })
     }
 

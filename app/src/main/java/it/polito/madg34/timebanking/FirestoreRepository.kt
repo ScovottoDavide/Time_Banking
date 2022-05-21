@@ -112,12 +112,16 @@ class FirestoreRepository {
                         newString = ""
                     }
                     skill.relatedAdvs = newString
-                    fireStoreDB.collection("skills").document(value).set(skill)
+                    if(newString.isNotEmpty())
+                        fireStoreDB.collection("skills").document(value).set(skill)
+                    else
+                        fireStoreDB.collection("skills").document(value).delete()
                 }
             })
     }
 
     fun getAllSkills() : CollectionReference {
+        Log.d("DELETE", "skillsbbbbb")
         return fireStoreDB.collection("skills")
     }
 
@@ -148,7 +152,9 @@ class FirestoreRepository {
     * Remove adv from advertisements collection and remove RELATED_ADVS when deleted from listFragment
     * */
     fun removeAdvDB(value : TimeSlot) : Task<Void> {
+        // Remove the adv in the skills collection, if the string is empty delete the document
         removeSkills(value.related_skill, mutableListOf(value.id))
+        Log.d("DELETE", "aaaa")
         return fireStoreDB.collection("advertisements").document(value.id).delete()
     }
 
