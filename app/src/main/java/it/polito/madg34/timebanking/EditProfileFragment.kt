@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -71,6 +72,7 @@ class EditProfileFragment : Fragment() {
         // Disable the navigation icon
         if (vm.needRegistration)
             (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+
 
         item = vm.localProfile!!
 
@@ -217,26 +219,39 @@ class EditProfileFragment : Fragment() {
                         if (!item.fullName.isNullOrEmpty() && !item.nickname.isNullOrEmpty()
                             && !item.location.isNullOrEmpty() && !item.aboutUser.isNullOrEmpty()
                         ) {
-                            uploadImage()
-                            vm.localProfile = item
-                            vm.modifyUserProfile(vm.localProfile!!)
-                            if (isRegistration) {
-                                Snackbar.make(
-                                    view,
-                                    "Profile successfully created",
-                                    Snackbar.LENGTH_LONG
-                                ).show()
-                                vm.listenerNavigation = null
-                            } else
-                                Snackbar.make(
-                                    view,
-                                    "Profile successfully edited",
-                                    Snackbar.LENGTH_LONG
-                                )
-                                    .show()
-                            if (isEnabled) {
-                                isEnabled = false
-                                requireActivity().onBackPressed()
+                            vm.checkNicknameVM(item.nickname.toString()).addOnSuccessListener {
+                                if (!vm.nicknameOk) {
+                                    Log.d("ENTRO?", "ENTROOO")
+                                    MaterialAlertDialogBuilder(requireContext())
+                                        .setTitle("WARNING")
+                                        .setMessage("Nickname already used. Please provide another nickname!")
+                                        .setPositiveButton("OK") { _, _ ->
+
+                                        }
+                                        .show()
+                                } else {
+                                    uploadImage()
+                                    vm.localProfile = item
+                                    vm.modifyUserProfile(vm.localProfile!!)
+                                    if (isRegistration) {
+                                        Snackbar.make(
+                                            view,
+                                            "Profile successfully created",
+                                            Snackbar.LENGTH_LONG
+                                        ).show()
+                                        vm.listenerNavigation = null
+                                    } else
+                                        Snackbar.make(
+                                            view,
+                                            "Profile successfully edited",
+                                            Snackbar.LENGTH_LONG
+                                        )
+                                            .show()
+                                    if (isEnabled) {
+                                        isEnabled = false
+                                        requireActivity().onBackPressed()
+                                    }
+                                }
                             }
                         } else
                             Snackbar.make(
@@ -433,6 +448,7 @@ class EditProfileFragment : Fragment() {
             R.id.save -> {
                 closeKeyboard()
                 if (isRegistration) {
+                    (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     vm.needRegistration = false
                     requireActivity().onBackPressed()
                 } else {

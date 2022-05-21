@@ -79,6 +79,14 @@ class MainActivity : AppCompatActivity() {
             }else if(navController.currentDestination?.id == navController.graph[R.id.timeSlotListFragment].id
                 && vmSkills.fromHome.value!!){
                     this.onBackPressed()
+            } else if(navController.currentDestination?.id == navController.graph[R.id.showProfileFragment].id
+                && vmProfile.clickedEmail != FirestoreRepository.currentUser.email){
+                    vmProfile.clickedEmail = FirestoreRepository.currentUser.email.toString()
+                    vmProfile.profile.value = vmProfile.profile.value
+                    this.onBackPressed()
+            }else if(navController.currentDestination?.id == navController.graph[R.id.skillsFragment].id){
+                loadNavigationHeader()
+                drawerLayout.openDrawer(GravityCompat.START)
             } else {
                 drawerLayout.openDrawer(GravityCompat.START)
             }
@@ -86,7 +94,7 @@ class MainActivity : AppCompatActivity() {
 
         vmProfile.getDBUser().observe(this) {
             if (it == null && vmProfile.needRegistration) {
-                navController.navigate(R.id.action_timeSlotListFragment_to_editProfileFragment)
+                navController.navigate(R.id.editProfileFragment)
             } else if (it == null)
                 Toast.makeText(this, "Firebase failure", Toast.LENGTH_SHORT).show()
             else {
@@ -95,21 +103,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        vmProfile.getAllUsers().observe(this) {
-            if (!it.isNullOrEmpty()) {
-                it.forEach { profile ->
-                    profile.skills.forEach { skill ->
-                        vmProfile.localSkills.add(skill.key)
-                    }
-                }
-            }
-        }
-
         navView = findViewById(R.id.nav_view)
         navView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav_profile -> {
                     if (navController.currentDestination?.id != navController.graph[R.id.showProfileFragment].id) {
+                        vmProfile.clickedEmail = FirestoreRepository.currentUser.email.toString()
                         navController.navigate(R.id.showProfileFragment)
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
@@ -118,6 +117,9 @@ class MainActivity : AppCompatActivity() {
                     if (navController.currentDestination?.id != navController.graph[R.id.timeSlotListFragment].id && !vmSkills.fromHome.value!!){
                         navController.navigate(R.id.timeSlotListFragment)
                     } else if(navController.currentDestination?.id == navController.graph[R.id.timeSlotListFragment].id && vmSkills.fromHome.value!!){
+                        vmSkills.fromHome.value = false
+                        navController.navigate(R.id.timeSlotListFragment)
+                    } else if(navController.currentDestination?.id == navController.graph[R.id.showProfileFragment].id && vmSkills.fromHome.value!!){
                         vmSkills.fromHome.value = false
                         navController.navigate(R.id.timeSlotListFragment)
                     }
@@ -137,7 +139,8 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if (destination.id == R.id.timeSlotListFragment && vmSkills.fromHome.value!!){
                 supportActionBar?.setHomeAsUpIndicator(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-            }
+            }else if(destination.id == R.id.showProfileFragment && vmProfile.clickedEmail != FirestoreRepository.currentUser.email)
+                supportActionBar?.setHomeAsUpIndicator(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
         }
 
         val logoutButton = findViewById<Button>(R.id.logout_btn)

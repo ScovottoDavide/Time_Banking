@@ -6,4 +6,5 @@
         android:icon="@drawable/check_bold"
         android:title="item1"
         app:showAsAction="always" />
+
 </menu>

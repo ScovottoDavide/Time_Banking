@@ -2,10 +2,9 @@ package it.polito.madg34.timebanking
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.TextView
+import android.view.*
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,12 +20,15 @@ class SkillsFragment : Fragment() {
     lateinit var emptyView: TextView
     lateinit var skillsRV: RecyclerView
 
-    override fun onCreateView(
+    lateinit var  optionButton : ImageButton
+
+        override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.skillsfragment_layout, container, false)
+        setHasOptionsMenu(true)
         return view
     }
 
@@ -48,6 +50,29 @@ class SkillsFragment : Fragment() {
                     val advs : MutableList<Skills> = skills.values.toMutableList()
                     skillsRV.adapter = SkillsAdapter(localSkills,advs)
                 }
+            }
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.homepage_menu, menu)
+        //optionButton = menu.findItem(R.id.filter).actionView as ImageButton
+        //optionButton.setImageDrawable(resources.getDrawable(R.drawable.filter_variant))
+        //optionButton.setBackgroundColor(resources.getColor(R.color.Goldenrod))
+        return super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.filter -> {
+                Toast.makeText(requireContext(), "ciao", Toast.LENGTH_SHORT).show()
+                val popupMenu = PopupMenu(context, view)
+                popupMenu.menuInflater.inflate(R.menu.filter_menu, popupMenu.menu)
+                popupMenu.show()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
             }
         }
     }

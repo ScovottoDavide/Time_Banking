@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import android.os.Bundle
 import android.view.*
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -51,14 +52,27 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         userDesc = view.findViewById(R.id.userDesc)
         img_view = view.findViewById(R.id.userImg)
 
-        vm.getDBUser().observe(viewLifecycleOwner) {
-            if (it == null)
-                Toast.makeText(context, "Firebase Failure!", Toast.LENGTH_LONG).show()
-            else {
-                profile = it
-                setProfile(view)
+
+        if(vm.clickedEmail != FirestoreRepository.currentUser.email){
+            vm.getViewProfile().observe(viewLifecycleOwner){
+                if (it == null)
+                    Toast.makeText(context, "Firebase Failure!", Toast.LENGTH_LONG).show()
+                else {
+                    profile = it
+                    setProfile(view)
+                }
+            }
+        }else{
+            vm.getDBUser().observe(viewLifecycleOwner) {
+                if (it == null)
+                    Toast.makeText(context, "Firebase Failure!", Toast.LENGTH_LONG).show()
+                else {
+                    profile = it
+                    setProfile(view)
+                }
             }
         }
+
         constantScreenLayoutOnScrolling(view)
     }
 
@@ -200,7 +214,9 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.pencil_menu, menu)
+        if(vm.clickedEmail == FirestoreRepository.currentUser.email ){
+            inflater.inflate(R.menu.pencil_menu, menu)
+        }
         super.onCreateOptionsMenu(menu, inflater)
     }
 

@@ -20,6 +20,8 @@ class TimeSlotDetailsFragment : Fragment() {
 
     val vm : TimeSlotViewModel by activityViewModels()
     val vmSkills : SkillsViewModel by activityViewModels()
+    val vmProfile : ProfileViewModel by activityViewModels()
+
 
     private var h: Int = 0
     private var w: Int = 0
@@ -64,7 +66,9 @@ class TimeSlotDetailsFragment : Fragment() {
                 .setTitle("Message")
                 .setMessage("Do you want to visit ${item?.published_by} profile? ")
                 .setPositiveButton("Yes") { _, _ ->
-                    //findNavController().navigate(R.id.showProfileFragment)
+                    vmProfile.clickedEmail = item?.published_by.toString()
+                    vmSkills.fromHome.value = true
+                    findNavController().navigate(R.id.showProfileFragment)
                 }
                 .setNegativeButton("No") { _, _ ->
                 }

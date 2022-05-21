@@ -46,6 +46,18 @@
             app:civ_border_width="1dp"
             app:srcCompat="@drawable/time_management" />
 
+        <ImageView
+            android:id="@+id/serviceImage2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:contentDescription="@string/app_name"
+            android:padding="5dp"
+            android:src="@drawable/menu_icon"
+            android:visibility="visible"
+            app:srcCompat="@drawable/time_management" />
+
+
         <TextView
             android:id="@+id/serviceTitle"
             android:layout_width="match_parent"

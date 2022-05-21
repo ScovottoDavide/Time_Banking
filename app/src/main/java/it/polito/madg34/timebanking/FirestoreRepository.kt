@@ -25,11 +25,19 @@ class FirestoreRepository {
         return fireStoreDB.collection("users").document(currentUser.email!!)
     }
 
+    fun checkNickname(registrationNickname: String) : Query{
+        return  fireStoreDB.collection("users").whereEqualTo("NICKNAME", registrationNickname)
+    }
+
     /*
        Function to get the documents of all users
    */
     fun getOthersUser(): CollectionReference {
         return fireStoreDB.collection("users")
+    }
+
+    fun getViewUser(email : String) : DocumentReference{
+        return fireStoreDB.collection("users").document(email)
     }
 
     /*

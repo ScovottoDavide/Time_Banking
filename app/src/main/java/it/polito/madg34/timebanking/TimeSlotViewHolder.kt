@@ -15,14 +15,22 @@ import de.hdodenhof.circleimageview.CircleImageView
 class TimeSlotViewHolder(v : View) : RecyclerView.ViewHolder(v){
 
     private val serviceImage : CircleImageView = v.findViewById(R.id.serviceImage)
+    private val serviceImage2 : ImageView = v.findViewById(R.id.serviceImage2)
     private val serviceTitle : TextView = v.findViewById(R.id.serviceTitle)
     private val serviceLocation : TextView = v.findViewById(R.id.serviceLocation)
     private val serviceDate : TextView = v.findViewById(R.id.serviceDate)
 
     fun bind(item : TimeSlot, userImg : String?) {
-        if(userImg == null)
-            serviceImage.setImageResource(R.drawable.time_management)
-        else Glide.with(this.itemView).load(userImg).into(serviceImage)
+        if(userImg.isNullOrEmpty()){
+            serviceImage.visibility = View.INVISIBLE
+            serviceImage2.visibility = View.VISIBLE
+            serviceImage2.setImageResource(R.drawable.time_management)
+        }
+        else {
+            serviceImage2.visibility = View.GONE
+            serviceImage.visibility = View.VISIBLE
+            Glide.with(this.itemView).load(userImg).into(serviceImage)
+        }
         serviceTitle.text = item.title
         serviceLocation.text = item.location
         serviceDate.text = item.date
