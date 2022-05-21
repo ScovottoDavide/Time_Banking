@@ -59,6 +59,9 @@ class FirestoreRepository {
         return fireStoreDB.collection("users").document(currentUser.email!!).set(value)
     }
 
+    fun getUserFromEmail(email : String): DocumentReference {
+        return fireStoreDB.collection("users").document(email)
+    }
     fun setSkills(value : String, advKey : String) {
         // get all advs from its collection to know if there are advs (else empty list)
         var old_string = ""

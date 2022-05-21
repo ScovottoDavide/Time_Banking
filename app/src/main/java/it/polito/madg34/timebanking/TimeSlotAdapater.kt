@@ -27,11 +27,16 @@ class TimeSlotAdapter(val data : MutableList<TimeSlot>) : RecyclerView.Adapter<T
     }
 
     override fun onBindViewHolder(holder: TimeSlotViewHolder, position: Int) {
-        val item = data[position] // access data item
-        holder.bind(item)
-
         vmTimeSlot = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
         vmSkills = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
+
+        val item = data[position] // access data item
+        vmTimeSlot.getImageFromEmail(item.published_by).addOnCompleteListener {
+            if(it.isSuccessful){
+                Log.d("IMG", vmTimeSlot.userUri)
+                holder.bind(item, vmTimeSlot.userUri)
+            }
+        }
 
         // Click Listener on the whole Card
         holder.itemView.setOnClickListener{

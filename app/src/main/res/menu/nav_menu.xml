@@ -11,10 +11,10 @@
         <item
             android:id="@+id/nav_listServices"
             android:icon="@drawable/menu_icon"
-            android:title="List of my services" />
+            android:title="My advertisements" />
         <item
             android:id="@+id/nav_listSkills"
-            android:icon="@drawable/menu_icon"
+            android:icon="@drawable/account_cog_outline"
             android:title="Online Skills" />
         <item
             android:id="@+id/void1"

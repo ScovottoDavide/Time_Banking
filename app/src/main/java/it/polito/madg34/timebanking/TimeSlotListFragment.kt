@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.w3c.dom.Text
 import java.util.*
 
 
@@ -43,6 +44,7 @@ class TimeSlotListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val addButton: FloatingActionButton = view.findViewById(R.id.add_button)
+        val fromSkillTitle : TextView = view.findViewById(R.id.titlleEditService5)
 
         vmSkills.fromHome.observe(viewLifecycleOwner) { fromHome ->
             if (fromHome) {
@@ -57,6 +59,7 @@ class TimeSlotListFragment : Fragment() {
                     } else {
                         emptyView = view.findViewById(R.id.emptyListTV)
                         emptyView.visibility = View.GONE
+                        fromSkillTitle.setText(getString(R.string.ListOnlineServices))
                         timeSlotsRV = view.findViewById(R.id.ServicesList)
                         timeSlotsRV.layoutManager = LinearLayoutManager(this.context)
                         timeSlotsRV.adapter = TimeSlotAdapter(timeSlotsFromSkill)

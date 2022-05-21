@@ -25,6 +25,7 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
     var currentIndexAdv: MutableLiveData<String> = MutableLiveData(String()).also { loadLastAdv() }
 
     var currentShownAdv : TimeSlot? = null
+    var userUri = ""
 
     private var listener1: ListenerRegistration? = null
     private var listener2: ListenerRegistration? = null
@@ -73,6 +74,14 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
 
     fun removeAdv(value: TimeSlot): Task<Void> {
         return FirestoreRepository().removeAdvDB(value)
+    }
+
+    fun getImageFromEmail(email : String) : Task<DocumentSnapshot> {
+        return FirestoreRepository().getUserFromEmail(email).get().addOnSuccessListener { res ->
+            if (res != null) {
+                userUri = res.getString("uri").toString()
+            }
+        }
     }
 
     private fun DocumentSnapshot.toTimeSlotObject(): TimeSlot? {
