@@ -1,28 +1,20 @@
 package it.polito.madg34.timebanking
 
+import android.app.AlertDialog
 import android.content.res.Configuration
 import android.os.Bundle
-import android.text.Editable
-import android.util.Log
+import android.text.Html
+import android.text.method.LinkMovementMethod
 import android.view.*
-import android.widget.LinearLayout
 import android.widget.TableRow
 import android.widget.TextView
-import android.widget.Toolbar
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 class TimeSlotDetailsFragment : Fragment() {
 
@@ -62,8 +54,21 @@ class TimeSlotDetailsFragment : Fragment() {
             time.setText(item?.time)
             duration.setText(item?.duration)
             location.setText(item?.location)
-            email.setText(item?.published_by)
+            val text = "<a href=''> ${item?.published_by} </a>"
+            email.setText(Html.fromHtml(text))
             skill.setText(item?.related_skill)
+        }
+
+        email.setOnClickListener {
+            AlertDialog.Builder(context)
+                .setTitle("Message")
+                .setMessage("Do you want to visit ${item?.published_by} profile? ")
+                .setPositiveButton("Yes") { _, _ ->
+                    //findNavController().navigate(R.id.showProfileFragment)
+                }
+                .setNegativeButton("No") { _, _ ->
+                }
+                .show()
         }
 
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {

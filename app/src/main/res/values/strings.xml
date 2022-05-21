@@ -29,8 +29,8 @@
     <string name="editSkillTitle">Edit skill :</string>
     <string name="addSkillTitle">Add skill :</string>
     <string name="removeSkill">Delete skill</string>
-    <string name="OfferedService">Offered Service</string>
-    <string name="EditService">Edit Service</string>
+    <string name="OfferedService">Offered Advertisement</string>
+    <string name="EditService">Edit Advertisement</string>
     <string name="AddService">Add Service</string>
     <string name="ListOfferedServices">My Advertisements</string>
     <string name="ListOnlineServices">Online Advertisements</string>
