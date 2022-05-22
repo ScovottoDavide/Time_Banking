@@ -25,6 +25,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -148,7 +149,7 @@ class EditProfileFragment : Fragment() {
         if (vm.currentPhotoPath.isNotEmpty()) {
             userImage.setImageURI(Uri.parse(item.img))
         } else if (vm.currentPhotoPath.isEmpty() && item.img?.isNotEmpty() == true) {
-            Glide.with(this).load(item.img).into(userImage)
+            Glide.with(this).load(item.img).diskCacheStrategy( DiskCacheStrategy.ALL ).dontTransform().into(userImage)
         } else
             userImage.setImageResource(R.drawable.user)
 

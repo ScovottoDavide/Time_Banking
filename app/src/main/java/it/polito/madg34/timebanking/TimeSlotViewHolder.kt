@@ -13,6 +13,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import de.hdodenhof.circleimageview.CircleImageView
 
 class TimeSlotViewHolder(v : View) : RecyclerView.ViewHolder(v){
@@ -33,7 +34,7 @@ class TimeSlotViewHolder(v : View) : RecyclerView.ViewHolder(v){
         else {
             serviceImage2.visibility = View.GONE
             serviceImage.visibility = View.VISIBLE
-            Glide.with(this.itemView).load(userImg).into(serviceImage)
+            Glide.with(this.itemView).load(userImg).diskCacheStrategy( DiskCacheStrategy.ALL ).dontTransform().into(serviceImage)
         }
         serviceTitle.text = item.title
         serviceLocation.text = item.location

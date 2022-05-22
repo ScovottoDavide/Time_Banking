@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
@@ -41,10 +42,9 @@
             android:layout_marginTop="26dp"
             android:contentDescription="@string/app_name"
             android:padding="5dp"
-            android:src="@drawable/menu_icon"
+            android:visibility="visible"
             app:civ_border_color="#FF000000"
-            app:civ_border_width="1dp"
-            app:srcCompat="@drawable/time_management" />
+            app:civ_border_width="1dp" />
 
         <ImageView
             android:id="@+id/serviceImage2"
@@ -101,13 +101,13 @@
         <Button
             android:id="@+id/profileButton"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="37dp"
             android:layout_below="@+id/serviceDate"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="-46dp"
+            android:layout_marginTop="-35dp"
             android:layout_marginEnd="0dp"
-            android:text="Profile"
-            android:textSize="12sp" />
+            android:text="view profile"
+            android:textSize="8sp" />
 
         <TextView
             android:id="@+id/serviceLocation"

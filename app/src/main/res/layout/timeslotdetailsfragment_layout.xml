@@ -222,6 +222,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="#757575"
                     android:editable="false"
+                    android:focusableInTouchMode="false"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>

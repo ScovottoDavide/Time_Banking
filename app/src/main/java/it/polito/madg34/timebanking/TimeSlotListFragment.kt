@@ -200,8 +200,14 @@ class TimeSlotListFragment : Fragment() {
     }
 
     private fun sortByTitle() {
-        timeSlotsFromSkill.forEach { vm.filteredTimeSlots.add(it) }
-        vm.filteredTimeSlots.sortBy { it.title.lowercase() }
+        if(vm.filtered.value!! ){
+            vm.filteredTimeSlots.sortBy { it.title.lowercase() }
+        }else {
+            vm.filteredTimeSlots = mutableListOf()
+            timeSlotsFromSkill.forEach { vm.filteredTimeSlots.add(it) }
+            vm.filteredTimeSlots.sortBy { it.title.lowercase() }
+        }
+
     }
 
     private fun filterByDate() {
@@ -216,6 +222,7 @@ class TimeSlotListFragment : Fragment() {
             utc.timeInMillis = it
             val format = SimpleDateFormat("dd-MM-yyyy", Locale.ITALY)
             val formatted: String = format.format(utc.time)
+            vm.filteredTimeSlots = mutableListOf()
             timeSlotsFromSkill.forEach {
                 Log.d("DATEE", "it ${it.date}, formatted $formatted")
                 if(it.date == formatted)

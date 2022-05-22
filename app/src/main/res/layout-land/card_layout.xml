@@ -55,6 +55,17 @@
             android:visibility="visible"
             app:srcCompat="@drawable/time_management" />
 
+        <Button
+            android:id="@+id/profileButton"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_below="@+id/serviceDate"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="-35dp"
+            android:layout_marginEnd="0dp"
+            android:text="view profile"
+            android:textSize="8sp" />
+
         <TextView
             android:id="@+id/serviceTitle"
             android:layout_width="match_parent"

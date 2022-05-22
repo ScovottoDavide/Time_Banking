@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
 import com.google.android.material.navigation.NavigationView
@@ -97,8 +98,8 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         val imgProfile = header?.findViewById<CircleImageView>(R.id.nav_header_userImg)
         if (!profile!!.img.isNullOrEmpty()) {
             //img_view.setImageURI(Uri.parse(profile!!.img))
-            Glide.with(this).load(profile!!.img).into(img_view)
-            Glide.with(this).load(profile!!.img).into(imgProfile!!)
+            Glide.with(this).load(profile!!.img).diskCacheStrategy( DiskCacheStrategy.ALL ).dontTransform().into(img_view)
+            Glide.with(this).load(profile!!.img).diskCacheStrategy( DiskCacheStrategy.ALL ).dontTransform().into(imgProfile!!)
             //imgProfile?.setImageDrawable(img_view.drawable)
         }else {
             img_view.setImageDrawable(resources.getDrawable(R.drawable.user_icon))
