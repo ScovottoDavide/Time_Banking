@@ -38,10 +38,14 @@ class AddSkillFragment: Fragment() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if(skillName.text.isNotEmpty()){
+                        val t = skillName.text.mapIndexed { index, c ->
+                            if (index==0)c.uppercaseChar() else c.lowercaseChar()
+                        }
+                        val sNew = t.joinToString("")
                         if(skillDesc.text.isEmpty())
-                            item?.skills?.set(skillName.text.toString(), "No description")
+                            item?.skills?.set(sNew, "No description")
                         else
-                            item?.skills?.set(skillName.text.toString(), skillDesc.text.toString())
+                            item?.skills?.set(sNew, skillDesc.text.toString())
                         Snackbar.make(view, "Skill successfully created!", Snackbar.LENGTH_LONG).show()
                         if (isEnabled) {
                             isEnabled = false
