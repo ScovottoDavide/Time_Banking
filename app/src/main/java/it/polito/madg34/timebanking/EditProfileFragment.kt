@@ -149,7 +149,8 @@ class EditProfileFragment : Fragment() {
         if (vm.currentPhotoPath.isNotEmpty()) {
             userImage.setImageURI(Uri.parse(item.img))
         } else if (vm.currentPhotoPath.isEmpty() && item.img?.isNotEmpty() == true) {
-            Glide.with(this).load(item.img).diskCacheStrategy( DiskCacheStrategy.ALL ).dontTransform().into(userImage)
+            Glide.with(this).load(item.img).diskCacheStrategy(DiskCacheStrategy.ALL).dontTransform()
+                .into(userImage)
         } else
             userImage.setImageResource(R.drawable.user)
 
@@ -222,10 +223,9 @@ class EditProfileFragment : Fragment() {
                         ) {
                             vm.checkNicknameVM(item.nickname.toString()).addOnSuccessListener {
                                 if (!vm.nicknameOk) {
-                                    Log.d("ENTRO?", "ENTROOO")
                                     MaterialAlertDialogBuilder(requireContext())
                                         .setTitle("WARNING")
-                                        .setMessage("Nickname already used. Please provide another nickname!")
+                                        .setMessage("Nickname already usedby another user. Please provide another nickname!")
                                         .setPositiveButton("OK") { _, _ ->
 
                                         }
@@ -485,25 +485,41 @@ class EditProfileFragment : Fragment() {
         if (!item.fullName.isNullOrEmpty() && !item.nickname.isNullOrEmpty()
             && !item.location.isNullOrEmpty() && !item.aboutUser.isNullOrEmpty()
         ) {
-            vm.modifyUserProfile(item)
-                .addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        if (vm.needRegistration)
-                            vm.needRegistration = false
-                        if (!isRegistration && !isFromBack) {
-                            Snackbar.make(
-                                requireView(),
-                                "Profile successfully edited",
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                            findNavController().navigate(R.id.action_editProfileFragment_to_showProfileFragment)
+            vm.checkNicknameVM(item.nickname.toString()).addOnSuccessListener {
+                if (!vm.nicknameOk) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setTitle("WARNING")
+                        .setMessage("Nickname already used by another user. Please provide another nickname!")
+                        .setPositiveButton("OK") { _, _ ->
+
                         }
-                    } else {
-                        if (!isFromBack)
-                            Toast.makeText(context, "Failed saving profile!", Toast.LENGTH_SHORT)
-                                .show()
-                    }
+                        .show()
+                } else {
+                    vm.modifyUserProfile(item)
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                if (vm.needRegistration)
+                                    vm.needRegistration = false
+                                if (!isRegistration && !isFromBack) {
+                                    Snackbar.make(
+                                        requireView(),
+                                        "Profile successfully edited",
+                                        Snackbar.LENGTH_LONG
+                                    ).show()
+                                    findNavController().navigate(R.id.action_editProfileFragment_to_showProfileFragment)
+                                }
+                            } else {
+                                if (!isFromBack)
+                                    Toast.makeText(
+                                        context,
+                                        "Failed saving profile!",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                        .show()
+                            }
+                        }
                 }
+            }
         } else {
             Snackbar.make(
                 requireView(),
@@ -513,83 +529,85 @@ class EditProfileFragment : Fragment() {
         }
     }
 
-    private fun uploadImage() {
-        // Create a storage reference from our app
-        if (vm.currentPhotoPath.isEmpty()) {
-            return saveValues()
-        }
-        val storageRef =
-            FirebaseStorage.getInstance().getReferenceFromUrl("gs://time-banking-g34.appspot.com")
-        val file = Uri.fromFile(File(vm.currentPhotoPath))
-        val profileImageRef =
-            storageRef.child("images/${FirestoreRepository.currentUser.email.toString()}.jpg")
-        val uploadTask = profileImageRef.putFile(file)
 
-        uploadTask.addOnCompleteListener {
-            if (it.isSuccessful) {
-                profileImageRef.downloadUrl.addOnSuccessListener { downloaded ->
-                    item.img = downloaded.toString()
+        private fun uploadImage() {
+            // Create a storage reference from our app
+            if (vm.currentPhotoPath.isEmpty()) {
+                return saveValues()
+            }
+            val storageRef =
+                FirebaseStorage.getInstance()
+                    .getReferenceFromUrl("gs://time-banking-g34.appspot.com")
+            val file = Uri.fromFile(File(vm.currentPhotoPath))
+            val profileImageRef =
+                storageRef.child("images/${FirestoreRepository.currentUser.email.toString()}.jpg")
+            val uploadTask = profileImageRef.putFile(file)
+
+            uploadTask.addOnCompleteListener {
+                if (it.isSuccessful) {
+                    profileImageRef.downloadUrl.addOnSuccessListener { downloaded ->
+                        item.img = downloaded.toString()
+                        saveValues()
+                    }
+                } else {
+                    if (!isFromBack)
+                        Toast.makeText(context, "Failed saving profile photo!", Toast.LENGTH_SHORT)
+                            .show()
                     saveValues()
                 }
-            } else {
-                if (!isFromBack)
-                    Toast.makeText(context, "Failed saving profile photo!", Toast.LENGTH_SHORT)
-                        .show()
-                saveValues()
+                vm.currentPhotoPath = ""
             }
-            vm.currentPhotoPath = ""
+        }
+
+        override fun onPause() {
+            super.onPause()
+            closeKeyboard()
+            updateProfile()
+        }
+
+        private fun closeKeyboard() {
+            // this will give us the view which is currently focus in this layout
+            val v: View? = this.view?.findFocus()
+
+            val manager: InputMethodManager =
+                context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            manager.hideSoftInputFromWindow(v?.windowToken, 0)
+        }
+
+        /*
+           Function to perform the logout and to return to the Auth Activity
+       */
+        private fun logOut() {
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Log out")
+                .setMessage("Do you want to log out from the Time Earn app?")
+                .setPositiveButton("Yes") { _, _ ->
+                    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                        .requestIdToken(getString(R.string.web_client_id))
+                        .requestEmail()
+                        .build()
+
+                    // Sign out from Google
+                    GoogleSignIn.getClient(requireActivity(), gso).signOut()
+                        .addOnCompleteListener(requireActivity()) {
+                            if (it.isSuccessful) {
+                                // Sign out from Firebase
+                                Firebase.auth.signOut()
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Successfully logged out!",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                                startActivity(Intent(requireContext(), AuthActivity::class.java))
+                                requireActivity().finish()
+                            }
+                        }
+                }
+                .setNegativeButton("No") { _, _ ->
+                }
+                .show()
         }
     }
-
-    override fun onPause() {
-        super.onPause()
-        closeKeyboard()
-        updateProfile()
-    }
-
-    private fun closeKeyboard() {
-        // this will give us the view which is currently focus in this layout
-        val v: View? = this.view?.findFocus()
-
-        val manager: InputMethodManager =
-            context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        manager.hideSoftInputFromWindow(v?.windowToken, 0)
-    }
-
-    /*
-       Function to perform the logout and to return to the Auth Activity
-   */
-    private fun logOut() {
-        MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Log out")
-            .setMessage("Do you want to log out from the Time Earn app?")
-            .setPositiveButton("Yes") { _, _ ->
-                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.web_client_id))
-                    .requestEmail()
-                    .build()
-
-                // Sign out from Google
-                GoogleSignIn.getClient(requireActivity(), gso).signOut()
-                    .addOnCompleteListener(requireActivity()) {
-                        if (it.isSuccessful) {
-                            // Sign out from Firebase
-                            Firebase.auth.signOut()
-                            Toast.makeText(
-                                requireContext(),
-                                "Successfully logged out!",
-                                Toast.LENGTH_SHORT
-                            )
-                                .show()
-                            startActivity(Intent(requireContext(), AuthActivity::class.java))
-                            requireActivity().finish()
-                        }
-                    }
-            }
-            .setNegativeButton("No") { _, _ ->
-            }
-            .show()
-    }
-}
 
 
