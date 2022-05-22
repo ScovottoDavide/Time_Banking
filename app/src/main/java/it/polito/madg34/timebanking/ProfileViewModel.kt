@@ -63,8 +63,9 @@ class ProfileViewModel : ViewModel() {
     }
 
     fun checkNicknameVM(registrationNickname : String): Task<QuerySnapshot> {
-        return FirestoreRepository().checkNickname(registrationNickname).get().addOnSuccessListener {
-            nicknameOk = it.isEmpty
+        return FirestoreRepository().checkNickname(registrationNickname)
+            .get().addOnSuccessListener {
+                nicknameOk = it.isEmpty
         }
     }
 

@@ -49,9 +49,17 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
                     currentIndexAdv.value = ""
                     return@EventListener
                 }
-                if (value!!.documents.size > 0)
-                    currentIndexAdv.value = value.documents.get(value.documents.size - 1).id
+                if (value!!.documents.size > 0){
+//                    currentIndexAdv.value = value.documents.get(value.documents.size - 1).id
+                    var max = 0
+                    value.documents.forEach {
+                        if(it.id.split("-")[1].toInt() > max)
+                            max = it.id.split("-")[1].toInt()
+                    }
+                    currentIndexAdv.value = "Adv-$max"
+                }
                 else currentIndexAdv.value = "Adv-0"
+                Log.d("ADV", "dentro ${currentIndexAdv.value}")
             })
 
     }
@@ -64,7 +72,7 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
         val id1 = currentIndexAdv.value?.split("-")?.get(1)?.toInt()
         val id2 = "Adv-" + (id1!! + 1).toString()
         value.id = id2
-        return FirestoreRepository().saveAdvDB(value)
+        return FirestoreRepository().saveAdvDB(value).addOnCompleteListener { loadLastAdv() }
     }
 
     fun updateAdv(value: TimeSlot): Task<Void> {

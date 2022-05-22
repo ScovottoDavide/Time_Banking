@@ -486,7 +486,7 @@ class EditProfileFragment : Fragment() {
             && !item.location.isNullOrEmpty() && !item.aboutUser.isNullOrEmpty()
         ) {
             vm.checkNicknameVM(item.nickname.toString()).addOnSuccessListener {
-                if (!vm.nicknameOk) {
+                if (!vm.nicknameOk && vm.profile.value?.nickname != item.nickname) {
                     MaterialAlertDialogBuilder(requireContext())
                         .setTitle("WARNING")
                         .setMessage("Nickname already used by another user. Please provide another nickname!")
