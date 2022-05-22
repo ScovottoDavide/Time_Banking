@@ -49,7 +49,7 @@ class SkillsFragment : Fragment() {
         vmSkills.getAllSkillsVM().observe(viewLifecycleOwner) {
             if(!it.isNullOrEmpty()){
                 skills = it
-                if (!skills.isEmpty()) {
+                if (skills.isEmpty()) {
                     emptyView.visibility = View.VISIBLE
                     homepageAppName.visibility = View.VISIBLE
                     homepageLogo.visibility = View.VISIBLE
