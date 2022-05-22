@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="@string/app_name"
-            app:titleCentered="true"/>
+            app:titleCentered="true" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -41,6 +41,18 @@
         app:layout_constraintVertical_bias="0.022" />
 
     <TextView
+        android:id="@+id/anchor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:text="TextView"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/textView5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.397" />
+
+    <TextView
         android:id="@+id/titlleEditService5"
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -55,23 +67,11 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbarLayout" />
 
     <TextView
-        android:id="@+id/anchor"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:text="TextView"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/textView5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.397" />
-
-    <TextView
         android:id="@+id/textView5"
-        android:layout_width="464dp"
-        android:layout_height="47dp"
+        android:layout_width="356dp"
+        android:layout_height="39dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="16dp"
         android:text="@string/skillfragDesc"
         android:textAlignment="center"
@@ -83,18 +83,58 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titlleEditService5" />
 
+    <ImageView
+        android:id="@+id/homepageLogo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="284dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/emptyListTV"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/time_management" />
+
     <TextView
-        android:id="@+id/emptyListTV"
+        android:id="@+id/homepageAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/EmptyList"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/ServicesList"
+        android:layout_marginStart="260dp"
+        android:fontFamily="monospace"
+        android:text="TimeEarn"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textColor="@color/Brown"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView"
+        app:layout_constraintHorizontal_bias="0.661"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.528" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/emptyListTV"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:boxStrokeColor="@color/Goldenrod"
+        app:boxStrokeWidth="2dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="@+id/SkillsList"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/SkillsList"
-        app:layout_constraintVertical_bias="0.393" />
+        app:layout_constraintVertical_bias="0.74"
+        app:startIconTint="@color/Black">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/outlinedTitleFixed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:text="@string/homepage"
+            android:textColor="#757575" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/SkillsList"
@@ -103,8 +143,10 @@
         android:layout_marginTop="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titlleEditService5">
+        app:layout_constraintTop_toBottomOf="@+id/titlleEditService5"
+        app:layout_constraintVertical_bias="1.0">
 
     </androidx.recyclerview.widget.RecyclerView>
 

@@ -50,7 +50,6 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
                     return@EventListener
                 }
                 if (value!!.documents.size > 0){
-//                    currentIndexAdv.value = value.documents.get(value.documents.size - 1).id
                     var max = 0
                     value.documents.forEach {
                         if(it.id.split("-")[1].toInt() > max)
@@ -59,7 +58,6 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
                     currentIndexAdv.value = "Adv-$max"
                 }
                 else currentIndexAdv.value = "Adv-0"
-                Log.d("ADV", "dentro ${currentIndexAdv.value}")
             })
 
     }

@@ -11,19 +11,23 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 
 class SkillsFragment : Fragment() {
 
     val vmSkills : SkillsViewModel by activityViewModels()
 
     private var skills : MutableMap<String, Skills> = mutableMapOf()
-    lateinit var emptyView: TextView
     lateinit var skillsRV: RecyclerView
+
+    lateinit var emptyView: TextInputLayout
+    lateinit var homepageLogo : ImageView
+    lateinit var homepageAppName : TextView
 
     var advs : MutableList<Skills> = mutableListOf()
     var localSkills : MutableList<String> = mutableListOf()
 
-    lateinit var  optionButton : ImageButton
 
         override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,15 +42,21 @@ class SkillsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        emptyView = view.findViewById(R.id.emptyListTV)
+        homepageLogo = view.findViewById(R.id.homepageLogo)
+        homepageAppName  = view.findViewById(R.id.homepageAppName)
+
         vmSkills.getAllSkillsVM().observe(viewLifecycleOwner) {
             if(!it.isNullOrEmpty()){
                 skills = it
-                if (skills.isEmpty()) {
-                    emptyView = view.findViewById(R.id.emptyListTV)
+                if (!skills.isEmpty()) {
                     emptyView.visibility = View.VISIBLE
+                    homepageAppName.visibility = View.VISIBLE
+                    homepageLogo.visibility = View.VISIBLE
                 } else {
-                    emptyView = view.findViewById(R.id.emptyListTV)
                     emptyView.visibility = View.GONE
+                    homepageAppName.visibility = View.GONE
+                    homepageLogo.visibility = View.GONE
                     skillsRV = view.findViewById(R.id.SkillsList)
                     skillsRV.layoutManager = LinearLayoutManager(this.context)
                     vmSkills.filtered.observe(viewLifecycleOwner){

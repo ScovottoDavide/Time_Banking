@@ -51,6 +51,9 @@
     <string name="welcome2">Do not forget, here time is money!</string>
     <string name="welcome3">Sign in and register your new profile and start interacting with all our friends!</string>
 
+    <string name="homepage">Nothing published yet. Use your skills to publish a new time offer.\n
+                Go in the provided section using the sidebar and publish the first advertisement</string>
+
     <string name="web_client_id">704043757142-su9qfek247vvrquhunelunu7binit5eg.apps.googleusercontent.com</string>
 
     <string name="skillfragDesc">Welcome, find people which can save you time. Look for people that have the skills
