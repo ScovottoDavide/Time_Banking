@@ -23,6 +23,8 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
 
     var currentShownAdv : TimeSlot? = null
     var userUri = ""
+    var filtered : MutableLiveData<Boolean> = MutableLiveData(false)
+    var filteredTimeSlots : MutableList<TimeSlot> = mutableListOf()
 
     private var listener1: ListenerRegistration? = null
     private var listener2: ListenerRegistration? = null

@@ -6,8 +6,8 @@
         app:showAsAction="always"
         />
 
-    <item android:id= "@+id/popularity"
-        android:title="Sort by popularity"
+    <item android:id= "@+id/date"
+        android:title="Filter by date"
         app:showAsAction="always"
         />
 

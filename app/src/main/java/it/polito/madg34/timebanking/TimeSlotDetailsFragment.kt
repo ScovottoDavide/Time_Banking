@@ -73,7 +73,7 @@ class TimeSlotDetailsFragment : Fragment() {
                 .setPositiveButton("Yes") { _, _ ->
                     vmProfile.clickedEmail.value = item?.published_by.toString()
                     vmSkills.fromHome.value = true
-                    findNavController().navigate(R.id.showProfileFragment)
+                    findNavController().navigate(R.id.action_timeSlotDetailsFragment_to_showProfileFragment)
                 }
                 .setNegativeButton("No") { _, _ ->
                 }

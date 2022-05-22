@@ -1,12 +1,15 @@
 package it.polito.madg34.timebanking
 
+import android.annotation.SuppressLint
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.get
+import androidx.navigation.Navigation
 import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -20,6 +23,7 @@ class TimeSlotViewHolder(v : View) : RecyclerView.ViewHolder(v){
     private val serviceLocation : TextView = v.findViewById(R.id.serviceLocation)
     private val serviceDate : TextView = v.findViewById(R.id.serviceDate)
 
+    @SuppressLint("ResourceAsColor")
     fun bind(item : TimeSlot, userImg : String?) {
         if(userImg.isNullOrEmpty()){
             serviceImage.visibility = View.INVISIBLE

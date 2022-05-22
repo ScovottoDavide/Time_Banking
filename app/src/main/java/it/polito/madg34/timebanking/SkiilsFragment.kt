@@ -77,9 +77,18 @@ class SkillsFragment : Fragment() {
 
             @SuppressLint("NotifyDataSetChanged")
             override fun onQueryTextChange(newText: String?): Boolean {
+                val local = skills
+                val together = local.map { it.key + ":" + it.value.relatedAdvs }
                 //gets the filtered list based on user entered text in search box
-                val filteredList = newText?.let { filter(localSkills, it) }
-                skillsRV.adapter = SkillsAdapter(filteredList as MutableList<String>, advs)
+                val filteredList = newText?.let { filter(together, it) }
+                localSkills = mutableListOf()
+                advs = mutableListOf()
+                filteredList?.forEach {
+                    val splitted = it.split(":")
+                    localSkills.add(splitted[0])
+                    advs.add(Skills(splitted[1]))
+                }
+                skillsRV.adapter = SkillsAdapter(localSkills, advs)
                 skillsRV.adapter?.notifyDataSetChanged()
                 return true
             }
@@ -92,7 +101,7 @@ class SkillsFragment : Fragment() {
     private fun filter(mList: List<String>, newText: String): List<String>? {
         val filteredList: MutableList<String> = ArrayList()
         for (item in mList) {
-            if (item.lowercase().contains(newText.lowercase())) {
+            if (item.split(":")[0].lowercase().contains(newText.lowercase())) {
                 filteredList.add(item)
             }
         }
