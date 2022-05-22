@@ -66,18 +66,20 @@ class TimeSlotDetailsFragment : Fragment() {
             skill.setText(item?.related_skill)
         }
 
-        email.setOnClickListener {
-            AlertDialog.Builder(context)
-                .setTitle("Message")
-                .setMessage("Do you want to visit ${item?.published_by} profile? ")
-                .setPositiveButton("Yes") { _, _ ->
-                    vmProfile.clickedEmail.value = item?.published_by.toString()
-                    vmSkills.fromHome.value = true
-                    findNavController().navigate(R.id.action_timeSlotDetailsFragment_to_showProfileFragment)
-                }
-                .setNegativeButton("No") { _, _ ->
-                }
-                .show()
+        if(vmSkills.fromHome.value!!){
+            email.setOnClickListener {
+                AlertDialog.Builder(context)
+                    .setTitle("Message")
+                    .setMessage("Do you want to visit ${item?.published_by} profile? ")
+                    .setPositiveButton("Yes") { _, _ ->
+                        vmProfile.clickedEmail.value = item?.published_by.toString()
+                        vmSkills.fromHome.value = true
+                        findNavController().navigate(R.id.action_timeSlotDetailsFragment_to_showProfileFragment)
+                    }
+                    .setNegativeButton("No") { _, _ ->
+                    }
+                    .show()
+            }
         }
 
         activity?.onBackPressedDispatcher?.addCallback(

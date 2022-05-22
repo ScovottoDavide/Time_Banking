@@ -42,6 +42,8 @@ class SkillsViewModel : ViewModel(){
                 }
                 allSkills.value = localSkills
             }
+            if(value?.documents?.isEmpty() == true)
+                allSkills.value = mutableMapOf()
         }
     }
 

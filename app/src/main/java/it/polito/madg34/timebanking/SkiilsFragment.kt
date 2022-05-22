@@ -16,20 +16,20 @@ import com.google.android.material.textfield.TextInputLayout
 
 class SkillsFragment : Fragment() {
 
-    val vmSkills : SkillsViewModel by activityViewModels()
+    val vmSkills: SkillsViewModel by activityViewModels()
 
-    private var skills : MutableMap<String, Skills> = mutableMapOf()
+    private var skills: MutableMap<String, Skills> = mutableMapOf()
     lateinit var skillsRV: RecyclerView
 
     lateinit var emptyView: TextInputLayout
-    lateinit var homepageLogo : ImageView
-    lateinit var homepageAppName : TextView
+    lateinit var homepageLogo: ImageView
+    lateinit var homepageAppName: TextView
 
-    var advs : MutableList<Skills> = mutableListOf()
-    var localSkills : MutableList<String> = mutableListOf()
+    var advs: MutableList<Skills> = mutableListOf()
+    var localSkills: MutableList<String> = mutableListOf()
 
 
-        override fun onCreateView(
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,10 +44,10 @@ class SkillsFragment : Fragment() {
 
         emptyView = view.findViewById(R.id.emptyListTV)
         homepageLogo = view.findViewById(R.id.homepageLogo)
-        homepageAppName  = view.findViewById(R.id.homepageAppName)
+        homepageAppName = view.findViewById(R.id.homepageAppName)
 
         vmSkills.getAllSkillsVM().observe(viewLifecycleOwner) {
-            if(!it.isNullOrEmpty()){
+            if (!it.isNullOrEmpty()) {
                 skills = it
                 if (skills.isEmpty()) {
                     emptyView.visibility = View.VISIBLE
@@ -59,13 +59,14 @@ class SkillsFragment : Fragment() {
                     homepageLogo.visibility = View.GONE
                     skillsRV = view.findViewById(R.id.SkillsList)
                     skillsRV.layoutManager = LinearLayoutManager(this.context)
-                    vmSkills.filtered.observe(viewLifecycleOwner){
-                        if(!it){
+                    vmSkills.filtered.observe(viewLifecycleOwner) {
+                        if (!it) {
                             localSkills = skills.keys.toMutableList()
                             advs = skills.values.toMutableList()
-                            skillsRV.adapter = SkillsAdapter(localSkills,advs)
-                        }else {
-                            skillsRV.adapter = SkillsAdapter(vmSkills.filteredSkills, vmSkills.filteredAdvs)
+                            skillsRV.adapter = SkillsAdapter(localSkills, advs)
+                        } else {
+                            skillsRV.adapter =
+                                SkillsAdapter(vmSkills.filteredSkills, vmSkills.filteredAdvs)
                         }
                     }
                 }
@@ -74,37 +75,40 @@ class SkillsFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.homepage_menu, menu)
-        // Associate searchable configuration with the SearchView
-        val searchManager = requireContext().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        val search = menu.findItem(R.id.search).actionView as SearchView
-        search.isIconifiedByDefault = false
-        search.setSearchableInfo(searchManager.getSearchableInfo(activity?.componentName))
-        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(p0: String?): Boolean {
-                return true
-            }
-
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onQueryTextChange(newText: String?): Boolean {
-                val local = skills
-                val together = local.map { it.key + ":" + it.value.relatedAdvs }
-                //gets the filtered list based on user entered text in search box
-                val filteredList = newText?.let { filter(together, it) }
-                localSkills = mutableListOf()
-                advs = mutableListOf()
-                filteredList?.forEach {
-                    val splitted = it.split(":")
-                    localSkills.add(splitted[0])
-                    advs.add(Skills(splitted[1]))
+        if (skills.isNotEmpty()) {
+            inflater.inflate(R.menu.homepage_menu, menu)
+            // Associate searchable configuration with the SearchView
+            val searchManager =
+                requireContext().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+            val search = menu.findItem(R.id.search).actionView as SearchView
+            search.isIconifiedByDefault = false
+            search.setSearchableInfo(searchManager.getSearchableInfo(activity?.componentName))
+            search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(p0: String?): Boolean {
+                    return true
                 }
-                skillsRV.adapter = SkillsAdapter(localSkills, advs)
-                skillsRV.adapter?.notifyDataSetChanged()
-                return true
-            }
 
-        })
-        return super.onCreateOptionsMenu(menu, inflater)
+                @SuppressLint("NotifyDataSetChanged")
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    val local = skills
+                    val together = local.map { it.key + ":" + it.value.relatedAdvs }
+                    //gets the filtered list based on user entered text in search box
+                    val filteredList = newText?.let { filter(together, it) }
+                    localSkills = mutableListOf()
+                    advs = mutableListOf()
+                    filteredList?.forEach {
+                        val splitted = it.split(":")
+                        localSkills.add(splitted[0])
+                        advs.add(Skills(splitted[1]))
+                    }
+                    skillsRV.adapter = SkillsAdapter(localSkills, advs)
+                    skillsRV.adapter?.notifyDataSetChanged()
+                    return true
+                }
+
+            })
+            return super.onCreateOptionsMenu(menu, inflater)
+        }
     }
 
     // filters the existing list that's provided to the List Adapter
@@ -136,7 +140,8 @@ class SkillsFragment : Fragment() {
                             R.id.popularity -> {
                                 sortByPopularity()
                                 vmSkills.filtered.value = true
-                                skillsRV.adapter = SkillsAdapter(vmSkills.filteredSkills, vmSkills.filteredAdvs)
+                                skillsRV.adapter =
+                                    SkillsAdapter(vmSkills.filteredSkills, vmSkills.filteredAdvs)
                                 skillsRV.adapter?.notifyDataSetChanged()
                                 true
                             }
@@ -164,7 +169,8 @@ class SkillsFragment : Fragment() {
         val together = local.map {
             it.key + ":" + it.value.relatedAdvs
         }
-        val sorted = together.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.split(":")[0] })
+        val sorted =
+            together.sortedWith(compareBy(String.CASE_INSENSITIVE_ORDER) { it.split(":")[0] })
         localSkills = mutableListOf()
         advs = mutableListOf()
         sorted.forEach {

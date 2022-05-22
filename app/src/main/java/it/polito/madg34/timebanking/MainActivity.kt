@@ -131,6 +131,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_listSkills -> {
                     if (navController.currentDestination?.id != navController.graph[R.id.skillsFragment].id) {
                         vmSkills.loadAllSkills()
+                        vmSkills.currentSkillAdvs.value = vmSkills.currentSkillAdvs.value
                         navController.navigate(R.id.skillsFragment)
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
@@ -155,6 +156,14 @@ class MainActivity : AppCompatActivity() {
             if (vmTimeSlot.currentUserAdvs.value?.size == 0 && navController.currentDestination?.id == navController.graph[R.id.timeSlotListFragment].id) {
                 // Dirty way, trigger reacreation of fragment to show empty message
                 navController.navigate(R.id.timeSlotListFragment)
+            }
+        }
+
+        vmSkills.getAllSkillsVM().observe(this){
+            Log.d("HOME", it.toString())
+            if(it.isEmpty() &&  navController.currentDestination?.id == navController.graph[R.id.skillsFragment].id){
+                // Dirty way, trigger reacreation of fragment to show empty message
+                navController.navigate(R.id.skillsFragment)
             }
         }
     }

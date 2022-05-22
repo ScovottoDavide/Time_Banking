@@ -55,9 +55,9 @@ class FirestoreRepository {
                                 // Skill deleted
                                 if(!value.skills.keys.contains(s)){
                                     removeAdvSkillFromProfile(s)
-                                } else if (s != value.skills.keys.elementAt(index) ){ // Skill name modified
+                                } /*else if (s != value.skills.keys.elementAt(index) ){ // Skill name modified
                                     removeAdvSkillFromProfile(s)
-                                }
+                                }*/
                             }
                         }
                     }
