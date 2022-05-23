@@ -65,15 +65,26 @@ class EditSkillFragment : Fragment() {
                     //PASSARE ARGOMENTI
                     if (fromSave || fromCancel) {
                         if (tv.text.toString().isNotEmpty()) {
-                            if (tv.text.toString() != _skillName) {
+                            val t = tv.text.mapIndexed { index, c ->
+                                if (index==0) {
+                                    c.uppercaseChar()
+                                }
+                                else {
+                                    c.lowercaseChar()
+                                }
+                            }
+                            var sNew = t.joinToString("")
+                            if(sNew.last() == ' ')
+                                sNew = sNew.dropLast(1)
+                            if (sNew != _skillName) {
                                 profile.skills?.remove(_skillName)
                                 if (editDesc.text.toString() != "")
                                     profile.skills?.set(
-                                        tv.text.toString(),
+                                        sNew,
                                         editDesc.text.toString()
                                     )
                                 else
-                                    profile.skills?.set(tv.text.toString(), "No Description")
+                                    profile.skills?.set(sNew, "No Description")
                             } else {
                                 if (editDesc.text.toString() != "")
                                     profile.skills?.replace(
@@ -93,7 +104,7 @@ class EditSkillFragment : Fragment() {
                                 isEnabled = false
                                 requireActivity().onBackPressed()
                             }
-                            if (profile.skills?.get(tv.text.toString()) == null)
+                            if (profile.skills?.get(sNew) == null)
                                 Snackbar.make(
                                     view,
                                     "Skill successfully removed!",
