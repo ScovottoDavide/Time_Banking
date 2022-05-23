@@ -39,9 +39,16 @@ class AddSkillFragment: Fragment() {
                 override fun handleOnBackPressed() {
                     if(skillName.text.isNotEmpty()){
                         val t = skillName.text.mapIndexed { index, c ->
-                            if (index==0)c.uppercaseChar() else c.lowercaseChar()
+                            if (index==0) {
+                                c.uppercaseChar()
+                            }
+                            else {
+                                c.lowercaseChar()
+                            }
                         }
-                        val sNew = t.joinToString("")
+                        var sNew = t.joinToString("")
+                        if(sNew.last() == ' ')
+                            sNew = sNew.dropLast(1)
                         if(skillDesc.text.isEmpty())
                             item?.skills?.set(sNew, "No description")
                         else
