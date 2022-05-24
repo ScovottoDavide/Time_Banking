@@ -55,8 +55,9 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         img_view = view.findViewById(R.id.userImg)
 
 
-        if(vm.clickedEmail.value != FirestoreRepository.currentUser.email){
-           vm.clickedEmail.observe(viewLifecycleOwner){
+        if (vm.clickedEmail.value != FirestoreRepository.currentUser.email && (vm.clickedEmail.value?.isNotEmpty() == true)) {
+            Log.d("EMAIL", vm.clickedEmail.value.toString() + " : " + FirestoreRepository.currentUser.email)
+            vm.clickedEmail.observe(viewLifecycleOwner) {
                 if (it == null)
                     Toast.makeText(context, "Firebase Failure!", Toast.LENGTH_LONG).show()
                 else {
@@ -66,7 +67,7 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
                     }
                 }
             }
-        }else{
+        } else {
             vm.getDBUser().observe(viewLifecycleOwner) {
                 if (it == null)
                     Toast.makeText(context, "Firebase Failure!", Toast.LENGTH_LONG).show()
@@ -98,10 +99,12 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         val imgProfile = header?.findViewById<CircleImageView>(R.id.nav_header_userImg)
         if (!profile!!.img.isNullOrEmpty()) {
             //img_view.setImageURI(Uri.parse(profile!!.img))
-            Glide.with(this).load(profile!!.img).diskCacheStrategy( DiskCacheStrategy.ALL ).dontTransform().into(img_view)
-            Glide.with(this).load(profile!!.img).diskCacheStrategy( DiskCacheStrategy.ALL ).dontTransform().into(imgProfile!!)
+            Glide.with(this).load(profile!!.img).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontTransform().into(img_view)
+            Glide.with(this).load(profile!!.img).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontTransform().into(imgProfile!!)
             //imgProfile?.setImageDrawable(img_view.drawable)
-        }else {
+        } else {
             img_view.setImageDrawable(resources.getDrawable(R.drawable.user_icon))
         }
 
@@ -220,7 +223,7 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        if(vm.clickedEmail.value == FirestoreRepository.currentUser.email ){
+        if (vm.clickedEmail.value == FirestoreRepository.currentUser.email) {
             inflater.inflate(R.menu.pencil_menu, menu)
         }
         super.onCreateOptionsMenu(menu, inflater)

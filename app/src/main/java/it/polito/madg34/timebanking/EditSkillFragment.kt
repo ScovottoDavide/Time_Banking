@@ -121,18 +121,20 @@ class EditSkillFragment : Fragment() {
                                 .show()
                         }
                     } else {
-                        AlertDialog.Builder(requireContext())
-                            .setTitle("Warning")
-                            .setMessage("Do you want to discard the changes?")
-                            .setPositiveButton("Yes") { _, _ ->
-                                if (isEnabled) {
-                                    isEnabled = false
-                                    requireActivity().onBackPressed()
+                        if(!vm.needRegistration){
+                            AlertDialog.Builder(requireContext())
+                                .setTitle("Warning")
+                                .setMessage("Do you want to discard the changes?")
+                                .setPositiveButton("Yes") { _, _ ->
+                                    if (isEnabled) {
+                                        isEnabled = false
+                                        requireActivity().onBackPressed()
+                                    }
                                 }
-                            }
-                            .setNegativeButton("No") { _, _ ->
-                            }
-                            .show()
+                                .setNegativeButton("No") { _, _ ->
+                                }
+                                .show()
+                        }
                     }
                 }
             })
@@ -154,28 +156,41 @@ class EditSkillFragment : Fragment() {
                 true
             }
             R.id.cancel -> {
-                AlertDialog.Builder(requireContext())
-                    .setTitle("Warning")
-                    .setMessage(
-                        "You have modified the skill name. This will cause" +
-                                "the deletion of all the advertisement related to this skill." +
-                                "Do you want to continue?"
-                    )
-                    .setPositiveButton("Yes") { _, _ ->
-                        val profile = vm.localProfile
-                        profile?.skills?.remove(tv.text.toString())
-                        vm.modifyUserProfile(profile!!)
-                        Snackbar.make(
-                            requireView(),
-                            "Skill successfully removed!",
-                            Snackbar.LENGTH_LONG
-                        ).show()
-                        fromCancel = true
-                        requireActivity().onBackPressed()
-                    }
-                    .setNegativeButton("No") { _, _ ->
-                    }
-                    .show()
+                if(!vm.needRegistration){
+                    AlertDialog.Builder(requireContext())
+                        .setTitle("Warning")
+                        .setMessage(
+                            "You have modified the skill name. This will cause" +
+                                    "the deletion of all the advertisement related to this skill." +
+                                    "Do you want to continue?"
+                        )
+                        .setPositiveButton("Yes") { _, _ ->
+                            val profile = vm.localProfile
+                            profile?.skills?.remove(tv.text.toString())
+                            vm.modifyUserProfile(profile!!)
+                            Snackbar.make(
+                                requireView(),
+                                "Skill successfully removed!",
+                                Snackbar.LENGTH_LONG
+                            ).show()
+                            fromCancel = true
+                            requireActivity().onBackPressed()
+                        }
+                        .setNegativeButton("No") { _, _ ->
+                        }
+                        .show()
+                }else {
+                    val profile = vm.localProfile
+                    profile?.skills?.remove(tv.text.toString())
+                    vm.modifyUserProfile(profile!!)
+                    Snackbar.make(
+                        requireView(),
+                        "Skill successfully removed!",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                    fromCancel = true
+                    requireActivity().onBackPressed()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -192,19 +207,22 @@ class EditSkillFragment : Fragment() {
     }
 
     private fun warningPopup() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Warning")
-            .setMessage(
-                "You have modified the skill name. This will cause" +
-                        "the deletion of all the advertisement related to this skill." +
-                        "Do you want to continue?"
-            )
-            .setPositiveButton("Yes") { _, _ ->
-                if (fromSave)
-                    requireActivity().onBackPressed()
-            }
-            .setNegativeButton("No") { _, _ ->
-            }
-            .show()
+        if(!vm.needRegistration){
+            AlertDialog.Builder(requireContext())
+                .setTitle("Warning")
+                .setMessage(
+                    "You have modified the skill name. This will cause" +
+                            "the deletion of all the advertisement related to this skill." +
+                            "Do you want to continue?"
+                )
+                .setPositiveButton("Yes") { _, _ ->
+                    if (fromSave)
+                        requireActivity().onBackPressed()
+                }
+                .setNegativeButton("No") { _, _ ->
+                }
+                .show()
+        }else if (fromSave)
+                requireActivity().onBackPressed()
     }
 }

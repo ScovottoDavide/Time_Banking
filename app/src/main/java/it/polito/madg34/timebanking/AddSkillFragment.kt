@@ -1,14 +1,17 @@
 package it.polito.madg34.timebanking
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Editable
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.navGraphViewModels
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
@@ -16,6 +19,9 @@ import com.google.android.material.snackbar.Snackbar
 class AddSkillFragment: Fragment() {
     val vm : ProfileViewModel by activityViewModels()
 
+    lateinit var skillName : EditText
+    lateinit var skillDesc : EditText
+    lateinit var item : ProfileUser
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.addskillfragment_layout, container, false)
         setHasOptionsMenu(true)
@@ -25,10 +31,10 @@ class AddSkillFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val item : ProfileUser? = vm.localProfile
+        item  = vm.localProfile!!
 
-        val skillName = view.findViewById<EditText>(R.id.skillName)
-        val skillDesc = view.findViewById<EditText>(R.id.skillDescription)
+        skillName = view.findViewById(R.id.skillName)
+        skillDesc = view.findViewById(R.id.skillDescription)
 
         skillName.hint = "New skill name ..."
         skillDesc.hint = "New skill description ..."
@@ -87,5 +93,30 @@ class AddSkillFragment: Fragment() {
 
         val manager: InputMethodManager = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromWindow(v?.windowToken, 0)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        closeKeyboard()
+        updateSKill()
+    }
+
+    private fun updateSKill() {
+        if (skillName.text.isNotEmpty()) {
+            val t = skillName.text.mapIndexed { index, c ->
+                if (index == 0) {
+                    c.uppercaseChar()
+                } else {
+                    c.lowercaseChar()
+                }
+            }
+            var sNew = t.joinToString("")
+            if (sNew.last() == ' ')
+                sNew = sNew.dropLast(1)
+            if (skillDesc.text.isEmpty())
+                item?.skills?.set(sNew, "No description")
+            else
+                item?.skills?.set(sNew, skillDesc.text.toString())
+        }
     }
 }

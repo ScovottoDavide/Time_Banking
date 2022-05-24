@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -71,8 +70,11 @@ class EditProfileFragment : Fragment() {
         setHasOptionsMenu(true)
 
         // Disable the navigation icon
-        if (vm.needRegistration)
+        if (vm.needRegistration){
+            (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
             (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        }
+
 
 
         item = vm.localProfile!!
@@ -222,7 +224,7 @@ class EditProfileFragment : Fragment() {
                             && !item.location.isNullOrEmpty() && !item.aboutUser.isNullOrEmpty()
                         ) {
                             vm.checkNicknameVM(item.nickname.toString()).addOnSuccessListener {
-                                if (!vm.nicknameOk  && vm.profile.value?.nickname != item.nickname) {
+                                if (!vm.nicknameOk && vm.profile.value?.nickname != item.nickname) {
                                     MaterialAlertDialogBuilder(requireContext())
                                         .setTitle("WARNING")
                                         .setMessage("Nickname already usedby another user. Please provide another nickname!")
@@ -241,6 +243,11 @@ class EditProfileFragment : Fragment() {
                                             Snackbar.LENGTH_LONG
                                         ).show()
                                         vm.listenerNavigation = null
+                                        val intent = Intent(
+                                            activity,
+                                            MainActivity::class.java
+                                        )
+                                        startActivity(intent)
                                     } else
                                         Snackbar.make(
                                             view,
@@ -254,13 +261,10 @@ class EditProfileFragment : Fragment() {
                                     }
                                 }
                             }
-                        } else
-                            Snackbar.make(
-                                view,
-                                "Profile must be complete",
-                                Snackbar.LENGTH_SHORT
-                            )
-                                .show()
+                        } else{
+                            Snackbar.make(view, "Profile must be complete", Snackbar.LENGTH_SHORT).show()
+                            vm.needRegistration = true
+                        }
                     }
                 }
 
@@ -448,9 +452,10 @@ class EditProfileFragment : Fragment() {
         return when (item.itemId) {
             R.id.save -> {
                 closeKeyboard()
-                if (isRegistration) {
-                    (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                if (vm.needRegistration) {
+                    //(activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
                     vm.needRegistration = false
+                    isRegistration = true
                     requireActivity().onBackPressed()
                 } else {
                     updateProfile()
@@ -530,84 +535,84 @@ class EditProfileFragment : Fragment() {
     }
 
 
-        private fun uploadImage() {
-            // Create a storage reference from our app
-            if (vm.currentPhotoPath.isEmpty()) {
-                return saveValues()
-            }
-            val storageRef =
-                FirebaseStorage.getInstance()
-                    .getReferenceFromUrl("gs://time-banking-g34.appspot.com")
-            val file = Uri.fromFile(File(vm.currentPhotoPath))
-            val profileImageRef =
-                storageRef.child("images/${FirestoreRepository.currentUser.email.toString()}.jpg")
-            val uploadTask = profileImageRef.putFile(file)
+    private fun uploadImage() {
+        // Create a storage reference from our app
+        if (vm.currentPhotoPath.isEmpty()) {
+            return saveValues()
+        }
+        val storageRef =
+            FirebaseStorage.getInstance()
+                .getReferenceFromUrl("gs://time-banking-g34.appspot.com")
+        val file = Uri.fromFile(File(vm.currentPhotoPath))
+        val profileImageRef =
+            storageRef.child("images/${FirestoreRepository.currentUser.email.toString()}.jpg")
+        val uploadTask = profileImageRef.putFile(file)
 
-            uploadTask.addOnCompleteListener {
-                if (it.isSuccessful) {
-                    profileImageRef.downloadUrl.addOnSuccessListener { downloaded ->
-                        item.img = downloaded.toString()
-                        saveValues()
-                    }
-                } else {
-                    if (!isFromBack)
-                        Toast.makeText(context, "Failed saving profile photo!", Toast.LENGTH_SHORT)
-                            .show()
+        uploadTask.addOnCompleteListener {
+            if (it.isSuccessful) {
+                profileImageRef.downloadUrl.addOnSuccessListener { downloaded ->
+                    item.img = downloaded.toString()
                     saveValues()
                 }
-                vm.currentPhotoPath = ""
+            } else {
+                if (!isFromBack)
+                    Toast.makeText(context, "Failed saving profile photo!", Toast.LENGTH_SHORT)
+                        .show()
+                saveValues()
             }
-        }
-
-        override fun onPause() {
-            super.onPause()
-            closeKeyboard()
-            updateProfile()
-        }
-
-        private fun closeKeyboard() {
-            // this will give us the view which is currently focus in this layout
-            val v: View? = this.view?.findFocus()
-
-            val manager: InputMethodManager =
-                context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            manager.hideSoftInputFromWindow(v?.windowToken, 0)
-        }
-
-        /*
-           Function to perform the logout and to return to the Auth Activity
-       */
-        private fun logOut() {
-            MaterialAlertDialogBuilder(requireContext())
-                .setTitle("Log out")
-                .setMessage("Do you want to log out from the Time Earn app?")
-                .setPositiveButton("Yes") { _, _ ->
-                    val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.web_client_id))
-                        .requestEmail()
-                        .build()
-
-                    // Sign out from Google
-                    GoogleSignIn.getClient(requireActivity(), gso).signOut()
-                        .addOnCompleteListener(requireActivity()) {
-                            if (it.isSuccessful) {
-                                // Sign out from Firebase
-                                Firebase.auth.signOut()
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Successfully logged out!",
-                                    Toast.LENGTH_SHORT
-                                )
-                                    .show()
-                                startActivity(Intent(requireContext(), AuthActivity::class.java))
-                                requireActivity().finish()
-                            }
-                        }
-                }
-                .setNegativeButton("No") { _, _ ->
-                }
-                .show()
+            vm.currentPhotoPath = ""
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        closeKeyboard()
+        updateProfile()
+    }
+
+    private fun closeKeyboard() {
+        // this will give us the view which is currently focus in this layout
+        val v: View? = this.view?.findFocus()
+
+        val manager: InputMethodManager =
+            context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(v?.windowToken, 0)
+    }
+
+    /*
+       Function to perform the logout and to return to the Auth Activity
+   */
+    private fun logOut() {
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle("Log out")
+            .setMessage("Do you want to log out from the Time Earn app?")
+            .setPositiveButton("Yes") { _, _ ->
+                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.web_client_id))
+                    .requestEmail()
+                    .build()
+
+                // Sign out from Google
+                GoogleSignIn.getClient(requireActivity(), gso).signOut()
+                    .addOnCompleteListener(requireActivity()) {
+                        if (it.isSuccessful) {
+                            // Sign out from Firebase
+                            Firebase.auth.signOut()
+                            Toast.makeText(
+                                requireContext(),
+                                "Successfully logged out!",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                            startActivity(Intent(requireContext(), AuthActivity::class.java))
+                            requireActivity().finish()
+                        }
+                    }
+            }
+            .setNegativeButton("No") { _, _ ->
+            }
+            .show()
+    }
+}
 
 

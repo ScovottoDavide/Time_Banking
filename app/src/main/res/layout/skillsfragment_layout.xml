@@ -78,6 +78,7 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="16sp"
         android:textStyle="italic"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titlleEditService5" />
@@ -88,6 +89,7 @@
         android:layout_height="120dp"
         android:layout_marginEnd="48dp"
         android:layout_marginBottom="84dp"
+        android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/emptyListTV"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/time_management" />
@@ -101,6 +103,7 @@
         android:text="TimeEarn"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@color/Brown"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView"
         app:layout_constraintHorizontal_bias="0.661"
@@ -115,6 +118,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:visibility="invisible"
         app:boxStrokeColor="@color/Goldenrod"
         app:boxStrokeWidth="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
