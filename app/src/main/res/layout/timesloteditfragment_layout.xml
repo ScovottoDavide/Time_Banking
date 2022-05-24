@@ -132,7 +132,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="#757575"
-                        android:enabled="false"
+                        android:editable="false"
+                        android:focusableInTouchMode="false"
                         tools:ignore="DuplicateSpeakableTextCheck,TextContrastCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -152,7 +153,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="#757575"
-                        android:enabled="false"
+                        android:editable="false"
+                        android:focusableInTouchMode="false"
                         tools:ignore="TextContrastCheck" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -173,7 +175,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#757575"
-                    android:enabled="false"
+                    android:editable="false"
+                    android:focusableInTouchMode="false"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>

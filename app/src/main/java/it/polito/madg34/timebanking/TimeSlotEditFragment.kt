@@ -1,8 +1,6 @@
 package it.polito.madg34.timebanking
 
 import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
@@ -13,8 +11,6 @@ import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -23,17 +19,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
-import org.w3c.dom.Text
 import java.text.SimpleDateFormat
-import java.time.Duration
-import java.time.LocalDate
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
-import java.time.temporal.TemporalAccessor
 import java.util.*
-import kotlin.math.min
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
+
 
 class TimeSlotEditFragment : Fragment() {
 
@@ -46,10 +34,10 @@ class TimeSlotEditFragment : Fragment() {
 
     private lateinit var title: TextInputEditText
     private lateinit var description: TextInputEditText
-    private lateinit var duration: TextInputLayout
+    private lateinit var duration: TextInputEditText
     private lateinit var location: TextInputEditText
-    private lateinit var date: TextInputLayout
-    private lateinit var time: TextInputLayout
+    private lateinit var date: TextInputEditText
+    private lateinit var time: TextInputEditText
     private lateinit var email: TextInputEditText
     private lateinit var menuSkills: TextInputLayout
     private lateinit var item: TimeSlot
@@ -75,10 +63,10 @@ class TimeSlotEditFragment : Fragment() {
         halfWidth(view)
         title = view.findViewById(R.id.outlinedTitleFixed)
         description = view.findViewById(R.id.outlinedDescriptionFixed)
-        duration = view.findViewById(R.id.outlinedDuration)
+        duration = view.findViewById(R.id.outlinedDurationFixed)
         location = view.findViewById(R.id.outlinedLocationFixed)
-        date = view.findViewById(R.id.outlinedDate)
-        time = view.findViewById(R.id.outlinedTime)
+        date = view.findViewById(R.id.outlinedDateFixed)
+        time = view.findViewById(R.id.outlinedTimeFixed)
         email = view.findViewById(R.id.outlinedMailFixed)
         menuSkills = view.findViewById(R.id.menuSkills)
 
@@ -120,21 +108,22 @@ class TimeSlotEditFragment : Fragment() {
             .setTitleText("Select Service duration")
             .build()
 
-        date.setStartIconOnClickListener {
+        date.setOnClickListener {
             datePicker.show(this.parentFragmentManager, "")
             datePicker.addOnPositiveButtonClickListener {
                 val utc = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
                 utc.timeInMillis = it
                 val format = SimpleDateFormat("dd-MM-yyyy", Locale.ITALY)
                 val formatted: String = format.format(utc.time)
-                date.editText?.setText(formatted)
+                Log.d("DATE", formatted)
+                date.setText(formatted)
             }
         }
 
-        time.setStartIconOnClickListener {
+        time.setOnClickListener {
             timePicker.show(this.parentFragmentManager, "")
             timePicker.addOnPositiveButtonClickListener {
-                time.editText?.setText(
+                time.setText(
                     String.format(
                         "%02d:%02d",
                         timePicker.hour,
@@ -144,10 +133,10 @@ class TimeSlotEditFragment : Fragment() {
             }
         }
 
-        duration.setStartIconOnClickListener {
+        duration.setOnClickListener {
             durationPicker.show(this.parentFragmentManager, "")
             durationPicker.addOnPositiveButtonClickListener {
-                duration.editText?.setText(
+                duration.setText(
                     String.format(
                         "%d hours and %d minutes",
                         durationPicker.hour,
@@ -159,9 +148,9 @@ class TimeSlotEditFragment : Fragment() {
 
         title.setText(item.title)
         description.setText(item.description)
-        date.editText?.setText(item.date)
-        time.editText?.setText(item.time)
-        duration.editText?.setText(item.duration)
+        date.setText(item.date)
+        time.setText(item.time)
+        duration.setText(item.duration)
         location.setText(item.location)
         email.setText(FirestoreRepository.currentUser.email)
 
@@ -171,11 +160,11 @@ class TimeSlotEditFragment : Fragment() {
         val adapter = ArrayAdapter(requireContext(), R.layout.list_skills, skills)
         (menuSkills.editText as? AutoCompleteTextView)?.setAdapter(adapter)
 
-        if(item.related_skill.isNotEmpty()) {
+        if (item.related_skill.isNotEmpty()) {
             menuSkills.editText?.setText(item.related_skill)
             menuSkills.editText?.isEnabled = false
             menuSkills.isEndIconVisible = false
-        }else{
+        } else {
             menuSkills.editText?.hint = getString(R.string.menu_skills)
         }
 
@@ -195,9 +184,9 @@ class TimeSlotEditFragment : Fragment() {
                             .show()
                     } else {
                         if (title.text.toString().isEmpty() || description.text.toString()
-                                .isEmpty() || date.editText?.text.toString().isEmpty()
-                            || time.editText?.text.toString()
-                                .isEmpty() || duration.editText?.text.toString()
+                                .isEmpty() || date.text.toString().isEmpty()
+                            || time.text.toString()
+                                .isEmpty() || duration.text.toString()
                                 .isEmpty() || location.text.toString().isEmpty()
                             || menuSkills.editText?.text.isNullOrEmpty()
                         )
@@ -211,9 +200,9 @@ class TimeSlotEditFragment : Fragment() {
                                 vm.currentUserAdvs.value?.get(index).also {
                                     it?.title = title.text.toString()
                                     it?.description = description.text.toString()
-                                    it?.date = date.editText?.text.toString()
-                                    it?.time = time.editText?.text.toString()
-                                    it?.duration = duration.editText?.text.toString()
+                                    it?.date = date.text.toString()
+                                    it?.time = time.text.toString()
+                                    it?.duration = duration.text.toString()
                                     it?.location = location.text.toString()
                                     it?.related_skill = menuSkills.editText?.text.toString()
                                     //it?.index = vm.currentUserAdvs.value?.size!!
@@ -228,9 +217,9 @@ class TimeSlotEditFragment : Fragment() {
                             } else if (index == -1) {
                                 item.title = title.text.toString()
                                 item.description = description.text.toString()
-                                item.date = date.editText?.text.toString()
-                                item.time = time.editText?.text.toString()
-                                item.duration = duration.editText?.text.toString()
+                                item.date = date.text.toString()
+                                item.time = time.text.toString()
+                                item.duration = duration.text.toString()
                                 item.location = location.text.toString()
                                 item.published_by = email.text.toString()
                                 item.related_skill = menuSkills.editText?.text.toString()
@@ -244,9 +233,9 @@ class TimeSlotEditFragment : Fragment() {
                             } else {
                                 item.title = title.text.toString()
                                 item.description = description.text.toString()
-                                item.date = date.editText?.text.toString()
-                                item.time = time.editText?.text.toString()
-                                item.duration = duration.editText?.text.toString()
+                                item.date = date.text.toString()
+                                item.time = time.text.toString()
+                                item.duration = duration.text.toString()
                                 item.location = location.text.toString()
                                 item.published_by = email.text.toString()
                                 item.related_skill = menuSkills.editText?.text.toString()
@@ -328,4 +317,5 @@ class TimeSlotEditFragment : Fragment() {
             context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromWindow(v?.windowToken, 0)
     }
+
 }
