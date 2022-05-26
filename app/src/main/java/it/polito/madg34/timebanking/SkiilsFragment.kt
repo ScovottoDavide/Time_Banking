@@ -7,12 +7,16 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.core.graphics.red
+import androidx.core.graphics.toColor
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.selects.select
 
 class SkillsFragment : Fragment() {
 
@@ -122,22 +126,25 @@ class SkillsFragment : Fragment() {
         return filteredList
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "ResourceAsColor")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.filter -> {
                 val popupMenu = PopupMenu(context, view?.findViewById(R.id.anchor))
                 popupMenu.menuInflater.inflate(R.menu.filter_menu, popupMenu.menu)
+                watchFilterMenu(popupMenu.menu)
                 popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
                     if (item != null) {
                         when (item.itemId) {
                             R.id.sort -> {
+                                vmSkills.selection.value = item.itemId
                                 sortByName()
                                 vmSkills.filtered.value = true
                                 skillsRV.adapter?.notifyDataSetChanged()
                                 true
                             }
                             R.id.popularity -> {
+                                vmSkills.selection.value = item.itemId
                                 sortByPopularity()
                                 vmSkills.filtered.value = true
                                 skillsRV.adapter =
@@ -146,6 +153,7 @@ class SkillsFragment : Fragment() {
                                 true
                             }
                             R.id.nothing -> {
+                                vmSkills.selection.value = item.itemId
                                 vmSkills.filtered.value = false
                                 true
                             }
@@ -199,5 +207,24 @@ class SkillsFragment : Fragment() {
         }
         vmSkills.filteredSkills = localSkills
         vmSkills.filteredAdvs = advs
+    }
+
+    private fun watchFilterMenu(menu : Menu){
+        vmSkills.selection.observe(viewLifecycleOwner){
+            when(it){
+                R.id.sort -> {
+                    val menuItem = menu.findItem(R.id.sort)
+                    menuItem.isChecked = true
+                }
+                R.id.popularity -> {
+                    val menuItem = menu.findItem(R.id.popularity)
+                    menuItem.isChecked = true
+                }
+                R.id.nothing -> {
+                    val menuItem = menu.findItem(R.id.nothing)
+                    menuItem.isChecked = true
+                }
+            }
+        }
     }
 }

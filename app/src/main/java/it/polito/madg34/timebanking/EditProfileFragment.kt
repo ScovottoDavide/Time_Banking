@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -31,6 +32,8 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -53,11 +56,11 @@ class EditProfileFragment : Fragment() {
     var isRegistration = false
     var isFromBack = false
 
-    lateinit var fullName: EditText
-    lateinit var nickname: EditText
-    lateinit var email: EditText
-    lateinit var location: EditText
-    lateinit var userDesc: EditText
+    lateinit var fullName: TextInputEditText
+    lateinit var nickname: TextInputEditText
+    lateinit var email: TextInputEditText
+    lateinit var location: TextInputEditText
+    lateinit var userDesc: TextInputEditText
     lateinit var userImage: CircleImageView
 
 
@@ -75,19 +78,17 @@ class EditProfileFragment : Fragment() {
             (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
 
-
-
         item = vm.localProfile!!
 
         if (item.email.isNullOrEmpty()) {
             isRegistration = true
         }
 
-        fullName = view.findViewById(R.id.editTextTextPersonName)
-        nickname = view.findViewById(R.id.editTextTextPersonName3)
-        email = view.findViewById(R.id.editTextTextEmailAddress)
-        location = view.findViewById(R.id.editTextLocation)
-        userDesc = view.findViewById(R.id.userDesc)
+        fullName = view.findViewById(R.id.outlinedFullnameFixed)
+        nickname = view.findViewById(R.id.outlinedNickNameFixed)
+        email = view.findViewById(R.id.outlinedEmailFixed)
+        location = view.findViewById(R.id.outlinedLocationFixed)
+        userDesc = view.findViewById(R.id.outlinedAboutmeFixed)
         userImage = view.findViewById(R.id.userImage)
 
         val buttonPopup = view.findViewById<ImageButton>(R.id.plus)
@@ -262,6 +263,7 @@ class EditProfileFragment : Fragment() {
                                 }
                             }
                         } else{
+                            formCheck()
                             Snackbar.make(view, "Profile must be complete", Snackbar.LENGTH_SHORT).show()
                             vm.needRegistration = true
                         }
@@ -470,8 +472,8 @@ class EditProfileFragment : Fragment() {
     }
 
     private fun updateProfile() {
-        if (fullName.text.isNotEmpty() || nickname.text.isNotEmpty() || location.text.isNotEmpty()
-            || userDesc.text.isNotEmpty()
+        if (fullName.text!!.isNotEmpty() || nickname.text!!.isNotEmpty() || location.text!!.isNotEmpty()
+            || userDesc.text!!.isNotEmpty()
         ) {
             vm.localProfile = ProfileUser(
                 fullName = fullName.text.toString(),
@@ -526,6 +528,7 @@ class EditProfileFragment : Fragment() {
                 }
             }
         } else {
+            formCheck()
             Snackbar.make(
                 requireView(),
                 "Profile must be complete",
@@ -612,6 +615,28 @@ class EditProfileFragment : Fragment() {
             .setNegativeButton("No") { _, _ ->
             }
             .show()
+    }
+
+    private fun formCheck(){
+        /*if (!item.fullName.isNullOrEmpty() && !item.nickname.isNullOrEmpty()
+            && !item.location.isNullOrEmpty() && !item.aboutUser.isNullOrEmpty()
+        )*/
+        if(item.fullName.isNullOrEmpty()){
+           val outerFullName = view?.findViewById<TextInputLayout>(R.id.outlinedFullName)
+            outerFullName?.error = "Insert your full name"
+        }
+        if(item.nickname.isNullOrEmpty()){
+            val outerNickaname = view?.findViewById<TextInputLayout>(R.id.outlinedNickName)
+            outerNickaname?.error = "Insert your nickname"
+        }
+        if(item.location.isNullOrEmpty()){
+            val outerLocation = view?.findViewById<TextInputLayout>(R.id.outlinedLocation)
+            outerLocation?.error = "Insert your desired location"
+        }
+        if(item.aboutUser.isNullOrEmpty()){
+            val outerAbout = view?.findViewById<TextInputLayout>(R.id.outlinedAboutMe)
+            outerAbout?.error = "Please tell something about you"
+        }
     }
 }
 

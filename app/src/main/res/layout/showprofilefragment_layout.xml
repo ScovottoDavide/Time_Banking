@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ScrollView
         android:id="@+id/scrollViewShow"
@@ -73,26 +74,23 @@
                 android:layout_weight="2"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlinedFullName"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:fontFamily="sans-serif-black"
-                    android:text="@string/fullName"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="14sp"
-                    android:textStyle="italic" />
+                    android:hint="@string/fullName"
+                    app:boxStrokeWidth="2dp"
+                    app:startIconDrawable="@drawable/format_title">
 
-                <TextView
-                    android:id="@+id/fullName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="16sp"
-                    app:drawableStartCompat="@drawable/outline_perm_identity_24" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/outlinedFullnameFixed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:textColor="@color/Black" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
@@ -100,26 +98,24 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp" />
 
-                <TextView
-                    android:id="@+id/textNickname"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlinedNickName"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:fontFamily="sans-serif-black"
-                    android:text="@string/nickname"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="14sp"
-                    android:textStyle="italic" />
+                    android:hint="@string/nickname"
+                    app:boxStrokeWidth="2dp"
+                    app:startIconDrawable="@drawable/baseline_face_24">
 
-                <TextView
-                    android:id="@+id/nickName"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="16sp"
-                    app:drawableStartCompat="@drawable/baseline_face_24" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/outlinedNickNameFixed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#757575"
+                        android:enabled="false"
+                        tools:ignore="TextContrastCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
@@ -127,26 +123,24 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp" />
 
-                <TextView
-                    android:id="@+id/textEmail"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlinedEmail"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:fontFamily="sans-serif-black"
-                    android:text="@string/email"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="14sp"
-                    android:textStyle="italic" />
+                    android:hint="@string/email"
+                    app:boxStrokeWidth="2dp"
+                    app:startIconDrawable="@drawable/outline_email_24">
 
-                <TextView
-                    android:id="@+id/email"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="16sp"
-                    app:drawableStartCompat="@drawable/outline_email_24" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/outlinedEmailFixed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:enabled="false"
+                        android:textColor="#757575"
+                        tools:ignore="TextContrastCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
@@ -154,26 +148,24 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp" />
 
-                <TextView
-                    android:id="@+id/textLocation"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlinedLocation"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:fontFamily="sans-serif-black"
-                    android:text="@string/location"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="14sp"
-                    android:textStyle="italic" />
+                    android:hint="@string/location"
+                    app:boxStrokeWidth="2dp"
+                    app:startIconDrawable="@drawable/outline_location_on_24">
 
-                <TextView
-                    android:id="@+id/location"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="16sp"
-                    app:drawableStartCompat="@drawable/outline_location_on_24" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/outlinedLocationFixed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#757575"
+                        android:enabled="false"
+                        tools:ignore="TextContrastCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.divider.MaterialDivider
                     android:layout_width="match_parent"
@@ -181,25 +173,24 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp" />
 
-                <TextView
-                    android:id="@+id/aboutUser"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlinedAboutMe"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:fontFamily="sans-serif-black"
-                    android:text="@string/aboutMe"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="14sp"
-                    android:textStyle="italic" />
+                    android:hint="@string/aboutMe"
+                    app:boxStrokeWidth="2dp"
+                    app:startIconDrawable="?android:attr/actionModeFindDrawable">
 
-                <TextView
-                    android:id="@+id/userDesc"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:fontFamily="sans-serif-medium"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="16sp" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/outlinedAboutmeFixed"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#757575"
+                        android:enabled="false"
+                        tools:ignore="TextContrastCheck" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/materialDivider"

@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id= "@+id/sort"
         android:title="Sort by name"
+        android:checkable="true"
         app:showAsAction="always"
         />
 
     <item android:id= "@+id/date"
         android:title="Filter by date"
+        android:checkable="true"
         app:showAsAction="always"
         />
 

@@ -74,6 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:hint="@string/Title"
+                app:errorEnabled="true"
                 app:boxStrokeWidth="1dp"
                 app:startIconDrawable="@drawable/format_title">
 
@@ -92,6 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/Description"
+                app:errorEnabled="true"
                 app:startIconCheckable="false"
                 app:startIconDrawable="@drawable/text_long">
 
@@ -118,6 +120,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/Date"
                     app:startIconCheckable="true"
+                    app:errorEnabled="true"
                     app:startIconDrawable="@android:drawable/ic_menu_my_calendar"
                     app:startIconTint="@color/black">
 
@@ -138,6 +141,7 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/Time"
                     app:startIconCheckable="true"
+                    app:errorEnabled="true"
                     app:startIconDrawable="@android:drawable/ic_menu_recent_history"
                     app:startIconTint="@color/black">
 
@@ -160,6 +164,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:hint="@string/Duration"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/timer_sand">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -179,6 +184,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:hint="@string/Location"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/outline_location_on_24"
                 app:startIconTint="@color/black">
 
@@ -198,6 +204,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:hint="@string/emailHint2"
+                app:errorEnabled="true"
                 app:startIconDrawable="@drawable/outline_email_24"
                 app:startIconTint="@color/black">
 
@@ -216,7 +223,8 @@
                 style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/menu_skills">
+                android:hint="@string/menu_skills"
+                app:errorEnabled="true">
 
                 <AutoCompleteTextView
                     android:id="@+id/skillsAutocomplete"

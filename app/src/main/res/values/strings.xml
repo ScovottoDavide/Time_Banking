@@ -6,20 +6,20 @@
 
     <string name="picutureTest">Default User Picture</string>
 
-    <string name="fullName">Full Name :</string>
+    <string name="fullName">Full Name</string>
     <string name="fullNameHint">Mario Rossi</string>
 
-    <string name="nickname">Nickname :</string>
+    <string name="nickname">Nickname</string>
     <string name="nickname_hint">Draco123</string>
 
-    <string name="email">Email :</string>
+    <string name="email">Email</string>
     <string name="email_hint">mariorossi@general.it</string>
     <string name="emailHint2">Email</string>
 
-    <string name="location">Location :</string>
+    <string name="location">Location</string>
     <string name="location_hint">Corso Castelfidardo, 39, Torino TO</string>
 
-    <string name="aboutMe">About me :</string>
+    <string name="aboutMe">About me</string>
 
     <string name="skills">My skills :</string>
     <string name="menu_skills">Choose skill</string>

@@ -190,11 +190,7 @@ class TimeSlotEditFragment : Fragment() {
                                 .isEmpty() || location.text.toString().isEmpty()
                             || menuSkills.editText?.text.isNullOrEmpty()
                         )
-                            Toast.makeText(
-                                context,
-                                "Please, fill the entire form.",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            formCheck()
                         else {
                             if (index >= 0 && index <= vm.currentUserAdvs.value?.size!!) {
                                 vm.currentUserAdvs.value?.get(index).also {
@@ -316,6 +312,37 @@ class TimeSlotEditFragment : Fragment() {
         val manager: InputMethodManager =
             context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromWindow(v?.windowToken, 0)
+    }
+
+    private fun formCheck(){
+        val outerTitle : TextInputLayout = view?.findViewById(R.id.outlinedTitle)!!
+        val outerDesc : TextInputLayout = view?.findViewById(R.id.outlinedDescription)!!
+        val outerDate : TextInputLayout = view?.findViewById(R.id.outlinedDate)!!
+        val outerTime : TextInputLayout = view?.findViewById(R.id.outlinedTime)!!
+        val outerDuration : TextInputLayout = view?.findViewById(R.id.outlinedDuration)!!
+        val outerLocation : TextInputLayout = view?.findViewById(R.id.outlinedLocation)!!
+
+        if(title.text.toString().isEmpty()){
+            outerTitle.error =  "Please provide a title"
+        }else outerTitle.error = null
+        if(description.text.toString().isEmpty()){
+            outerDesc.error =  "Please provide a description"
+        }else outerDesc.error = null
+        if(date.text.toString().isEmpty()){
+            outerDate.error =  "Please choose a date"
+        }else outerDate.error = null
+        if(time.text.toString().isEmpty()){
+            outerTime.error =  "Provide time"
+        }else outerTime.error = null
+        if(duration.text.toString().isEmpty()){
+            outerDuration.error =  "Please choose the duration"
+        }else outerDuration.error = null
+        if(location.text.toString().isEmpty()){
+            outerLocation.error =  "Please provide a location"
+        }else outerLocation.error = null
+        if(menuSkills.editText?.text.isNullOrEmpty()){
+            menuSkills.error = "Please choose a skill"
+        }else menuSkills.error = null
     }
 
 }

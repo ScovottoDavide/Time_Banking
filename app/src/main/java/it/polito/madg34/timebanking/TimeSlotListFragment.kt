@@ -156,20 +156,24 @@ class TimeSlotListFragment : Fragment() {
             R.id.filter -> {
                 val popupMenu = PopupMenu(context, view?.findViewById(R.id.anchor))
                 popupMenu.menuInflater.inflate(R.menu.filter_menu_timeslotlist, popupMenu.menu)
+                watchFilterMenu(popupMenu.menu)
                 popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { item ->
                     if (item != null) {
                         when (item.itemId) {
                             R.id.sort -> {
+                                vmSkills.selection.value = item.itemId
                                 sortByTitle()
                                 vm.filtered.value = true
                                 timeSlotsRV.adapter?.notifyDataSetChanged()
                                 true
                             }
                             R.id.date -> {
+                                vmSkills.selection.value = item.itemId
                                 filterByDate()
                                 true
                             }
                             R.id.nothing -> {
+                                vmSkills.selection.value = item.itemId
                                 vm.filtered.value = false
                                 true
                             }
@@ -230,6 +234,25 @@ class TimeSlotListFragment : Fragment() {
             }
             vm.filtered.value = true
             timeSlotsRV.adapter?.notifyDataSetChanged()
+        }
+    }
+
+    private fun watchFilterMenu(menu : Menu){
+        vmSkills.selection.observe(viewLifecycleOwner){
+            when(it){
+                R.id.sort -> {
+                    val menuItem = menu.findItem(R.id.sort)
+                    menuItem.isChecked = true
+                }
+                R.id.date -> {
+                    val menuItem = menu.findItem(R.id.date)
+                    menuItem.isChecked = true
+                }
+                R.id.nothing -> {
+                    val menuItem = menu.findItem(R.id.nothing)
+                    menuItem.isChecked = true
+                }
+            }
         }
     }
 }

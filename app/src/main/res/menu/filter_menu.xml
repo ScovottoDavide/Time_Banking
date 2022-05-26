@@ -4,11 +4,14 @@
     <item android:id= "@+id/sort"
         android:title="Sort by name"
         app:showAsAction="always"
+        android:checkable="true"
+        app:actionViewClass="android.widget.TextView"
         />
 
     <item android:id= "@+id/popularity"
         android:title="Sort by popularity"
         app:showAsAction="always"
+        android:checkable="true"
         />
 
     <item android:id= "@+id/nothing"

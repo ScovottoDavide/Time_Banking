@@ -143,8 +143,16 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if (destination.id == R.id.timeSlotListFragment && vmSkills.fromHome.value!!) {
                 supportActionBar?.setHomeAsUpIndicator(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
-            } else if (destination.id == R.id.showProfileFragment && vmProfile.clickedEmail.value != FirestoreRepository.currentUser.email)
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            } else if (destination.id == R.id.showProfileFragment && vmProfile.clickedEmail.value != FirestoreRepository.currentUser.email){
                 supportActionBar?.setHomeAsUpIndicator(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            }else if(destination.id == R.id.timeSlotEditFragment || destination.id == R.id.timeSlotDetailsFragment
+                || destination.id == R.id.editProfileFragment || destination.id == R.id.editSkillFragment
+                || destination.id == R.id.addSkillFragment)
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+            else
+                drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
         }
 
         val logoutButton = findViewById<Button>(R.id.logout_btn)

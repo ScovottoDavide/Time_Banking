@@ -15,6 +15,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.textfield.TextInputEditText
 import de.hdodenhof.circleimageview.CircleImageView
 
 class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
@@ -23,11 +24,11 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     private var h = 0
     private var w = 0
 
-    lateinit var fullNameView: TextView
-    lateinit var nicknameView: TextView
-    lateinit var emailView: TextView
-    lateinit var myLocationView: TextView
-    lateinit var userDesc: TextView
+    lateinit var fullNameView: TextInputEditText
+    lateinit var nicknameView: TextInputEditText
+    lateinit var emailView: TextInputEditText
+    lateinit var myLocationView: TextInputEditText
+    lateinit var userDesc: TextInputEditText
     lateinit var img_view: CircleImageView
     private var profile: ProfileUser? = ProfileUser()
 
@@ -47,11 +48,11 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        fullNameView = view.findViewById(R.id.fullName)
-        nicknameView = view.findViewById(R.id.nickName)
-        emailView = view.findViewById(R.id.email)
-        myLocationView = view.findViewById(R.id.location)
-        userDesc = view.findViewById(R.id.userDesc)
+        fullNameView = view.findViewById(R.id.outlinedFullnameFixed)
+        nicknameView = view.findViewById(R.id.outlinedNickNameFixed)
+        emailView = view.findViewById(R.id.outlinedEmailFixed)
+        myLocationView = view.findViewById(R.id.outlinedLocationFixed)
+        userDesc = view.findViewById(R.id.outlinedAboutmeFixed)
         img_view = view.findViewById(R.id.userImg)
 
 
@@ -82,11 +83,11 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     }
 
     private fun setProfile(view: View) {
-        fullNameView.text = profile?.fullName
-        nicknameView.text = profile?.nickname
-        emailView.text = profile?.email
-        myLocationView.text = profile?.location
-        userDesc.text = profile?.aboutUser
+        fullNameView.setText(profile?.fullName)
+        nicknameView.setText(profile?.nickname)
+        emailView.setText(profile?.email)
+        myLocationView.setText(profile?.location)
+        userDesc.setText(profile?.aboutUser)
 
         val navView = activity?.findViewById<NavigationView>(R.id.nav_view)
         val header = navView?.getHeaderView(0)
