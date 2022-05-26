@@ -100,16 +100,16 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
             val location = get("LOCATION") as String
             val email = get("PUBLISHED_BY") as String
             val related_skill = get("RELATED_SKILL") as String
+            val available = get("AVAILABLE") as Long
             val index = get("INDEX") as Long
 
             TimeSlot(
                 id, title, description, date, time, duration, location, email, related_skill,
-                index.toInt()
+                index.toInt(), available.toInt()
             )
 
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("prova4", e.toString())
             null
         }
     }

@@ -81,6 +81,7 @@ class TimeSlotListFragment : Fragment() {
                 }
             } else {
                 vm.getDBTimeSlots().observe(viewLifecycleOwner) {
+                    Log.d("ADV", it.toString())
                     if (!it.isNullOrEmpty()) {
                         timeSlots = it as MutableList<TimeSlot>
                     }

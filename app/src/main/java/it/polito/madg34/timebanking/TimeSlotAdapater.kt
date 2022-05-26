@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
@@ -28,6 +29,7 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
     lateinit var vmTimeSlot: TimeSlotViewModel
     lateinit var vmSkills: SkillsViewModel
     lateinit var vmProfile: ProfileViewModel
+    lateinit var dialog : AlertDialog
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeSlotViewHolder {
         v = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
@@ -45,6 +47,14 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
                 Log.d("IMG", vmTimeSlot.userUri)
                 holder.bind(item, vmTimeSlot.userUri)
             }
+        }
+
+        val a = holder.itemView.context as AppCompatActivity
+        val b = a.supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        val navController = b.navController
+
+        if(vmSkills.viewProfilePopupOpen){
+            showPopUpDialog(holder, item, navController)
         }
 
         // Click Listener on the whole Card
@@ -89,24 +99,11 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
             }
         }
 
-        val a = holder.itemView.context as AppCompatActivity
-        val b = a.supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
-        val navController = b.navController
         val viewProfileButton: Button = holder.itemView.findViewById(R.id.profileButton)
         if (vmSkills.fromHome.value!!) {
             viewProfileButton.visibility = View.VISIBLE
             viewProfileButton.setOnClickListener {
-                AlertDialog.Builder(holder.itemView.context)
-                    .setTitle("Message")
-                    .setMessage("Do you want to visit ${item.published_by} profile? ")
-                    .setPositiveButton("Yes") { _, _ ->
-                        vmProfile.clickedEmail.value = item.published_by
-                        vmSkills.fromHome.value = true
-                        navController.navigate(R.id.action_timeSlotListFragment_to_showProfileFragment)
-                    }
-                    .setNegativeButton("No") { _, _ ->
-                    }
-                    .show()
+                showPopUpDialog(holder, item, navController)
             }
         } else
             viewProfileButton.visibility = View.INVISIBLE
@@ -114,4 +111,21 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
 
     override fun getItemCount(): Int = data.size
 
+    private fun showPopUpDialog(holder: TimeSlotViewHolder, item :TimeSlot, navController : NavController){
+        vmSkills.viewProfilePopupOpen = true
+        dialog = AlertDialog.Builder(holder.itemView.context)
+            .setTitle("Message")
+            .setMessage("Do you want to visit ${item.published_by} profile? ")
+            .setPositiveButton("Yes") { _, _ ->
+                vmProfile.clickedEmail.value = item.published_by
+                vmSkills.fromHome.value = true
+                vmSkills.viewProfilePopupOpen = false
+                navController.navigate(R.id.action_timeSlotListFragment_to_showProfileFragment)
+            }
+            .setNegativeButton("No") { _, _ ->
+                vmSkills.viewProfilePopupOpen = false
+            }
+            .show()
+        dialog.setOnDismissListener { vmSkills.viewProfilePopupOpen = false }
+    }
 }

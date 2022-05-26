@@ -46,10 +46,23 @@ class MainActivity : AppCompatActivity() {
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
 
+    private var isPopupOpenDiscard = false
+    private var isPopupOpenLogOut = false
+    lateinit var alertDialog: AlertDialog
+    lateinit var alertDialogLogOut: AlertDialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        isPopupOpenDiscard = savedInstanceState?.getBoolean("shouldShowPopup") == true
+        isPopupOpenLogOut = savedInstanceState?.getBoolean("shouldShowPopupLogOut") == true
+        if (isPopupOpenDiscard) {
+            discardChanges()
+        }
+        if (isPopupOpenLogOut) {
+            logOut()
+        }
         // Get the flag from the intent extra in order to know if the first registration is needed
         vmProfile.needRegistration = intent.getBooleanExtra("INTENT_NEED_REGISTRATION_EXTRA", false)
 
@@ -79,7 +92,7 @@ class MainActivity : AppCompatActivity() {
             } else if (navController.currentDestination?.id == navController.graph[R.id.timeSlotListFragment].id
                 && vmSkills.fromHome.value!!
             ) {
-                this.onBackPressed()
+                navController.navigate(R.id.action_timeSlotListFragment_to_skillsFragment)
             } else if (navController.currentDestination?.id == navController.graph[R.id.showProfileFragment].id
                 && vmProfile.clickedEmail.value != FirestoreRepository.currentUser.email
             ) {
@@ -144,12 +157,13 @@ class MainActivity : AppCompatActivity() {
             if (destination.id == R.id.timeSlotListFragment && vmSkills.fromHome.value!!) {
                 supportActionBar?.setHomeAsUpIndicator(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-            } else if (destination.id == R.id.showProfileFragment && vmProfile.clickedEmail.value != FirestoreRepository.currentUser.email){
+            } else if (destination.id == R.id.showProfileFragment && vmProfile.clickedEmail.value != FirestoreRepository.currentUser.email) {
                 supportActionBar?.setHomeAsUpIndicator(androidx.appcompat.R.drawable.abc_ic_ab_back_material)
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-            }else if(destination.id == R.id.timeSlotEditFragment || destination.id == R.id.timeSlotDetailsFragment
+            } else if (destination.id == R.id.timeSlotEditFragment || destination.id == R.id.timeSlotDetailsFragment
                 || destination.id == R.id.editProfileFragment || destination.id == R.id.editSkillFragment
-                || destination.id == R.id.addSkillFragment)
+                || destination.id == R.id.addSkillFragment
+            )
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             else
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -167,9 +181,9 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        vmSkills.getAllSkillsVM().observe(this){
+        vmSkills.getAllSkillsVM().observe(this) {
             Log.d("HOME", it.toString())
-            if(it.isEmpty() &&  navController.currentDestination?.id == navController.graph[R.id.skillsFragment].id){
+            if (it.isEmpty() && navController.currentDestination?.id == navController.graph[R.id.skillsFragment].id) {
                 // Dirty way, trigger reacreation of fragment to show empty message
                 navController.navigate(R.id.skillsFragment)
             }
@@ -197,7 +211,8 @@ class MainActivity : AppCompatActivity() {
         Function to perform the logout and to return to the Auth Activity
     */
     private fun logOut() {
-        MaterialAlertDialogBuilder(this)
+        isPopupOpenLogOut = true
+        alertDialogLogOut = AlertDialog.Builder(this)
             .setTitle("Log out")
             .setMessage("Do you want to log out from the Time Earn app?")
             .setPositiveButton("Yes") { _, _ ->
@@ -218,14 +233,19 @@ class MainActivity : AppCompatActivity() {
                             finish()
                         }
                     }
+                isPopupOpenLogOut = false
             }
             .setNegativeButton("No") { _, _ ->
+                isPopupOpenLogOut = false
             }
             .show()
+
+        alertDialogLogOut.setOnDismissListener { isPopupOpenLogOut = false }
     }
 
     private fun discardChanges() {
-        AlertDialog.Builder(this)
+        isPopupOpenDiscard = true
+        alertDialog = AlertDialog.Builder(this)
             .setTitle("Warning!")
             .setMessage("Do you want to discard the changes?")
             .setPositiveButton("Yes") { _, _ ->
@@ -238,11 +258,28 @@ class MainActivity : AppCompatActivity() {
                 else if (navController.currentDestination?.id == navController.graph[R.id.timeSlotEditFragment].id) {
                     navController.navigate(R.id.action_timeSlotEditFragment_to_timeSlotListFragment)
                 }
-
+                isPopupOpenDiscard = false
             }
             .setNegativeButton("No") { _, _ ->
+                isPopupOpenDiscard = false
             }
             .show()
+
+        alertDialog.setOnDismissListener { isPopupOpenDiscard = false }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if (isPopupOpenDiscard)
+            alertDialog.dismiss()
+        if (isPopupOpenLogOut)
+            alertDialogLogOut.dismiss()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("shouldShowPopup", isPopupOpenDiscard)
+        outState.putBoolean("shouldShowPopupLogOut", isPopupOpenLogOut)
     }
 }
 

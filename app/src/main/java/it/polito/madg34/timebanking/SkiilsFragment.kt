@@ -74,6 +74,10 @@ class SkillsFragment : Fragment() {
                         }
                     }
                 }
+            } else {
+                emptyView.visibility = View.VISIBLE
+                homepageAppName.visibility = View.VISIBLE
+                homepageLogo.visibility = View.VISIBLE
             }
         }
     }

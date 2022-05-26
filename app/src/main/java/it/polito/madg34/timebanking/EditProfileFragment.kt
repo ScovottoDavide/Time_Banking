@@ -18,6 +18,7 @@ import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.os.bundleOf
@@ -63,6 +64,14 @@ class EditProfileFragment : Fragment() {
     lateinit var userDesc: TextInputEditText
     lateinit var userImage: CircleImageView
 
+    lateinit var dialog: AlertDialog
+    private var isLogOutDialogOpen = false
+
+    lateinit var dialogNickname: AlertDialog
+    private var isNicknameDialogOpen = false
+
+    lateinit var dialogInfo: AlertDialog
+    private var isInfoDialogOpen = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,10 +82,19 @@ class EditProfileFragment : Fragment() {
         setHasOptionsMenu(true)
 
         // Disable the navigation icon
-        if (vm.needRegistration){
+        if (vm.needRegistration) {
             (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
             (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
         }
+        isLogOutDialogOpen = savedInstanceState?.getBoolean("showDialog") == true
+        isInfoDialogOpen = savedInstanceState?.getBoolean("showDialogInfo") == true
+        if (isLogOutDialogOpen)
+            logOut()
+        if (isInfoDialogOpen)
+            infoPopup()
+        isNicknameDialogOpen = savedInstanceState?.getBoolean("showDialogNickname") == true
+        if (isNicknameDialogOpen)
+            nickNameDialog()
 
         item = vm.localProfile!!
 
@@ -128,15 +146,7 @@ class EditProfileFragment : Fragment() {
             val title = view.findViewById<TextView>(R.id.AccountInfo)
             title.setText(getString(R.string.registration))
             if (!vm.showed) {
-                MaterialAlertDialogBuilder(requireContext())
-                    .setTitle("Registration")
-                    .setMessage(
-                        "Before continuing, compile the form to give us some important information about you." +
-                                "If you go back, you will be logged out."
-                    )
-                    .setPositiveButton("OK") { _, _ ->
-                    }
-                    .show()
+                infoPopup()
                 vm.showed = true
             }
         }
@@ -226,13 +236,7 @@ class EditProfileFragment : Fragment() {
                         ) {
                             vm.checkNicknameVM(item.nickname.toString()).addOnSuccessListener {
                                 if (!vm.nicknameOk && vm.profile.value?.nickname != item.nickname) {
-                                    MaterialAlertDialogBuilder(requireContext())
-                                        .setTitle("WARNING")
-                                        .setMessage("Nickname already usedby another user. Please provide another nickname!")
-                                        .setPositiveButton("OK") { _, _ ->
-
-                                        }
-                                        .show()
+                                    nickNameDialog()
                                 } else {
                                     uploadImage()
                                     vm.localProfile = item
@@ -262,9 +266,10 @@ class EditProfileFragment : Fragment() {
                                     }
                                 }
                             }
-                        } else{
+                        } else {
                             formCheck()
-                            Snackbar.make(view, "Profile must be complete", Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(view, "Profile must be complete", Snackbar.LENGTH_SHORT)
+                                .show()
                             vm.needRegistration = true
                         }
                     }
@@ -571,6 +576,12 @@ class EditProfileFragment : Fragment() {
         super.onPause()
         closeKeyboard()
         updateProfile()
+        if (isInfoDialogOpen)
+            dialogInfo.dismiss()
+        if (isNicknameDialogOpen)
+            dialogNickname.dismiss()
+        if(isLogOutDialogOpen)
+            dialog.dismiss()
     }
 
     private fun closeKeyboard() {
@@ -586,7 +597,8 @@ class EditProfileFragment : Fragment() {
        Function to perform the logout and to return to the Auth Activity
    */
     private fun logOut() {
-        MaterialAlertDialogBuilder(requireContext())
+        isLogOutDialogOpen = true
+        dialog = AlertDialog.Builder(requireContext())
             .setTitle("Log out")
             .setMessage("Do you want to log out from the Time Earn app?")
             .setPositiveButton("Yes") { _, _ ->
@@ -611,29 +623,60 @@ class EditProfileFragment : Fragment() {
                             requireActivity().finish()
                         }
                     }
+                isLogOutDialogOpen = false
             }
             .setNegativeButton("No") { _, _ ->
+                isLogOutDialogOpen = false
             }
             .show()
+
+        dialog.setOnDismissListener { isLogOutDialogOpen = false }
     }
 
-    private fun formCheck(){
+    private fun nickNameDialog() {
+        isNicknameDialogOpen = true
+        dialogNickname = AlertDialog.Builder(requireContext())
+            .setTitle("WARNING")
+            .setMessage("Nickname already usedby another user. Please provide another nickname!")
+            .setPositiveButton("OK") { _, _ ->
+                isNicknameDialogOpen = false
+            }
+            .show()
+        dialogNickname.setOnDismissListener { isNicknameDialogOpen = false }
+    }
+
+    private fun infoPopup() {
+        isInfoDialogOpen = true
+        dialogInfo = AlertDialog.Builder(requireContext())
+            .setTitle("Registration")
+            .setMessage(
+                "Before continuing, compile the form to give us some important information about you." +
+                        "If you go back, you will be logged out."
+            )
+            .setPositiveButton("OK") { _, _ ->
+                isInfoDialogOpen = false
+            }
+            .show()
+        dialogInfo.setOnDismissListener { isInfoDialogOpen = false }
+    }
+
+    private fun formCheck() {
         /*if (!item.fullName.isNullOrEmpty() && !item.nickname.isNullOrEmpty()
             && !item.location.isNullOrEmpty() && !item.aboutUser.isNullOrEmpty()
         )*/
-        if(item.fullName.isNullOrEmpty()){
-           val outerFullName = view?.findViewById<TextInputLayout>(R.id.outlinedFullName)
+        if (item.fullName.isNullOrEmpty()) {
+            val outerFullName = view?.findViewById<TextInputLayout>(R.id.outlinedFullName)
             outerFullName?.error = "Insert your full name"
         }
-        if(item.nickname.isNullOrEmpty()){
+        if (item.nickname.isNullOrEmpty()) {
             val outerNickaname = view?.findViewById<TextInputLayout>(R.id.outlinedNickName)
             outerNickaname?.error = "Insert your nickname"
         }
-        if(item.location.isNullOrEmpty()){
+        if (item.location.isNullOrEmpty()) {
             val outerLocation = view?.findViewById<TextInputLayout>(R.id.outlinedLocation)
             outerLocation?.error = "Insert your desired location"
         }
-        if(item.aboutUser.isNullOrEmpty()){
+        if (item.aboutUser.isNullOrEmpty()) {
             val outerAbout = view?.findViewById<TextInputLayout>(R.id.outlinedAboutMe)
             outerAbout?.error = "Please tell something about you"
         }

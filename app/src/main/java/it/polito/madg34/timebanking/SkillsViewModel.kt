@@ -25,6 +25,8 @@ class SkillsViewModel : ViewModel(){
     var filteredAdvs : MutableList<Skills> = mutableListOf()
     var selection = MutableLiveData(0)
 
+    var viewProfilePopupOpen = false
+
     private var listener1: ListenerRegistration? = null
     private var listener2: ListenerRegistration? = null
 
@@ -83,16 +85,16 @@ class SkillsViewModel : ViewModel(){
             val location = get("LOCATION") as String
             val email = get("PUBLISHED_BY") as String
             val related_skill = get("RELATED_SKILL") as String
+            val available = get("AVAILABLE") as Long
             val index = get("INDEX") as Long
 
             TimeSlot(
                 id, title, description, date, time, duration, location, email, related_skill,
-                index.toInt()
+                index.toInt(), available.toInt()
             )
 
         } catch (e: Exception) {
             e.printStackTrace()
-            Log.d("prova4", e.toString())
             null
         }
     }

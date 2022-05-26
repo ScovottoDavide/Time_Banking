@@ -9,6 +9,7 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.datepicker.CalendarConstraints
@@ -48,6 +49,9 @@ class TimeSlotEditFragment : Fragment() {
 
     val skills = mutableListOf<String>()
 
+    lateinit var noSkillPopup : AlertDialog
+    var isPopupOpen = false
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -55,6 +59,10 @@ class TimeSlotEditFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.timesloteditfragment_layout, container, false)
         setHasOptionsMenu(true)
+
+        isPopupOpen = savedInstanceState?.getBoolean("showPopup") == true
+        if(isPopupOpen)
+            noSkillPopup()
         return view
     }
 
@@ -173,15 +181,7 @@ class TimeSlotEditFragment : Fragment() {
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     if (vmProfile.profile.value?.skills?.isEmpty() == true) {
-                        AlertDialog.Builder(requireContext())
-                            .setTitle("Indications")
-                            .setMessage(
-                                "In order to publish an advertisement, at least one skill " +
-                                        "has to be set in your profile. Go back in your profile and add one."
-                            )
-                            .setPositiveButton("OK") { _, _ ->
-                            }
-                            .show()
+                        noSkillPopup()
                     } else {
                         if (title.text.toString().isEmpty() || description.text.toString()
                                 .isEmpty() || date.text.toString().isEmpty()
@@ -201,7 +201,6 @@ class TimeSlotEditFragment : Fragment() {
                                     it?.duration = duration.text.toString()
                                     it?.location = location.text.toString()
                                     it?.related_skill = menuSkills.editText?.text.toString()
-                                    //it?.index = vm.currentUserAdvs.value?.size!!
                                     vm.currentShownAdv = vm.currentUserAdvs.value?.get(index)!!
                                     vm.updateAdv(vm.currentUserAdvs.value?.get(index)!!)
                                     Snackbar.make(
@@ -219,6 +218,7 @@ class TimeSlotEditFragment : Fragment() {
                                 item.location = location.text.toString()
                                 item.published_by = email.text.toString()
                                 item.related_skill = menuSkills.editText?.text.toString()
+                                //item.available = 1
                                 item.index = vm.currentUserAdvs.value?.size!!
                                 vm.saveAdv(item)
                                 Snackbar.make(
@@ -236,6 +236,7 @@ class TimeSlotEditFragment : Fragment() {
                                 item.published_by = email.text.toString()
                                 item.related_skill = menuSkills.editText?.text.toString()
                                 item.index = vm.currentUserAdvs.value?.size!!
+                                //item.available = 1
                                 vm.saveAdv(item)
                                 Snackbar.make(
                                     view,
@@ -289,15 +290,7 @@ class TimeSlotEditFragment : Fragment() {
                     closeKeyboard()
                     requireActivity().onBackPressed()
                 } else {
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("Indications")
-                        .setMessage(
-                            "In order to publish an advertisement, at least one skill " +
-                                    "has to be set in your profile. Go back in your profile and add one."
-                        )
-                        .setPositiveButton("OK") { _, _ ->
-                        }
-                        .show()
+                    noSkillPopup()
                 }
                 true
             }
@@ -345,4 +338,30 @@ class TimeSlotEditFragment : Fragment() {
         }else menuSkills.error = null
     }
 
+    override fun onPause() {
+        super.onPause()
+        if(isPopupOpen)
+            noSkillPopup()
+    }
+
+    fun noSkillPopup() {
+        isPopupOpen = true
+        noSkillPopup = AlertDialog.Builder(requireContext())
+            .setTitle("Indications")
+            .setMessage(
+                "In order to publish an advertisement, at least one skill " +
+                        "has to be set in your profile. Go back in your profile and add one."
+            )
+            .setPositiveButton("OK") { _, _ ->
+                isPopupOpen = false
+            }
+            .show()
+
+        noSkillPopup.setOnDismissListener { isPopupOpen = false }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("showPopup", isPopupOpen)
+    }
 }

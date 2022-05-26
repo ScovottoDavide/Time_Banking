@@ -18,17 +18,22 @@ class EditSkillFragment : Fragment() {
 
     val vm: ProfileViewModel by activityViewModels()
 
-    var _index: Int = 0
-    var _indexDesc: Int = 0
-    var _skillDescription: String? = ""
-    var _skillName: String? = ""
-    var _skillOld: String? = ""
-    var fromCancel = false
-    var fromSave = false
+    private var _index: Int = 0
+    private var _indexDesc: Int = 0
+    private var _skillDescription: String? = ""
+    private var _skillName: String? = ""
+    private var _skillOld: String? = ""
+    private var fromCancel = false
+    private var fromSave = false
+    private var isPopupOpen = false
+    private var isPopupDeleteOpen = false
 
     lateinit var tv: TextView
     lateinit var editDesc: EditText
     lateinit var profile: ProfileUser
+
+    lateinit var dialog : AlertDialog
+    lateinit var dialogDelete : AlertDialog
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,7 +42,13 @@ class EditSkillFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.editskillfragment_layout, container, false)
         setHasOptionsMenu(true)
-        //(activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+        isPopupOpen = savedInstanceState?.getBoolean("showDialog") == true
+        isPopupDeleteOpen = savedInstanceState?.getBoolean("showDialogDelete") == true
+        fromSave = savedInstanceState?.getBoolean("fromSave") == true
+        if(isPopupOpen)
+            warningPopup()
+        if(isPopupDeleteOpen && !vm.needRegistration)
+            deletePopup()
         return view
     }
 
@@ -150,35 +161,13 @@ class EditSkillFragment : Fragment() {
         return when (item.itemId) {
             R.id.save -> {
                 closeKeyboard()
-                //requireActivity().onBackPressed()
                 fromSave = true
                 warningPopup()
                 true
             }
             R.id.cancel -> {
                 if(!vm.needRegistration){
-                    AlertDialog.Builder(requireContext())
-                        .setTitle("Warning")
-                        .setMessage(
-                            "You have modified the skill name. This will cause" +
-                                    "the deletion of all the advertisement related to this skill." +
-                                    "Do you want to continue?"
-                        )
-                        .setPositiveButton("Yes") { _, _ ->
-                            val profile = vm.localProfile
-                            profile?.skills?.remove(tv.text.toString())
-                            vm.modifyUserProfile(profile!!)
-                            Snackbar.make(
-                                requireView(),
-                                "Skill successfully removed!",
-                                Snackbar.LENGTH_LONG
-                            ).show()
-                            fromCancel = true
-                            requireActivity().onBackPressed()
-                        }
-                        .setNegativeButton("No") { _, _ ->
-                        }
-                        .show()
+                    deletePopup()
                 }else {
                     val profile = vm.localProfile
                     profile?.skills?.remove(tv.text.toString())
@@ -208,21 +197,60 @@ class EditSkillFragment : Fragment() {
 
     private fun warningPopup() {
         if(!vm.needRegistration){
-            AlertDialog.Builder(requireContext())
+            isPopupOpen = true
+            dialog = AlertDialog.Builder(requireContext())
                 .setTitle("Warning")
                 .setMessage(
-                    "You have modified the skill name. This will cause" +
-                            "the deletion of all the advertisement related to this skill." +
+                    "If you have modified the skill name all the advertisements" +
+                            "related to this skill we be deleted." +
                             "Do you want to continue?"
                 )
                 .setPositiveButton("Yes") { _, _ ->
+                    Log.d("DENTRO", "ciao")
                     if (fromSave)
                         requireActivity().onBackPressed()
                 }
                 .setNegativeButton("No") { _, _ ->
                 }
                 .show()
+            dialog.setOnDismissListener { isPopupOpen = false }
         }else if (fromSave)
                 requireActivity().onBackPressed()
+    }
+
+    private fun deletePopup(){
+        isPopupDeleteOpen = true
+        dialogDelete = AlertDialog.Builder(requireContext())
+            .setTitle("Warning")
+            .setMessage(
+                "If you delete this skill, also all the advertisement related to " +
+                        "this skill will be deleted." +
+                        "Do you want to continue?"
+            )
+            .setPositiveButton("Yes") { _, _ ->
+                val profile = vm.localProfile
+                profile?.skills?.remove(tv.text.toString())
+                vm.modifyUserProfile(profile!!)
+                Snackbar.make(
+                    requireView(),
+                    "Skill successfully removed!",
+                    Snackbar.LENGTH_LONG
+                ).show()
+                fromCancel = true
+                isPopupDeleteOpen = true
+                requireActivity().onBackPressed()
+            }
+            .setNegativeButton("No") { _, _ ->
+                isPopupDeleteOpen = true
+            }
+            .show()
+        dialogDelete.setOnDismissListener { isPopupDeleteOpen = false }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("showDialog", isPopupOpen)
+        outState.putBoolean("showDialogDelete", isPopupDeleteOpen)
+        outState.putBoolean("fromSave", fromSave)
     }
 }

@@ -17,15 +17,21 @@
             android:icon="@drawable/account_cog_outline"
             android:title="Online Skills" />
         <item
+            android:id="@+id/receivedReqs"
+            android:title="Received requests"
+            android:icon="@drawable/email_receive_outline"
+            />
+        <item
+            android:id="@+id/sentReqs"
+            android:title="Requests sent"
+            android:icon="@drawable/email_send_outline"
+            />
+        <item
             android:id="@+id/void1"
             android:title=""
+            android:enabled="false"
             android:checkable="false"
-            android:enabled="false"/>
-        <item
-            android:id="@+id/void2"
-            android:title=""
-            android:checkable="false"
-            android:enabled="false"/>
+            />
     </group>
 
 </menu>
