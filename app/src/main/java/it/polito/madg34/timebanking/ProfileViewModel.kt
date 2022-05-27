@@ -17,15 +17,20 @@ class ProfileViewModel : ViewModel() {
     var nicknameOk = false
 
     var localProfile: ProfileUser? = ProfileUser()
-    var profileToShow : ProfileUser? = ProfileUser()
+    var profileToShow: ProfileUser? = ProfileUser()
     var currentPhotoPath = ""
-    var clickedEmail : MutableLiveData<String> = MutableLiveData("")
+    var clickedEmail: MutableLiveData<String> = MutableLiveData("")
 
     val profile: MutableLiveData<ProfileUser> by lazy { MutableLiveData(ProfileUser()).also { loadProfile() } }
     val viewProfile: MutableLiveData<ProfileUser> by lazy { MutableLiveData(ProfileUser()).also { loadViewProfile() } }
 
+    val chatImage: MutableLiveData<String?> = MutableLiveData(String())
+    var currentChatImage: String = ""
+
     var listenerNavigation: View.OnClickListener? = null
     private var listener1: ListenerRegistration? = null
+    private var listener2: ListenerRegistration? = null
+
 
     /*
     * Load Profile current user
@@ -40,9 +45,9 @@ class ProfileViewModel : ViewModel() {
         })
     }
 
-    fun loadViewProfile() : Task<DocumentSnapshot> {
+    fun loadViewProfile(): Task<DocumentSnapshot> {
         return FirestoreRepository().getViewUser(clickedEmail.value!!).get().addOnSuccessListener {
-            if(it != null){
+            if (it != null) {
                 viewProfile.value = it.toObject(ProfileUser::class.java)
                 profileToShow = it.toObject(ProfileUser::class.java)
                 Log.d("carica", viewProfile.value.toString())
@@ -62,10 +67,18 @@ class ProfileViewModel : ViewModel() {
         return viewProfile
     }
 
-    fun checkNicknameVM(registrationNickname : String): Task<QuerySnapshot> {
+    fun checkNicknameVM(registrationNickname: String): Task<QuerySnapshot> {
         return FirestoreRepository().checkNickname(registrationNickname)
             .get().addOnSuccessListener {
                 nicknameOk = it.isEmpty
+            }
+    }
+
+    fun loadChatImage(email: String): Task<DocumentSnapshot> {
+        return FirestoreRepository().getChatImage(email).get().addOnSuccessListener {
+            if(it != null){
+                chatImage.value = it.getString("uri")
+            }
         }
     }
 

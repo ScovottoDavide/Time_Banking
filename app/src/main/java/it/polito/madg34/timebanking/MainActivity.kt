@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.timeSlotListFragment, R.id.showProfileFragment, R.id.skillsFragment),
+            setOf(R.id.timeSlotListFragment, R.id.showProfileFragment, R.id.skillsFragment, R.id.chatFragment),
             drawerLayout
         )
 
@@ -146,6 +146,12 @@ class MainActivity : AppCompatActivity() {
                         vmSkills.loadAllSkills()
                         vmSkills.currentSkillAdvs.value = vmSkills.currentSkillAdvs.value
                         navController.navigate(R.id.skillsFragment)
+                    }
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                }
+                R.id.sentReqs -> {
+                    if (navController.currentDestination?.id != navController.graph[R.id.chatFragment].id) {
+                        navController.navigate(R.id.chatFragment)
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
