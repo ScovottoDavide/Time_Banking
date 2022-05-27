@@ -93,6 +93,17 @@
             app:srcCompat="@drawable/outline_edit_24" />
 
         <ImageButton
+            android:id="@+id/chatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/serviceTitle"
+            android:backgroundTint="@color/Goldenrod"
+            android:contentDescription="Chat :"
+            android:minHeight="48dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/chat_plus" />
+
+        <ImageButton
             android:id="@+id/deleteCard"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

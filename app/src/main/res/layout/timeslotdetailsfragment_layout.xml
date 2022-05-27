@@ -65,7 +65,7 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titlleEditService">
 
@@ -99,8 +99,8 @@
                     android:id="@+id/outlinedTitleFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#757575"
-                    android:enabled="false"/>
+                    android:enabled="false"
+                    android:textColor="#757575" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -118,9 +118,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="8dp"
+                    android:enabled="false"
                     android:textColor="#757575"
-                    tools:ignore="DuplicateSpeakableTextCheck"
-                    android:enabled="false"/>
+                    tools:ignore="DuplicateSpeakableTextCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -143,8 +143,8 @@
                         android:id="@+id/outlinedDateFixed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="#757575"
-                        android:enabled="false"/>
+                        android:enabled="false"
+                        android:textColor="#757575" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -161,8 +161,8 @@
                         android:id="@+id/outlinedTimeFixed"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="#757575"
-                        android:enabled="false"/>
+                        android:enabled="false"
+                        android:textColor="#757575" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -182,8 +182,8 @@
                     android:id="@+id/outlinedDurationFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#757575"
-                    android:enabled="false"/>
+                    android:enabled="false"
+                    android:textColor="#757575" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -201,11 +201,12 @@
                     android:id="@+id/outlinedLocationFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#757575"
                     android:enabled="false"
-                    tools:ignore="TextContrastCheck"/>
+                    android:textColor="#757575"
+                    tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedMail"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -220,9 +221,9 @@
                     android:id="@+id/outlinedMailFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#757575"
                     android:editable="false"
                     android:focusableInTouchMode="false"
+                    android:textColor="#757575"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -241,12 +242,27 @@
                     android:id="@+id/outlinedSkillFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="#757575"
                     android:enabled="false"
+                    android:textColor="#757575"
                     tools:ignore="TextContrastCheck" />
 
             </com.google.android.material.textfield.TextInputLayout>
+
         </LinearLayout>
 
+
     </ScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/chat_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:contentDescription="@string/Date"
+        android:visibility="gone"
+        app:backgroundTint="@color/Goldenrod"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/chat_plus" />
 </androidx.constraintlayout.widget.ConstraintLayout>

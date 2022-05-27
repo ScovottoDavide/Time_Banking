@@ -14,6 +14,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 
@@ -52,6 +53,7 @@ class TimeSlotDetailsFragment : Fragment() {
         val location = view.findViewById<TextInputEditText>(R.id.outlinedLocationFixed)
         val email = view.findViewById<TextInputEditText>(R.id.outlinedMailFixed)
         val skill = view.findViewById<TextInputEditText>(R.id.outlinedSkillFixed)
+        val chat = view.findViewById<FloatingActionButton>(R.id.chat_button)
 
         // Observe in order to get automatically the updated values
         vm.getDBTimeSlots().observe(this.viewLifecycleOwner) {
@@ -79,6 +81,11 @@ class TimeSlotDetailsFragment : Fragment() {
                     .setNegativeButton("No") { _, _ ->
                     }
                     .show()
+            }
+            if(item?.published_by != FirestoreRepository.currentUser.email){
+                chat.visibility = View.VISIBLE
+            }else{
+                chat.visibility = View.GONE
             }
         }
 

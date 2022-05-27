@@ -99,6 +99,17 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
             }
         }
 
+        val chat = holder.itemView.findViewById<ImageButton>(R.id.chatButton)
+        if(vmSkills.fromHome.value!!){
+            if(item.published_by != FirestoreRepository.currentUser.email){
+                chat.visibility = View.VISIBLE
+            }else{
+                chat.visibility = View.GONE
+            }
+        }else{
+            chat.visibility = View.GONE
+        }
+
         val viewProfileButton: Button = holder.itemView.findViewById(R.id.profileButton)
         if (vmSkills.fromHome.value!!) {
             viewProfileButton.visibility = View.VISIBLE
