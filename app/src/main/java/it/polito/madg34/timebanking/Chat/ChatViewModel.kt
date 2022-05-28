@@ -1,14 +1,11 @@
-package it.polito.madg34.timebanking.chat
+package it.polito.madg34.timebanking.Chat
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import it.polito.madg34.timebanking.FirestoreRepository
-import it.polito.madg34.timebanking.TimeSlot
-import java.lang.Exception
 
 class ChatViewModel : ViewModel() {
     val currentChatList: MutableLiveData<MutableList<Chat>> = MutableLiveData<MutableList<Chat>>().also { loadChatSent() }

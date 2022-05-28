@@ -1,17 +1,14 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.HomeSkills
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import androidx.core.os.bundleOf
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.get
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
+import it.polito.madg34.timebanking.R
 
 class SkillsAdapter(var data : MutableList<String>, val listStringsAdvs : MutableList<Skills>) : RecyclerView.Adapter<SkillsViewHolder>() {
 

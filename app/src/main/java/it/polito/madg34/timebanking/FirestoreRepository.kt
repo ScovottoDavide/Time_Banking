@@ -5,9 +5,11 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
+import it.polito.madg34.timebanking.HomeSkills.Skills
 import it.polito.madg34.timebanking.Messages.Message
-import it.polito.madg34.timebanking.chat.Chat
-import java.util.*
+import it.polito.madg34.timebanking.Profile.ProfileUser
+import it.polito.madg34.timebanking.TimeSlots.TimeSlot
+import it.polito.madg34.timebanking.Chat.Chat
 
 class FirestoreRepository {
     private var fireStoreDB = FirebaseFirestore.getInstance()

@@ -1,7 +1,6 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.Profile
 
 import androidx.annotation.Keep
-import androidx.lifecycle.liveData
 import com.google.firebase.firestore.IgnoreExtraProperties
 import com.google.firebase.firestore.PropertyName
 

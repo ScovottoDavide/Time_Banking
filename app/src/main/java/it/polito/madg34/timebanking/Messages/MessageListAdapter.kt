@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.get
 import androidx.recyclerview.widget.RecyclerView
 import it.polito.madg34.timebanking.FirestoreRepository
-import it.polito.madg34.timebanking.ProfileViewModel
+import it.polito.madg34.timebanking.Profile.ProfileViewModel
 import it.polito.madg34.timebanking.R
 
 

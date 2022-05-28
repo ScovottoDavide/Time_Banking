@@ -1,4 +1,4 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.Profile
 
 import android.app.Activity
 import android.content.ActivityNotFoundException
@@ -11,7 +11,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
@@ -39,6 +38,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import de.hdodenhof.circleimageview.CircleImageView
+import it.polito.madg34.timebanking.AuthActivity
+import it.polito.madg34.timebanking.FirestoreRepository
+import it.polito.madg34.timebanking.MainActivity
+import it.polito.madg34.timebanking.R
 import java.io.*
 
 class EditProfileFragment : Fragment() {

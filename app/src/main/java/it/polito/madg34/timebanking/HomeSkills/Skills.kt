@@ -1,4 +1,4 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.HomeSkills
 
 import androidx.annotation.Keep
 import com.google.firebase.firestore.IgnoreExtraProperties

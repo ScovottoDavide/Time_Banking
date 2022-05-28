@@ -1,20 +1,14 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.TimeSlots
 
 import android.annotation.SuppressLint
 import android.view.View
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.get
-import androidx.navigation.Navigation
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import de.hdodenhof.circleimageview.CircleImageView
+import it.polito.madg34.timebanking.R
 
 class TimeSlotViewHolder(v : View) : RecyclerView.ViewHolder(v){
 

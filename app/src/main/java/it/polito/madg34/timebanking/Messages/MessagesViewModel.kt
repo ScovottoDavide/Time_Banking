@@ -1,6 +1,5 @@
 package it.polito.madg34.timebanking.Messages
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ListenerRegistration
 import it.polito.madg34.timebanking.FirestoreRepository
-import it.polito.madg34.timebanking.TimeSlot
 import java.lang.Exception
 
 class MessagesViewModel : ViewModel() {

@@ -1,4 +1,4 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.TimeSlots
 
 import android.app.AlertDialog
 import android.content.Context
@@ -9,7 +9,6 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.datepicker.CalendarConstraints
@@ -20,6 +19,9 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
+import it.polito.madg34.timebanking.FirestoreRepository
+import it.polito.madg34.timebanking.Profile.ProfileViewModel
+import it.polito.madg34.timebanking.R
 import java.text.SimpleDateFormat
 import java.util.*
 

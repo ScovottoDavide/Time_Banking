@@ -1,4 +1,4 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.TimeSlots
 
 import android.annotation.SuppressLint
 import android.app.SearchManager
@@ -6,24 +6,18 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.datepicker.CalendarConstraints
-import com.google.android.material.datepicker.DateValidatorPointForward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import org.w3c.dom.Text
-import java.sql.Time
+import it.polito.madg34.timebanking.R
+import it.polito.madg34.timebanking.HomeSkills.SkillsViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 

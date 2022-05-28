@@ -1,12 +1,8 @@
 package it.polito.madg34.timebanking
 
 import android.content.Intent
-import android.location.GnssAntennaInfo
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.MenuItem
-import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -15,11 +11,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.get
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
@@ -28,12 +22,17 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import de.hdodenhof.circleimageview.CircleImageView
-import it.polito.madg34.timebanking.chat.ChatViewModel
+import it.polito.madg34.timebanking.HomeSkills.SkillsViewModel
+import it.polito.madg34.timebanking.Profile.ProfileUser
+import it.polito.madg34.timebanking.Profile.ProfileViewModel
+import it.polito.madg34.timebanking.Profile.emptyProfile
+import it.polito.madg34.timebanking.TimeSlots.TimeSlot
+import it.polito.madg34.timebanking.TimeSlots.TimeSlotViewModel
+import it.polito.madg34.timebanking.Chat.ChatViewModel
 
 
 class MainActivity : AppCompatActivity() {

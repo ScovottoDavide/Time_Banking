@@ -1,4 +1,4 @@
-package it.polito.madg34.timebanking.chat
+package it.polito.madg34.timebanking.Chat
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -10,11 +10,9 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.get
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
-import it.polito.madg34.timebanking.FirestoreRepository
 import it.polito.madg34.timebanking.Messages.MessagesViewModel
-import it.polito.madg34.timebanking.ProfileViewModel
+import it.polito.madg34.timebanking.Profile.ProfileViewModel
 import it.polito.madg34.timebanking.R
-import it.polito.madg34.timebanking.TimeSlotViewModel
 
 class ChatAdapter(val chatList: List<Chat>) :
     RecyclerView.Adapter<ChatViewHolder>() {

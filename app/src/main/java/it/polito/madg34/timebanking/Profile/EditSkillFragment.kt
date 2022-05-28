@@ -1,4 +1,4 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.Profile
 
 import android.content.Context
 import android.os.Bundle
@@ -9,10 +9,10 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
+import it.polito.madg34.timebanking.R
 
 class EditSkillFragment : Fragment() {
 

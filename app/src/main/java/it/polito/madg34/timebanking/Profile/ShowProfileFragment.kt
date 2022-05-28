@@ -1,11 +1,10 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.Profile
 
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.activity.OnBackPressedCallback
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -17,6 +16,8 @@ import com.github.florent37.expansionpanel.ExpansionLayout
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputEditText
 import de.hdodenhof.circleimageview.CircleImageView
+import it.polito.madg34.timebanking.FirestoreRepository
+import it.polito.madg34.timebanking.R
 
 class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     val vm: ProfileViewModel by activityViewModels()

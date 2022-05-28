@@ -1,6 +1,5 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.Profile
 
-import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
 import com.google.android.gms.tasks.Task
@@ -8,7 +7,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ListenerRegistration
 import com.google.firebase.firestore.QuerySnapshot
-import java.lang.Exception
+import it.polito.madg34.timebanking.FirestoreRepository
 
 class ProfileViewModel : ViewModel() {
 

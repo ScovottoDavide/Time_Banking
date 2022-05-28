@@ -1,20 +1,16 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.Profile
 
 import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
-import android.text.Editable
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
-import androidx.navigation.navGraphViewModels
-import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
+import it.polito.madg34.timebanking.R
 
 class AddSkillFragment: Fragment() {
     val vm : ProfileViewModel by activityViewModels()

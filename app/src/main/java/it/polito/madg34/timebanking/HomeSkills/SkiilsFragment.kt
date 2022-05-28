@@ -1,22 +1,17 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.HomeSkills
 
 import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.*
-import androidx.core.graphics.red
-import androidx.core.graphics.toColor
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.selects.select
+import it.polito.madg34.timebanking.R
 
 class SkillsFragment : Fragment() {
 

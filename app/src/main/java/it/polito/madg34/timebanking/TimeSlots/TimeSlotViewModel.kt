@@ -1,20 +1,13 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.TimeSlots
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import android.app.Application
-import android.content.Context
-import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.*
 import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import it.polito.madg34.timebanking.FirestoreRepository
 import java.lang.Exception
-import java.lang.reflect.Type
-import java.sql.Time
 
 
 class TimeSlotViewModel(application: Application) : AndroidViewModel(application) {

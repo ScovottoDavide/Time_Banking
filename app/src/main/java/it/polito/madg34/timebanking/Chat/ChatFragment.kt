@@ -1,7 +1,6 @@
-package it.polito.madg34.timebanking.chat
+package it.polito.madg34.timebanking.Chat
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +8,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import it.polito.madg34.timebanking.ProfileViewModel
 import it.polito.madg34.timebanking.R
 
 class ChatFragment : Fragment() {

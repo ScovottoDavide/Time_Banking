@@ -7,13 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.ImageButton
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.polito.madg34.timebanking.R
-import it.polito.madg34.timebanking.chat.ChatViewModel
 
 class MessageFragment : Fragment() {
     val vmMessage: MessagesViewModel by activityViewModels()

@@ -1,15 +1,11 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.TimeSlots
 
 import android.app.AlertDialog
 import android.content.res.Configuration
 import android.os.Bundle
 import android.text.Html
-import android.text.method.LinkMovementMethod
-import android.util.Log
 import android.view.*
 import android.widget.TableRow
-import android.widget.TextView
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -17,6 +13,10 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import it.polito.madg34.timebanking.FirestoreRepository
+import it.polito.madg34.timebanking.Profile.ProfileViewModel
+import it.polito.madg34.timebanking.R
+import it.polito.madg34.timebanking.HomeSkills.SkillsViewModel
 
 class TimeSlotDetailsFragment : Fragment() {
 

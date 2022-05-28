@@ -1,4 +1,4 @@
-package it.polito.madg34.timebanking.chat
+package it.polito.madg34.timebanking.Chat
 
 import androidx.annotation.Keep
 import com.google.firebase.firestore.IgnoreExtraProperties

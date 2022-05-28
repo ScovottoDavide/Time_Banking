@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/timeSlotDetailsFragment"
-        android:name="it.polito.madg34.timebanking.TimeSlotDetailsFragment"
+        android:name="it.polito.madg34.timebanking.TimeSlots.TimeSlotDetailsFragment"
         android:label="@string/app_name" >
         <action
             android:id="@+id/action_timeSlotDetailsFragment_to_timeSlotEditFragment"
@@ -29,7 +29,7 @@
     </fragment>
     <fragment
         android:id="@+id/timeSlotEditFragment"
-        android:name="it.polito.madg34.timebanking.TimeSlotEditFragment"
+        android:name="it.polito.madg34.timebanking.TimeSlots.TimeSlotEditFragment"
         android:label="@string/app_name" >
         <action
             android:id="@+id/action_timeSlotEditFragment_to_timeSlotDetailsFragment2"
@@ -46,7 +46,7 @@
     </fragment>
     <fragment
         android:id="@+id/timeSlotListFragment"
-        android:name="it.polito.madg34.timebanking.TimeSlotListFragment"
+        android:name="it.polito.madg34.timebanking.TimeSlots.TimeSlotListFragment"
         android:label="@string/app_name" >
         <action
             android:id="@+id/action_timeSlotListFragment_to_timeSlotDetailsFragment2"
@@ -81,7 +81,7 @@
     </fragment>
     <fragment
         android:id="@+id/showProfileFragment"
-        android:name="it.polito.madg34.timebanking.ShowProfileFragment"
+        android:name="it.polito.madg34.timebanking.Profile.ShowProfileFragment"
         android:label="@string/app_name" >
         <action
             android:id="@+id/action_showProfileFragment_to_editProfileFragment"
@@ -98,7 +98,7 @@
     </fragment>
     <fragment
         android:id="@+id/editProfileFragment"
-        android:name="it.polito.madg34.timebanking.EditProfileFragment"
+        android:name="it.polito.madg34.timebanking.Profile.EditProfileFragment"
         android:label="@string/app_name" >
         <action
             android:id="@+id/action_editProfileFragment_to_addSkillFragment"
@@ -121,7 +121,7 @@
     </fragment>
     <fragment
         android:id="@+id/addSkillFragment"
-        android:name="it.polito.madg34.timebanking.AddSkillFragment"
+        android:name="it.polito.madg34.timebanking.Profile.AddSkillFragment"
         android:label="@string/app_name" >
         <action
             android:id="@+id/action_addSkillFragment_to_editProfileFragment"
@@ -132,7 +132,7 @@
     </fragment>
     <fragment
         android:id="@+id/editSkillFragment"
-        android:name="it.polito.madg34.timebanking.EditSkillFragment"
+        android:name="it.polito.madg34.timebanking.Profile.EditSkillFragment"
         android:label="@string/app_name" >
         <action
             android:id="@+id/action_editSkillFragment_to_editProfileFragment"
@@ -143,7 +143,7 @@
     </fragment>
     <fragment
         android:id="@+id/skillsFragment"
-        android:name="it.polito.madg34.timebanking.SkillsFragment"
+        android:name="it.polito.madg34.timebanking.HomeSkills.SkillsFragment"
         android:label="@string/app_name" >
         <action
             android:id="@+id/action_skillsFragment_to_timeSlotListFragment"
@@ -160,7 +160,7 @@
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
-        android:name="it.polito.madg34.timebanking.chat.ChatFragment"
+        android:name="it.polito.madg34.timebanking.Chat.ChatFragment"
         android:label="@string/app_name" >
         <action
             android:id="@+id/action_chatFragment_to_skillsFragment"

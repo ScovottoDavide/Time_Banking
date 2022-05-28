@@ -1,12 +1,13 @@
-package it.polito.madg34.timebanking
+package it.polito.madg34.timebanking.HomeSkills
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ListenerRegistration
+import it.polito.madg34.timebanking.FirestoreRepository
+import it.polito.madg34.timebanking.TimeSlots.TimeSlot
 import java.lang.Exception
 
 class SkillsViewModel : ViewModel(){
@@ -31,7 +32,7 @@ class SkillsViewModel : ViewModel(){
     private var listener2: ListenerRegistration? = null
 
     fun loadAllSkills() {
-        listener1 = FirestoreRepository().getAllSkills().addSnapshotListener{value, e ->
+        listener1 = FirestoreRepository().getAllSkills().addSnapshotListener{ value, e ->
             if (e != null) {
                 allSkills.value = null
                 return@addSnapshotListener
