@@ -50,7 +50,6 @@ class ProfileViewModel : ViewModel() {
             if (it != null) {
                 viewProfile.value = it.toObject(ProfileUser::class.java)
                 profileToShow = it.toObject(ProfileUser::class.java)
-                Log.d("carica", viewProfile.value.toString())
             }
         }
     }

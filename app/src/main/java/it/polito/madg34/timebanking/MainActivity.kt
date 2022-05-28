@@ -33,12 +33,15 @@ import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import de.hdodenhof.circleimageview.CircleImageView
+import it.polito.madg34.timebanking.chat.ChatViewModel
 
 
 class MainActivity : AppCompatActivity() {
     val vmProfile: ProfileViewModel by viewModels()
     val vmTimeSlot: TimeSlotViewModel by viewModels()
     val vmSkills: SkillsViewModel by viewModels()
+    val vmChat: ChatViewModel by viewModels()
+
     var profile: ProfileUser = emptyProfile()
     var timeSlots: List<TimeSlot> = emptyList()
     lateinit var appBarConfiguration: AppBarConfiguration
@@ -72,7 +75,12 @@ class MainActivity : AppCompatActivity() {
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
         appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.timeSlotListFragment, R.id.showProfileFragment, R.id.skillsFragment, R.id.chatFragment),
+            setOf(
+                R.id.timeSlotListFragment,
+                R.id.showProfileFragment,
+                R.id.skillsFragment,
+                R.id.chatFragment
+            ),
             drawerLayout
         )
 
@@ -81,7 +89,8 @@ class MainActivity : AppCompatActivity() {
         toolbar.setupWithNavController(navController, appBarConfiguration)
 
         toolbar.setNavigationOnClickListener {
-            if (navController.currentDestination?.id == navController.graph[R.id.timeSlotDetailsFragment].id)
+            if (navController.currentDestination?.id == navController.graph[R.id.timeSlotDetailsFragment].id ||
+                    navController.currentDestination?.id == navController.graph[R.id.messageFragment].id)
                 onBackPressed()
             else if (navController.currentDestination?.id == navController.graph[R.id.editSkillFragment].id
                 || navController.currentDestination?.id == navController.graph[R.id.editProfileFragment].id
@@ -149,10 +158,14 @@ class MainActivity : AppCompatActivity() {
                     }
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
+                R.id.receivedReqs -> {
+                    vmChat.sentOrReceived.value = true
+                    navController.navigate(R.id.chatFragment)
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                }
                 R.id.sentReqs -> {
-                    if (navController.currentDestination?.id != navController.graph[R.id.chatFragment].id) {
-                        navController.navigate(R.id.chatFragment)
-                    }
+                    vmChat.sentOrReceived.value = false
+                    navController.navigate(R.id.chatFragment)
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
             }
@@ -168,7 +181,7 @@ class MainActivity : AppCompatActivity() {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             } else if (destination.id == R.id.timeSlotEditFragment || destination.id == R.id.timeSlotDetailsFragment
                 || destination.id == R.id.editProfileFragment || destination.id == R.id.editSkillFragment
-                || destination.id == R.id.addSkillFragment
+                || destination.id == R.id.addSkillFragment || destination.id == R.id.messageFragment
             )
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             else

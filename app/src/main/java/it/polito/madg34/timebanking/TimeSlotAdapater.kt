@@ -21,6 +21,9 @@ import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import it.polito.madg34.timebanking.Messages.MessagesViewModel
+import it.polito.madg34.timebanking.chat.Chat
+import it.polito.madg34.timebanking.chat.ChatViewModel
 
 class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
     RecyclerView.Adapter<TimeSlotViewHolder>() {
@@ -29,7 +32,10 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
     lateinit var vmTimeSlot: TimeSlotViewModel
     lateinit var vmSkills: SkillsViewModel
     lateinit var vmProfile: ProfileViewModel
-    lateinit var dialog : AlertDialog
+    lateinit var vmChat: ChatViewModel
+    lateinit var vmMessages: MessagesViewModel
+
+    lateinit var dialog: AlertDialog
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeSlotViewHolder {
         v = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
@@ -40,6 +46,8 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
         vmTimeSlot = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
         vmSkills = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
         vmProfile = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
+        vmChat = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
+        vmMessages = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
 
         val item = data[position] // access data item
         vmTimeSlot.getImageFromEmail(item.published_by).addOnCompleteListener {
@@ -53,7 +61,7 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
         val b = a.supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = b.navController
 
-        if(vmSkills.viewProfilePopupOpen){
+        if (vmSkills.viewProfilePopupOpen) {
             showPopUpDialog(holder, item, navController)
         }
 
@@ -100,13 +108,29 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
         }
 
         val chat = holder.itemView.findViewById<ImageButton>(R.id.chatButton)
-        if(vmSkills.fromHome.value!!){
-            if(item.published_by != FirestoreRepository.currentUser.email){
+        if (vmSkills.fromHome.value!!) {
+            if (item.published_by != FirestoreRepository.currentUser.email) {
                 chat.visibility = View.VISIBLE
-            }else{
+                chat.setOnClickListener {
+                    val newChat = Chat("${item.id},${item.published_by}")
+                    if(vmChat.stringChat.contains(newChat.info)){
+                        vmMessages.currentRelatedAdv = item.id
+                        vmMessages.otherUserEmail = item.published_by
+                        vmMessages.loadMessages()
+                        navController.navigate(R.id.action_timeSlotListFragment_to_messageFragment)
+                    }else {
+                        vmChat.newChatAdd(newChat)?.addOnSuccessListener {
+                            vmMessages.currentRelatedAdv = item.id
+                            vmMessages.otherUserEmail = item.published_by
+                            vmMessages.loadMessages()
+                            navController.navigate(R.id.action_timeSlotListFragment_to_messageFragment)
+                        }
+                    }
+                }
+            } else {
                 chat.visibility = View.GONE
             }
-        }else{
+        } else {
             chat.visibility = View.GONE
         }
 
@@ -122,7 +146,11 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
 
     override fun getItemCount(): Int = data.size
 
-    private fun showPopUpDialog(holder: TimeSlotViewHolder, item :TimeSlot, navController : NavController){
+    private fun showPopUpDialog(
+        holder: TimeSlotViewHolder,
+        item: TimeSlot,
+        navController: NavController
+    ) {
         vmSkills.viewProfilePopupOpen = true
         dialog = AlertDialog.Builder(holder.itemView.context)
             .setTitle("Message")

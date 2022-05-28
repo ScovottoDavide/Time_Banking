@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import it.polito.madg34.timebanking.Messages.Message
 import it.polito.madg34.timebanking.chat.Chat
+import java.util.*
 
 class FirestoreRepository {
     private var fireStoreDB = FirebaseFirestore.getInstance()
@@ -30,7 +31,7 @@ class FirestoreRepository {
     /*
        Function to get the image of a users
    */
-    fun getChatImage(email : String) : DocumentReference {
+    fun getChatImage(email: String): DocumentReference {
         return fireStoreDB.collection("users").document(email)
     }
 
@@ -191,35 +192,26 @@ class FirestoreRepository {
             })
     }
 
-
+    /**  Get all existing chats with people I wrote to */
     fun getAllChatEmail(): DocumentReference {
         return fireStoreDB.collection("chat").document(currentUser.email!!)
     }
 
-    fun addChat(newChat: Chat, message: Message) {
-        val x = newChat.fromUser?.values
-        x?.forEach {
-            it.values.forEach { mex_id ->
-                setMessage(mex_id, message).addOnSuccessListener {
-                    fireStoreDB.collection("chat").document(currentUser.email!!).set(newChat)
-                }
-            }
-        }
+    /**  Get all existing chats with people that wrote me */
+    fun getAllChatReceived(): CollectionReference {
+        return fireStoreDB.collection("chat")
     }
 
-    fun getChatMessages(email: String): DocumentReference {
-        var chatMap = mapOf<String, String>()
-        getAllChatEmail().get().addOnSuccessListener {
-            if(it != null){
-                chatMap = it.data?.get(email) as Map<String, String>
-            }
-        }
-
+    fun addChat(newChat: String): Task<Void> {
+        return fireStoreDB.collection("chat").document(currentUser.email!!).set(Chat(newChat))
     }
 
-    fun setMessage(id: String, message: Message): Task<Void> {
-        return fireStoreDB.collection("messages").document(id).set(message)
+    fun getChatMessages(relatedAdv : String): Query {
+        return fireStoreDB.collection("messages").whereEqualTo("RELATED_ADV", relatedAdv)
     }
 
+    fun setMessage(message: Message): Task<Void> {
+        return fireStoreDB.collection("messages").document().set(message)
+    }
 
 }

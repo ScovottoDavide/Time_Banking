@@ -1,6 +1,7 @@
 package it.polito.madg34.timebanking.chat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,9 +14,10 @@ import it.polito.madg34.timebanking.R
 
 class ChatFragment : Fragment() {
     val vmChat: ChatViewModel by activityViewModels()
-    val vmProfile: ProfileViewModel by activityViewModels()
 
-    private var chatList: MutableList<String> = mutableListOf()
+    private var chatList: List<Chat> = listOf()
+    private var chatReceivedList: List<Chat> = listOf()
+
     lateinit var chatRV: RecyclerView
 
     override fun onCreateView(
@@ -31,17 +33,25 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        /*vmProfile.chatImage.observe(viewLifecycleOwner){
-            if(!it.isNullOrEmpty()){
-                vmProfile.currentChatImage = it
-            }
-        }*/
-        vmChat.getCurrentChatList().observe(viewLifecycleOwner){
-            if(!it.isNullOrEmpty()){
-                chatList = it as MutableList<String>
-                chatRV = view.findViewById(R.id.ChatList)
-                chatRV.layoutManager = LinearLayoutManager(this.context)
-                chatRV.adapter = ChatAdapter(chatList)
+        vmChat.sentOrReceived.observe(viewLifecycleOwner){ sentOrreceived ->
+            if(sentOrreceived){
+                vmChat.getCurrentChatReceivedList().observe(viewLifecycleOwner){
+                    if(!it.isNullOrEmpty()){
+                        chatReceivedList = it
+                        chatRV = view.findViewById(R.id.ChatList)
+                        chatRV.layoutManager = LinearLayoutManager(this.context)
+                        chatRV.adapter = ChatAdapter(chatReceivedList)
+                    }
+                }
+            }else {
+                vmChat.getCurrentChatList().observe(viewLifecycleOwner){
+                    if(!it.isNullOrEmpty()){
+                        chatList = it
+                        chatRV = view.findViewById(R.id.ChatList)
+                        chatRV.layoutManager = LinearLayoutManager(this.context)
+                        chatRV.adapter = ChatAdapter(chatList)
+                    }
+                }
             }
         }
     }

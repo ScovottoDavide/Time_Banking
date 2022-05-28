@@ -75,6 +75,9 @@
         <action
             android:id="@+id/action_timeSlotListFragment_to_skillsFragment"
             app:destination="@id/skillsFragment" />
+        <action
+            android:id="@+id/action_timeSlotListFragment_to_messageFragment"
+            app:destination="@id/messageFragment" />
     </fragment>
     <fragment
         android:id="@+id/showProfileFragment"
@@ -150,7 +153,10 @@
             app:popExitAnim="@anim/slide_out"/>
         <action
             android:id="@+id/action_skillsFragment_to_chatFragment"
-            app:destination="@id/chatFragment" />
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
@@ -158,6 +164,19 @@
         android:label="@string/app_name" >
         <action
             android:id="@+id/action_chatFragment_to_skillsFragment"
-            app:destination="@id/skillsFragment" />
+            app:destination="@id/skillsFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
+        <action
+            android:id="@+id/action_chatFragment_to_messageFragment"
+            app:destination="@id/messageFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
     </fragment>
+    <fragment
+        android:id="@+id/messageFragment"
+        android:name="it.polito.madg34.timebanking.Messages.MessageFragment"
+        android:label="@string/app_name" />
 </navigation>

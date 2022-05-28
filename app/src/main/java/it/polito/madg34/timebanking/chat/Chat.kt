@@ -6,6 +6,10 @@ import com.google.firebase.firestore.PropertyName
 
 @Keep
 @IgnoreExtraProperties
-data class Chat(
-    @get: PropertyName("FromUser") @set: PropertyName("FromUser") var fromUser: Map<String,Map<String,String>>?,
-    )
+class Chat(
+    @get: PropertyName("INFO") @set: PropertyName("INFO") var info: String = "",
+    ){
+    fun equals(c1: Chat, c2 : Chat): Boolean {
+        return c1.info == c2.info
+    }
+}
