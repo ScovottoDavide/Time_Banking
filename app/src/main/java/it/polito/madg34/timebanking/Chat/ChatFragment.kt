@@ -1,6 +1,7 @@
 package it.polito.madg34.timebanking.Chat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,17 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import it.polito.madg34.timebanking.R
+import it.polito.madg34.timebanking.TimeSlots.TimeSlot
+import it.polito.madg34.timebanking.TimeSlots.TimeSlotViewModel
 
 class ChatFragment : Fragment() {
     val vmChat: ChatViewModel by activityViewModels()
+    val vmTimeSlot: TimeSlotViewModel by activityViewModels()
 
     private var chatList: List<Chat> = listOf()
     private var chatReceivedList: List<Chat> = listOf()
+    private var timeSlots : MutableList<TimeSlot> = mutableListOf()
+    private var timeSlotsIds : MutableList<String> = mutableListOf()
 
     lateinit var chatRV: RecyclerView
 
@@ -36,18 +42,40 @@ class ChatFragment : Fragment() {
                 vmChat.getCurrentChatReceivedList().observe(viewLifecycleOwner){
                     if(!it.isNullOrEmpty()){
                         chatReceivedList = it
-                        chatRV = view.findViewById(R.id.ChatList)
-                        chatRV.layoutManager = LinearLayoutManager(this.context)
-                        chatRV.adapter = ChatAdapter(chatReceivedList)
+                        chatReceivedList.forEach {
+                            it.info.split("|").forEach { s ->
+                                timeSlotsIds.add(s.split(",")[0])
+                            }
+                        }
+                        vmTimeSlot.loadAdvByIds(timeSlotsIds)
+                        vmTimeSlot.getChatTimeSlots().observe(viewLifecycleOwner){ it1 ->
+                            if(it1 != null){
+                                timeSlots = it1
+                                chatRV = view.findViewById(R.id.ChatList)
+                                chatRV.layoutManager = LinearLayoutManager(this.context)
+                                chatRV.adapter = ChatAdapter(chatReceivedList, timeSlots)
+                            }
+                        }
                     }
                 }
             }else {
-                vmChat.getCurrentChatList().observe(viewLifecycleOwner){
-                    if(!it.isNullOrEmpty()){
-                        chatList = it
-                        chatRV = view.findViewById(R.id.ChatList)
-                        chatRV.layoutManager = LinearLayoutManager(this.context)
-                        chatRV.adapter = ChatAdapter(chatList)
+                vmChat.getCurrentChatList().observe(viewLifecycleOwner){ it1 ->
+                    if(!it1.isNullOrEmpty()){
+                        chatList = it1
+                        chatList.forEach { c ->
+                            c.info.split("|").forEach { s ->
+                                timeSlotsIds.add(s.split(",")[0])
+                            }
+                        }
+                        vmTimeSlot.loadAdvByIds(timeSlotsIds)
+                        vmTimeSlot.getChatTimeSlots().observe(viewLifecycleOwner){ it2 ->
+                            if(it2 != null){
+                                timeSlots = it2
+                                chatRV = view.findViewById(R.id.ChatList)
+                                chatRV.layoutManager = LinearLayoutManager(this.context)
+                                chatRV.adapter = ChatAdapter(chatList, timeSlots)
+                            }
+                        }
                     }
                 }
             }

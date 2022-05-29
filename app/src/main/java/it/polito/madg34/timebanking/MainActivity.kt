@@ -89,7 +89,8 @@ class MainActivity : AppCompatActivity() {
 
         toolbar.setNavigationOnClickListener {
             if (navController.currentDestination?.id == navController.graph[R.id.timeSlotDetailsFragment].id ||
-                    navController.currentDestination?.id == navController.graph[R.id.messageFragment].id)
+                navController.currentDestination?.id == navController.graph[R.id.messageFragment].id
+            )
                 onBackPressed()
             else if (navController.currentDestination?.id == navController.graph[R.id.editSkillFragment].id
                 || navController.currentDestination?.id == navController.graph[R.id.editProfileFragment].id
@@ -144,6 +145,9 @@ class MainActivity : AppCompatActivity() {
                         vmSkills.fromHome.value = false
                         navController.navigate(R.id.timeSlotListFragment)
                     } else if (navController.currentDestination?.id == navController.graph[R.id.showProfileFragment].id && vmSkills.fromHome.value!!) {
+                        vmSkills.fromHome.value = false
+                        navController.navigate(R.id.timeSlotListFragment)
+                    } else if(navController.currentDestination?.id == navController.graph[R.id.chatFragment].id){
                         vmSkills.fromHome.value = false
                         navController.navigate(R.id.timeSlotListFragment)
                     }

@@ -3,6 +3,7 @@ package it.polito.madg34.timebanking.TimeSlots
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
@@ -13,6 +14,7 @@ import java.lang.Exception
 class TimeSlotViewModel(application: Application) : AndroidViewModel(application) {
     val currentUserAdvs: MutableLiveData<List<TimeSlot>> = MutableLiveData<List<TimeSlot>>().also { loadAdvs() }
     var currentIndexAdv: MutableLiveData<String> = MutableLiveData(String()).also { loadLastAdv() }
+    val chatAdvs: MutableLiveData<MutableList<TimeSlot>> = MutableLiveData<MutableList<TimeSlot>>()
 
     var currentShownAdv : TimeSlot? = null
     var userUri = ""
@@ -21,6 +23,7 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
 
     private var listener1: ListenerRegistration? = null
     private var listener2: ListenerRegistration? = null
+    private var listener3: ListenerRegistration? = null
 
     fun loadAdvs() {
         listener1 = FirestoreRepository().getAdvs()
@@ -55,8 +58,27 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
 
     }
 
+    fun loadAdvByIds(advIds : List<String>) {
+        val tmp = mutableListOf<TimeSlot>()
+        advIds.forEach {
+            listener3 =  FirestoreRepository().getAdvFromDocId(it)
+                ?.addSnapshotListener(EventListener{ value, e ->
+                    if (e != null) {
+                        chatAdvs.value = mutableListOf()
+                        return@EventListener
+                    }
+                    value!!.toTimeSlotObject()?.let { it1 -> tmp.add(it1) }
+                    chatAdvs.value = tmp
+                })
+        }
+    }
+
     fun getDBTimeSlots(): LiveData<List<TimeSlot>> {
         return currentUserAdvs
+    }
+
+    fun getChatTimeSlots(): LiveData<MutableList<TimeSlot>> {
+        return chatAdvs
     }
 
     fun saveAdv(value: TimeSlot): Task<Void> {

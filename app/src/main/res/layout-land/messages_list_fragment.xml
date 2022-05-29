@@ -21,7 +21,40 @@
             app:popupTheme="@style/Theme.AppCompat.Light">
 
         </androidx.appcompat.widget.Toolbar>
+
     </com.google.android.material.appbar.AppBarLayout>
+
+    <TableRow
+        android:id="@+id/RowAcceptDeny"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:elevation="2dp"
+        app:layout_constraintEnd_toEndOf="@+id/recycler_gchat"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/layout_group_chat">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/RowAccept"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:text="Accept"
+            android:textColor="@color/Green"
+            app:strokeColor="@color/Green"
+            app:strokeWidth="1dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/RowDeny"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            android:text="Deny"
+            android:textColor="@color/Red"
+            app:strokeColor="@color/Red"
+            app:strokeWidth="1dp" />
+    </TableRow>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_gchat"
