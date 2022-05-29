@@ -3,7 +3,9 @@ package it.polito.madg34.timebanking
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -47,6 +49,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var navController: NavController
     lateinit var drawerLayout: DrawerLayout
     lateinit var navView: NavigationView
+    lateinit var loading : ProgressBar
 
     private var isPopupOpenDiscard = false
     private var isPopupOpenLogOut = false
@@ -56,6 +59,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        loading = findViewById(R.id.progress_bar)
+        loading.visibility = View.GONE
 
         isPopupOpenDiscard = savedInstanceState?.getBoolean("shouldShowPopup") == true
         isPopupOpenLogOut = savedInstanceState?.getBoolean("shouldShowPopupLogOut") == true

@@ -3,7 +3,9 @@ package it.polito.madg34.timebanking
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +25,12 @@ class AuthActivity : AppCompatActivity() {
 
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var mAuth: FirebaseAuth
+
+    lateinit var loading : ProgressBar
+    lateinit var signInButton: SignInButton
+    lateinit var signinTV : TextView
+    lateinit var TV8 : TextView
+    lateinit var TV7 : TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,6 +60,17 @@ class AuthActivity : AppCompatActivity() {
 
         } else {
             // Else start the main activity
+            setContentView(R.layout.auth_activity)
+            signInButton = findViewById(R.id.sign_in_button)
+            signinTV = findViewById(R.id.textView4)
+            TV7 = findViewById(R.id.textView7)
+            TV8 = findViewById(R.id.textView8)
+            loading = findViewById(R.id.progress_bar)
+            signinTV.visibility = View.GONE
+            TV8.visibility = View.GONE
+            TV7.visibility = View.GONE
+            signInButton.visibility = View.GONE
+            loading.visibility = View.VISIBLE
             startMainActivity()
         }
 
