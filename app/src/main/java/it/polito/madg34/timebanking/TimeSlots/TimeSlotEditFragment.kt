@@ -220,7 +220,9 @@ class TimeSlotEditFragment : Fragment() {
                                 item.location = location.text.toString()
                                 item.published_by = email.text.toString()
                                 item.related_skill = menuSkills.editText?.text.toString()
-                                //item.available = 1
+                                item.refused = ""
+                                item.accepted = ""
+                                item.available = 1
                                 item.index = vm.currentUserAdvs.value?.size!!
                                 vm.saveAdv(item)
                                 Snackbar.make(
@@ -238,7 +240,9 @@ class TimeSlotEditFragment : Fragment() {
                                 item.published_by = email.text.toString()
                                 item.related_skill = menuSkills.editText?.text.toString()
                                 item.index = vm.currentUserAdvs.value?.size!!
-                                //item.available = 1
+                                item.refused = ""
+                                item.accepted = ""
+                                item.available = 1
                                 vm.saveAdv(item)
                                 Snackbar.make(
                                     view,

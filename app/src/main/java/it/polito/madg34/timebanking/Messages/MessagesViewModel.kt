@@ -13,11 +13,17 @@ import java.lang.Exception
 
 class MessagesViewModel : ViewModel() {
 
-    val currentUserMessages: MutableLiveData<List<Message>> =
+    val currentUserMessages : MutableLiveData<List<Message>> =
         MutableLiveData<List<Message>>().also { loadMessages() }
+
+    val allMessages : MutableLiveData<List<Message>> =
+        MutableLiveData<List<Message>>().also { getAllUnreadMessages() }
 
     var otherUserEmail = ""
     var currentRelatedAdv = ""
+
+    var receivedReqNumber = 0
+    var sentNumber = 0
 
     private var listener1: ListenerRegistration? = null
 
@@ -48,12 +54,28 @@ class MessagesViewModel : ViewModel() {
         }
     }
 
+    private fun getAllUnreadMessages() {
+        FirestoreRepository().getAllMessages().addSnapshotListener(EventListener{ value, e ->
+            if (e != null) {
+                allMessages.value = emptyList()
+                return@EventListener
+            }
+            if(value!!.documents.size > 0){
+                allMessages.value = value.documents.mapNotNull { d -> d.toMessageObject() }
+            }
+        })
+    }
+
     fun getCurrentUserMessages(): LiveData<List<Message>> {
         return currentUserMessages
     }
 
+    fun getAllMessages() : LiveData<List<Message>>{
+        return allMessages
+    }
+
     fun sendNewMessage(messageContent: String): Task<Void> {
-        val newMessage = Message(
+        val newMessage = Message("",
             messageContent, 0, FirestoreRepository.currentUser.email!!, otherUserEmail,
             System.currentTimeMillis(), currentRelatedAdv
         )
@@ -61,8 +83,13 @@ class MessagesViewModel : ViewModel() {
         return FirestoreRepository().setMessage(newMessage)
     }
 
+    fun updateMessageRead(message : Message): Task<Void> {
+        return FirestoreRepository().updateMessageReadDB(message.id)
+    }
+
     private fun DocumentSnapshot.toMessageObject(): Message? {
         return try {
+            val id = get("ID") as String
             val messageContent = get("MESSAGE_CONTENT") as String
             val read = get("READ") as Long
             val sentBy = get("SENT_BY") as String
@@ -70,7 +97,7 @@ class MessagesViewModel : ViewModel() {
             val timestamp = get("TIMESTAMP") as Long
             val relatedAdv = get("RELATED_ADV") as String
 
-            Message(messageContent, read.toInt(), sentBy, received_by, timestamp, relatedAdv)
+            Message(id, messageContent, read.toInt(), sentBy, received_by, timestamp, relatedAdv)
         } catch (e: Exception) {
             e.printStackTrace()
             null

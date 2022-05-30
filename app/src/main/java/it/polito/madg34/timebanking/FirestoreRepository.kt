@@ -213,7 +213,16 @@ class FirestoreRepository {
     }
 
     fun setMessage(message: Message): Task<Void> {
-        return fireStoreDB.collection("messages").document().set(message)
+        message.id =  fireStoreDB.collection("messages").document().id
+        return fireStoreDB.collection("messages").document(message.id).set(message)
+    }
+
+    fun getAllMessages(): CollectionReference {
+        return fireStoreDB.collection("messages")
+    }
+
+    fun updateMessageReadDB(id : String): Task<Void> {
+       return fireStoreDB.collection("messages").document(id).update("READ", 1)
     }
 
 }

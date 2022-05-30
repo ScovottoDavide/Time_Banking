@@ -116,11 +116,13 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
             val email = get("PUBLISHED_BY") as String
             val related_skill = get("RELATED_SKILL") as String
             val available = get("AVAILABLE") as Long
+            val refused = get("REFUSED") as String
+            val accepted = get("ACCEPTED") as String
             val index = get("INDEX") as Long
 
             TimeSlot(
                 id, title, description, date, time, duration, location, email, related_skill,
-                index.toInt(), available.toInt()
+                index.toInt(), available.toInt(), refused, accepted
             )
 
         } catch (e: Exception) {

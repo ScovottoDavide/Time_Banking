@@ -17,11 +17,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import it.polito.madg34.timebanking.Chat.ChatViewModel
+import it.polito.madg34.timebanking.FirestoreRepository
 import it.polito.madg34.timebanking.R
+import it.polito.madg34.timebanking.TimeSlots.TimeSlotViewModel
 
 class MessageFragment : Fragment() {
     val vmMessage: MessagesViewModel by activityViewModels()
     val vmChat: ChatViewModel by activityViewModels()
+    val vmTimeSlot: TimeSlotViewModel by activityViewModels()
 
     var messagesToDisplay : List<Message> = emptyList()
 
@@ -58,8 +61,13 @@ class MessageFragment : Fragment() {
         }
 
         if(vmChat.sentOrReceived.value == true){ // received
-            accept.visibility = View.VISIBLE
-            deny.visibility = View.VISIBLE
+            if(vmTimeSlot.currentShownAdv?.refused?.isEmpty() == true && vmTimeSlot.currentShownAdv?.accepted?.isEmpty() == true){
+                accept.visibility = View.VISIBLE
+                deny.visibility = View.VISIBLE
+            }else{
+                accept.visibility = View.GONE
+                deny.visibility = View.GONE
+            }
         } else {
             accept.visibility = View.GONE
             deny.visibility = View.GONE
@@ -68,13 +76,29 @@ class MessageFragment : Fragment() {
         vmMessage.getCurrentUserMessages().observe(viewLifecycleOwner){
             if(it != null){
                 messagesToDisplay = it
-                Log.d("MESSAGES", messagesToDisplay.toString())
+                val messagesRead = messagesToDisplay.filter { it.sentBy != FirestoreRepository.currentUser.email!! }
+                messagesRead.forEach { m -> vmMessage.updateMessageRead(m) }
                 messagesRV = view.findViewById(R.id.recycler_gchat)
                 messagesRV.layoutManager = LinearLayoutManager(this.context)
                 messagesRV.adapter = MessageListAdapter(messagesToDisplay)
                 if(messagesToDisplay.isNotEmpty())
                     messagesRV.smoothScrollToPosition(messagesToDisplay.size - 1)
             }
+        }
+
+        /** 1. Update available field of timeslot
+         *  2. Update accepted field of timeslot
+         *  3. Remove timeslot from online (done through point 1)
+         *
+         * */
+        accept.setOnClickListener{
+            vmTimeSlot.currentShownAdv?.available = 0
+            vmTimeSlot.currentShownAdv?.accepted = vmMessage.otherUserEmail
+            vmTimeSlot.currentShownAdv?.let { it1 -> vmTimeSlot.updateAdv(it1) }
+        }
+
+        deny.setOnClickListener {
+
         }
     }
 

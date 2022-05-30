@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
 
@@ -18,20 +19,19 @@
             android:title="Online Skills" />
         <item
             android:id="@+id/receivedReqs"
-            android:title="Received requests"
             android:icon="@drawable/email_receive_outline"
-            />
+            android:title="Received requests"
+            app:actionLayout="@layout/menu_counter" />
         <item
             android:id="@+id/sentReqs"
-            android:title="Requests sent"
             android:icon="@drawable/email_send_outline"
-            />
+            android:title="Requests sent"
+            app:actionLayout="@layout/menu_counter" />
         <item
             android:id="@+id/void1"
-            android:title=""
-            android:enabled="false"
             android:checkable="false"
-            />
+            android:enabled="false"
+            android:title="" />
     </group>
 
 </menu>

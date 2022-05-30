@@ -46,11 +46,11 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:layout_marginBottom="24dp"
-        app:layout_constraintBottom_toBottomOf="@+id/titlleEditService5"
+        app:layout_constraintBottom_toBottomOf="@+id/chatTitle"
         app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
-        android:id="@+id/titlleEditService5"
+        android:id="@+id/chatTitle"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
@@ -84,7 +84,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titlleEditService5" >
+        app:layout_constraintTop_toBottomOf="@+id/chatTitle" >
 
     </androidx.recyclerview.widget.RecyclerView>
 

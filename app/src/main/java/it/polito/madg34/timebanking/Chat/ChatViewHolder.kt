@@ -24,7 +24,7 @@ class ChatViewHolder(v : View) : RecyclerView.ViewHolder(v) {
     private val statusButton : MaterialButton = v.findViewById(R.id.statusButton)
 
     @SuppressLint("ResourceAsColor")
-    fun bind(item : TimeSlot, userImg : String?, status : Boolean) {
+    fun bind(item : TimeSlot, userImg : String?, otherEmail : String) {
         if(userImg.isNullOrEmpty()){
             serviceImage.visibility = View.INVISIBLE
             serviceImage2.visibility = View.VISIBLE
@@ -36,12 +36,17 @@ class ChatViewHolder(v : View) : RecyclerView.ViewHolder(v) {
             Glide.with(this.itemView).load(userImg).diskCacheStrategy( DiskCacheStrategy.ALL ).dontTransform().into(serviceImage)
         }
 
-        if(status){
+        if(item.accepted.isNotEmpty() && otherEmail == item.accepted){
             val cls = ColorStateList.valueOf(Color.parseColor("#008000"))
             statusButton.strokeColor = cls
             statusButton.setTextColor(cls)
             statusButton.setText("Accepted")
-        } else {
+        } else if(item.accepted.isNotEmpty() && otherEmail != item.accepted) {
+            val cls = ColorStateList.valueOf(Color.parseColor("#ff0000"))
+            statusButton.strokeColor = cls
+            statusButton.setTextColor(cls)
+            statusButton.setText("Refused")
+        }else {
             val cls = ColorStateList.valueOf(Color.parseColor("#ffa500"))
             statusButton.strokeColor = cls
             statusButton.setTextColor(cls)

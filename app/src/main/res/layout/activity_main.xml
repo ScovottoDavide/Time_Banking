@@ -13,11 +13,12 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
+
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appBarLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:elevation="8dp"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -28,9 +29,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/Goldenrod"
+                app:menu="@menu/nav_menu"
                 app:navigationIcon="@drawable/menu_icon"
                 app:title="@string/app_name"
                 app:titleCentered="true" />
+
+            <TextView
+                android:id="@+id/tv_nav_drawer_count"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="-45dp"
+                android:background="@drawable/menu_text_bg"
+                android:gravity="center"
+                android:text="10"
+                android:textColor="@android:color/white"
+                android:textSize="8dp"
+                android:visibility="gone" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -77,11 +92,9 @@
             android:id="@+id/logout_btn"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="@string/logout"
             android:layout_gravity="bottom"
-            />
+            android:text="@string/logout" />
     </com.google.android.material.navigation.NavigationView>
-
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

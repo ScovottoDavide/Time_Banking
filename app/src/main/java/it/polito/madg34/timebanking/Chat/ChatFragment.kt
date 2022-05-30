@@ -5,6 +5,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +25,7 @@ class ChatFragment : Fragment() {
     private var timeSlotsIds : MutableList<String> = mutableListOf()
 
     lateinit var chatRV: RecyclerView
+    lateinit var titlePage : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,9 +39,11 @@ class ChatFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        titlePage = view.findViewById(R.id.chatTitle)
 
         vmChat.sentOrReceived.observe(viewLifecycleOwner){ sentOrreceived ->
-            if(sentOrreceived){
+            if(sentOrreceived){ // received
+                titlePage.setText("Incoming Requests")
                 vmChat.getCurrentChatReceivedList().observe(viewLifecycleOwner){
                     if(!it.isNullOrEmpty()){
                         chatReceivedList = it
@@ -59,6 +64,7 @@ class ChatFragment : Fragment() {
                     }
                 }
             }else {
+                titlePage.setText("Outgoing Requests")
                 vmChat.getCurrentChatList().observe(viewLifecycleOwner){ it1 ->
                     if(!it1.isNullOrEmpty()){
                         chatList = it1

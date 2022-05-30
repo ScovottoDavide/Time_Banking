@@ -31,16 +31,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!--ImageVIew to display our Course Image-->
-
-        <!--Text View to display Course Name-->
+        <TextView
+            android:id="@+id/requester"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="3dp"
+            android:gravity="center_vertical"
+            android:text="@string/fullName"
+            android:textSize="14sp"
+            android:textStyle="bold|italic" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/serviceImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="16dp"
             android:contentDescription="@string/app_name"
+            android:layout_below="@id/requester"
             android:padding="5dp"
             android:visibility="visible"
             app:civ_border_color="#FF000000"
@@ -50,7 +58,8 @@
             android:id="@+id/serviceImage2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
+            android:layout_below="@id/requester"
+            android:layout_marginTop="16dp"
             android:contentDescription="@string/app_name"
             android:padding="5dp"
             android:src="@drawable/menu_icon"
@@ -64,6 +73,7 @@
             android:layout_alignEnd="@id/serviceTitle"
             android:backgroundTint="@color/Goldenrod"
             android:contentDescription="Chat :"
+            android:layout_below="@id/requester"
             android:minHeight="48dp"
             app:srcCompat="@drawable/chat_plus" />
 
@@ -89,6 +99,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@id/serviceImage"
+            android:layout_below="@id/requester"
             android:drawableStart="@drawable/format_title"
             android:drawableTint="@color/Gray"
             android:text="@string/fullName"
@@ -106,7 +117,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/serviceTitle"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="6dp"
             android:layout_toEndOf="@id/serviceImage"
             android:drawablePadding="2dp"
             android:gravity="center_vertical"
@@ -120,7 +131,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/serviceLocation"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="6dp"
             android:layout_toEndOf="@id/serviceImage"
             android:drawablePadding="2dp"
             android:gravity="center_vertical"

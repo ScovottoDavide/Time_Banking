@@ -16,7 +16,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import it.polito.madg34.timebanking.Chat.ChatViewModel
 import it.polito.madg34.timebanking.R
 import it.polito.madg34.timebanking.HomeSkills.SkillsViewModel
 import java.text.SimpleDateFormat
@@ -48,14 +47,14 @@ class TimeSlotListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val addButton: FloatingActionButton = view.findViewById(R.id.add_button)
-        val fromSkillTitle : TextView = view.findViewById(R.id.titlleEditService5)
+        val fromSkillTitle : TextView = view.findViewById(R.id.chatTitle)
 
         vmSkills.fromHome.observe(viewLifecycleOwner) { fromHome ->
             if (fromHome) {
                 addButton.hide()
                 vmSkills.getAdvsToDisplayFromSkill().observe(viewLifecycleOwner) {
                     if (!it.isNullOrEmpty()) {
-                        timeSlotsFromSkill = it as MutableList<TimeSlot>
+                        timeSlotsFromSkill = it.filter{timeSlot ->  timeSlot.available==1} as MutableList<TimeSlot>
                     }
                     if (timeSlotsFromSkill.size == 0) {
                         emptyView = view.findViewById(R.id.emptyListTV)

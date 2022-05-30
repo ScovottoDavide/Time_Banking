@@ -24,12 +24,10 @@ class ProfileViewModel : ViewModel() {
     val viewProfile: MutableLiveData<ProfileUser> by lazy { MutableLiveData(ProfileUser()).also { loadViewProfile() } }
 
     val chatImage: MutableLiveData<String?> = MutableLiveData(String())
-    var currentChatImage: String = ""
+    var nickname : String = ""
 
     var listenerNavigation: View.OnClickListener? = null
     private var listener1: ListenerRegistration? = null
-    private var listener2: ListenerRegistration? = null
-
 
     /*
     * Load Profile current user
@@ -76,6 +74,7 @@ class ProfileViewModel : ViewModel() {
         return FirestoreRepository().getChatImage(email).get().addOnSuccessListener {
             if(it != null){
                 chatImage.value = it.getString("uri")
+                nickname = it.getString("NICKNAME").toString()
             }
         }
     }
