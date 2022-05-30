@@ -52,7 +52,8 @@ class MessageFragment : Fragment() {
         sendButton = view.findViewById(R.id.button_gchat_send)
         messageContent = view.findViewById(R.id.edit_gchat_message)
         sendButton.setOnClickListener {
-            vmMessage.sendNewMessage(messageContent.text.toString())
+            if(messageContent.text.isNotEmpty())
+                vmMessage.sendNewMessage(messageContent.text.toString())
             messageContent.setText("")
         }
 

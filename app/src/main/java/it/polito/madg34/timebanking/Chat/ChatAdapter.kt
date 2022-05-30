@@ -42,12 +42,14 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots : List<TimeSlot>) : Re
         val split = chatEntry.split(",")
         val chatEntryAdv = split[0]
         var chatEntryEmail = split[1]
+        var profileImageReceived = ""
         val timeSlot = timeSlots.find { it.id == chatEntryAdv }
 
         if(vmChat.sentOrReceived.value == true){ // received
-            chatEntryEmail = FirestoreRepository.currentUser.email!!
-        }
-        vmProfile.loadChatImage(chatEntryEmail).addOnSuccessListener {
+            profileImageReceived = FirestoreRepository.currentUser.email!!
+        }else
+            profileImageReceived = chatEntryEmail
+        vmProfile.loadChatImage(profileImageReceived).addOnSuccessListener {
             if(it != null){
                 if (timeSlot != null) {
                     holder.bind(timeSlot, vmProfile.chatImage.value)

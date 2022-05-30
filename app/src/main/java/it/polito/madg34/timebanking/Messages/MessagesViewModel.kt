@@ -1,5 +1,6 @@
 package it.polito.madg34.timebanking.Messages
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -31,15 +32,16 @@ class MessagesViewModel : ViewModel() {
                     }
                     if (value!!.documents.size > 0) {
                         currentUserMessages.value = value.documents.filter {
-                            (it.getString("SENT_BY") == FirestoreRepository.currentUser.email ||
-                                    it.getString("SENT_BY") == otherUserEmail)
-                                    &&
-                                    (it.getString("RECEIVED_BY") == otherUserEmail ||
+                            (it.getString("SENT_BY") == FirestoreRepository.currentUser.email &&
+                                    it.getString("RECEIVED_BY") == otherUserEmail)
+                                    ||
+                                    (it.getString("SENT_BY") == otherUserEmail ||
                                             it.getString("RECEIVED_BY") == FirestoreRepository.currentUser.email)
                         }.mapNotNull { d -> d.toMessageObject() }
                         currentUserMessages.value = currentUserMessages.value?.sortedBy {
                             it.timeStamp
                         }
+                        Log.d("EMAIL", currentUserMessages.value.toString())
                     }
                     else currentUserMessages.value = emptyList()
                 })
