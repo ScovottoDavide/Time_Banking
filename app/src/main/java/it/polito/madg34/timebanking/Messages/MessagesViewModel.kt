@@ -33,7 +33,7 @@ class MessagesViewModel : ViewModel() {
                         currentUserMessages.value = value.documents.filter {
                             (it.getString("SENT_BY") == FirestoreRepository.currentUser.email ||
                                     it.getString("SENT_BY") == otherUserEmail)
-                                    ||
+                                    &&
                                     (it.getString("RECEIVED_BY") == otherUserEmail ||
                                             it.getString("RECEIVED_BY") == FirestoreRepository.currentUser.email)
                         }.mapNotNull { d -> d.toMessageObject() }

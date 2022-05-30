@@ -71,7 +71,8 @@ class MessageFragment : Fragment() {
                 messagesRV = view.findViewById(R.id.recycler_gchat)
                 messagesRV.layoutManager = LinearLayoutManager(this.context)
                 messagesRV.adapter = MessageListAdapter(messagesToDisplay)
-                messagesRV.smoothScrollToPosition(messagesToDisplay.size - 1)
+                if(messagesToDisplay.isNotEmpty())
+                    messagesRV.smoothScrollToPosition(messagesToDisplay.size - 1)
             }
         }
     }

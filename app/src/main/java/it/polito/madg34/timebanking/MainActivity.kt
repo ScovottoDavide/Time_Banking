@@ -161,6 +161,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.nav_listSkills -> {
                     if (navController.currentDestination?.id != navController.graph[R.id.skillsFragment].id) {
+                        vmChat.sentOrReceived.value = false
                         vmSkills.loadAllSkills()
                         vmSkills.currentSkillAdvs.value = vmSkills.currentSkillAdvs.value
                         navController.navigate(R.id.skillsFragment)
