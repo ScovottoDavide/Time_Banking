@@ -57,6 +57,16 @@
             android:visibility="visible"
             app:srcCompat="@drawable/time_management" />
 
+        <ImageButton
+            android:id="@+id/chatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/serviceTitle"
+            android:backgroundTint="@color/Goldenrod"
+            android:contentDescription="Chat :"
+            android:minHeight="48dp"
+            app:srcCompat="@drawable/chat_plus" />
+
 
         <TextView
             android:id="@+id/serviceTitle"

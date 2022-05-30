@@ -114,7 +114,8 @@ class MainActivity : AppCompatActivity() {
                 vmProfile.clickedEmail.value = FirestoreRepository.currentUser.email.toString()
                 vmProfile.profile.value = vmProfile.profile.value
                 this.onBackPressed()
-            } else if (navController.currentDestination?.id == navController.graph[R.id.skillsFragment].id) {
+            } else if (navController.currentDestination?.id == navController.graph[R.id.skillsFragment].id ||
+                navController.currentDestination?.id == navController.graph[R.id.chatFragment].id) {
                 loadNavigationHeader()
                 drawerLayout.openDrawer(GravityCompat.START)
             } else {

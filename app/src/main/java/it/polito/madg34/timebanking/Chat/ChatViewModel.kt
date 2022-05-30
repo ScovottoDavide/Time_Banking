@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import it.polito.madg34.timebanking.FirestoreRepository
+import it.polito.madg34.timebanking.TimeSlots.TimeSlot
 
 class ChatViewModel : ViewModel() {
     val currentChatList: MutableLiveData<MutableList<Chat>> = MutableLiveData<MutableList<Chat>>().also { loadChatSent() }

@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import it.polito.madg34.timebanking.Chat.ChatViewModel
 import it.polito.madg34.timebanking.R
 import it.polito.madg34.timebanking.HomeSkills.SkillsViewModel
 import java.text.SimpleDateFormat
@@ -26,6 +27,7 @@ class TimeSlotListFragment : Fragment() {
 
     val vm: TimeSlotViewModel by activityViewModels()
     val vmSkills: SkillsViewModel by activityViewModels()
+
 
     private var timeSlots: MutableList<TimeSlot> = mutableListOf()
     private var timeSlotsFromSkill: MutableList<TimeSlot> = mutableListOf()

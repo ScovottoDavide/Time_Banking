@@ -35,7 +35,7 @@ class MessagesViewModel : ViewModel() {
                             (it.getString("SENT_BY") == FirestoreRepository.currentUser.email &&
                                     it.getString("RECEIVED_BY") == otherUserEmail)
                                     ||
-                                    (it.getString("SENT_BY") == otherUserEmail ||
+                                    (it.getString("SENT_BY") == otherUserEmail &&
                                             it.getString("RECEIVED_BY") == FirestoreRepository.currentUser.email)
                         }.mapNotNull { d -> d.toMessageObject() }
                         currentUserMessages.value = currentUserMessages.value?.sortedBy {

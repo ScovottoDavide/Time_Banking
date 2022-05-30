@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import it.polito.madg34.timebanking.Chat.ChatViewModel
 import it.polito.madg34.timebanking.FirestoreRepository
 import it.polito.madg34.timebanking.Profile.ProfileViewModel
 import it.polito.madg34.timebanking.R
@@ -23,6 +24,8 @@ class TimeSlotDetailsFragment : Fragment() {
     val vm: TimeSlotViewModel by activityViewModels()
     val vmSkills: SkillsViewModel by activityViewModels()
     val vmProfile: ProfileViewModel by activityViewModels()
+    val vmChat: ChatViewModel by activityViewModels()
+
 
 
     private var h: Int = 0
@@ -63,8 +66,12 @@ class TimeSlotDetailsFragment : Fragment() {
             time.setText(item?.time)
             duration.setText(item?.duration)
             location.setText(item?.location)
-            val text = "<a href=''> ${item?.published_by} </a>"
-            email.setText(Html.fromHtml(text))
+            if(vmSkills.fromHome.value == true){
+                val text = "<a href=''> ${item?.published_by} </a>"
+                email.setText(Html.fromHtml(text))
+            }else{
+                email.setText(item?.published_by)
+            }
             skill.setText(item?.related_skill)
         }
 

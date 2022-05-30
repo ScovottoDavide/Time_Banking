@@ -57,6 +57,30 @@
             android:visibility="visible"
             app:srcCompat="@drawable/time_management" />
 
+        <ImageButton
+            android:id="@+id/chatButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@id/serviceTitle"
+            android:backgroundTint="@color/Goldenrod"
+            android:contentDescription="Chat :"
+            android:minHeight="48dp"
+            app:srcCompat="@drawable/chat_plus" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/statusButton"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_below="@+id/serviceDate"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="-35dp"
+            android:layout_marginEnd="0dp"
+            android:clickable="false"
+            android:text="view profile"
+            android:textSize="8sp"
+            app:backgroundTint="@color/White"
+            app:strokeWidth="1dp"/>
+
 
         <TextView
             android:id="@+id/serviceTitle"
