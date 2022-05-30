@@ -15,38 +15,43 @@ import it.polito.madg34.timebanking.R
 import it.polito.madg34.timebanking.TimeSlots.TimeSlot
 
 
-class ChatViewHolder(v : View) : RecyclerView.ViewHolder(v) {
-    private val serviceImage : CircleImageView = v.findViewById(R.id.serviceImage)
-    private val serviceImage2 : ImageView = v.findViewById(R.id.serviceImage2)
-    private val serviceTitle : TextView = v.findViewById(R.id.serviceTitle)
-    private val serviceLocation : TextView = v.findViewById(R.id.serviceLocation)
-    private val serviceDate : TextView = v.findViewById(R.id.serviceDate)
-    private val statusButton : MaterialButton = v.findViewById(R.id.statusButton)
+class ChatViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+    private val serviceImage: CircleImageView = v.findViewById(R.id.serviceImage)
+    private val serviceImage2: ImageView = v.findViewById(R.id.serviceImage2)
+    private val serviceTitle: TextView = v.findViewById(R.id.serviceTitle)
+    private val serviceLocation: TextView = v.findViewById(R.id.serviceLocation)
+    private val serviceDate: TextView = v.findViewById(R.id.serviceDate)
+    private val statusButton: MaterialButton = v.findViewById(R.id.statusButton)
 
     @SuppressLint("ResourceAsColor")
-    fun bind(item : TimeSlot, userImg : String?, otherEmail : String) {
-        if(userImg.isNullOrEmpty()){
+    fun bind(item: TimeSlot, userImg: String?, otherEmail: String) {
+        if (userImg.isNullOrEmpty()) {
             serviceImage.visibility = View.INVISIBLE
             serviceImage2.visibility = View.VISIBLE
             serviceImage2.setImageResource(R.drawable.time_management)
-        }
-        else {
+        } else {
             serviceImage2.visibility = View.GONE
             serviceImage.visibility = View.VISIBLE
-            Glide.with(this.itemView).load(userImg).diskCacheStrategy( DiskCacheStrategy.ALL ).dontTransform().into(serviceImage)
+            Glide.with(this.itemView).load(userImg).diskCacheStrategy(DiskCacheStrategy.ALL)
+                .dontTransform().into(serviceImage)
         }
 
-        if(item.accepted.isNotEmpty() && otherEmail == item.accepted){
+        if (item.accepted.isNotEmpty() && otherEmail == item.accepted) {
             val cls = ColorStateList.valueOf(Color.parseColor("#008000"))
             statusButton.strokeColor = cls
             statusButton.setTextColor(cls)
             statusButton.setText("Accepted")
-        } else if(item.accepted.isNotEmpty() && otherEmail != item.accepted) {
+        } else if (item.accepted.isNotEmpty() && otherEmail != item.accepted) {
             val cls = ColorStateList.valueOf(Color.parseColor("#ff0000"))
             statusButton.strokeColor = cls
             statusButton.setTextColor(cls)
-            statusButton.setText("Refused")
-        }else {
+            statusButton.setText("Rejected")
+        } else if (item.refused.isNotEmpty()) {
+            val cls = ColorStateList.valueOf(Color.parseColor("#ff0000"))
+            statusButton.strokeColor = cls
+            statusButton.setTextColor(cls)
+            statusButton.setText("Rejected")
+        } else {
             val cls = ColorStateList.valueOf(Color.parseColor("#ffa500"))
             statusButton.strokeColor = cls
             statusButton.setTextColor(cls)

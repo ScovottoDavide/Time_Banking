@@ -50,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
-            android:text="Deny"
+            android:text="Reject"
             android:textColor="@color/Red"
             app:strokeColor="@color/Red"
             app:strokeWidth="1dp" />

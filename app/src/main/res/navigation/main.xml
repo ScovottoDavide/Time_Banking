@@ -74,10 +74,16 @@
             app:popExitAnim="@anim/slide_out"/>
         <action
             android:id="@+id/action_timeSlotListFragment_to_skillsFragment"
-            app:destination="@id/skillsFragment" />
+            app:destination="@id/skillsFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
         <action
             android:id="@+id/action_timeSlotListFragment_to_messageFragment"
-            app:destination="@id/messageFragment" />
+            app:destination="@id/messageFragment"
+            app:enterAnim="@anim/slide_in"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/slide_out"/>
     </fragment>
     <fragment
         android:id="@+id/showProfileFragment"

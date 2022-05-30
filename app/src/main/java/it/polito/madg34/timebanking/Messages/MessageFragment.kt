@@ -10,8 +10,10 @@ import android.view.ViewTreeObserver
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TableRow
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
@@ -26,7 +28,7 @@ class MessageFragment : Fragment() {
     val vmChat: ChatViewModel by activityViewModels()
     val vmTimeSlot: TimeSlotViewModel by activityViewModels()
 
-    var messagesToDisplay : List<Message> = emptyList()
+    private var messagesToDisplay : List<Message> = emptyList()
 
     lateinit var messagesRV : RecyclerView
 
@@ -34,9 +36,14 @@ class MessageFragment : Fragment() {
     lateinit var messageContent : EditText
     lateinit var accept : MaterialButton
     lateinit var deny : MaterialButton
+    lateinit var alertDialog : AlertDialog
+    lateinit var alertDecline : AlertDialog
 
     private var h: Int = 0
     private var w: Int = 0
+
+    private var isPopupOpenAccept = false
+    private var isPopupOpenDecline = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +52,10 @@ class MessageFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.messages_list_fragment, container, false)
         halfWidth(view)
-        //setHasOptionsMenu(true)
+        if(savedInstanceState?.getBoolean("isOpen") == true)
+            popUpAccept()
+        if(savedInstanceState?.getBoolean("isOpenDecline") == true)
+            popUpReject()
         return view
     }
 
@@ -89,17 +99,55 @@ class MessageFragment : Fragment() {
         /** 1. Update available field of timeslot
          *  2. Update accepted field of timeslot
          *  3. Remove timeslot from online (done through point 1)
-         *
+         *  4. Automatic refusal for other requester on the same adv
          * */
         accept.setOnClickListener{
-            vmTimeSlot.currentShownAdv?.available = 0
-            vmTimeSlot.currentShownAdv?.accepted = vmMessage.otherUserEmail
-            vmTimeSlot.currentShownAdv?.let { it1 -> vmTimeSlot.updateAdv(it1) }
+            popUpAccept()
         }
 
+        /** Deny for the current requester */
         deny.setOnClickListener {
-
+            popUpReject()
         }
+    }
+
+    private fun popUpAccept(){
+        isPopupOpenAccept = true
+        alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Warning!")
+            .setMessage("Accepting the request made by ${vmMessage.otherUserEmail} will automatically trigger" +
+                    " the refusal of all the other requests you received on this advertisement.\n" +
+                    "Do you want to continue?")
+            .setPositiveButton("Yes") { _, _ ->
+                vmTimeSlot.currentShownAdv?.available = 0
+                vmTimeSlot.currentShownAdv?.accepted = vmMessage.otherUserEmail
+                vmTimeSlot.currentShownAdv?.let { it1 -> vmTimeSlot.updateAdv(it1) }
+                isPopupOpenAccept = false
+            }
+            .setNegativeButton("No") { _, _ ->
+                isPopupOpenAccept = false
+            }
+            .show()
+
+        alertDialog.setOnDismissListener { isPopupOpenAccept = false }
+    }
+
+    private fun popUpReject(){
+        isPopupOpenDecline = true
+        alertDialog = AlertDialog.Builder(requireContext())
+            .setTitle("Warning!")
+            .setMessage("Do you want to decline ${vmMessage.otherUserEmail} request?")
+            .setPositiveButton("Yes") { _, _ ->
+                vmTimeSlot.currentShownAdv?.refused = vmMessage.otherUserEmail
+                vmTimeSlot.currentShownAdv?.let { it1 -> vmTimeSlot.updateAdv(it1) }
+                isPopupOpenDecline = false
+            }
+            .setNegativeButton("No") { _, _ ->
+                isPopupOpenDecline = false
+            }
+            .show()
+
+        alertDialog.setOnDismissListener { isPopupOpenDecline = false }
     }
 
     private fun halfWidth(view: View) {
@@ -124,5 +172,11 @@ class MessageFragment : Fragment() {
                 row.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean("isOpen", isPopupOpenAccept)
+        outState.putBoolean("isOpenDecline", isPopupOpenDecline)
     }
 }
