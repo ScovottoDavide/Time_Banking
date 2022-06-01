@@ -66,6 +66,7 @@ class EditProfileFragment : Fragment() {
     lateinit var location: TextInputEditText
     lateinit var userDesc: TextInputEditText
     lateinit var userImage: CircleImageView
+    lateinit var timeView: TextInputEditText
 
     lateinit var dialog: AlertDialog
     private var isLogOutDialogOpen = false
@@ -111,6 +112,7 @@ class EditProfileFragment : Fragment() {
         location = view.findViewById(R.id.outlinedLocationFixed)
         userDesc = view.findViewById(R.id.outlinedAboutmeFixed)
         userImage = view.findViewById(R.id.userImage)
+        timeView = view.findViewById(R.id.outlinedEarnTimeFixed)
 
         val buttonPopup = view.findViewById<ImageButton>(R.id.plus)
         buttonPopup.setOnClickListener(View.OnClickListener() {
@@ -148,6 +150,7 @@ class EditProfileFragment : Fragment() {
         if (isRegistration) {
             val title = view.findViewById<TextView>(R.id.AccountInfo)
             title.setText(getString(R.string.registration))
+            timeView.setText("1h:30m")
             if (!vm.showed) {
                 infoPopup()
                 vm.showed = true
@@ -162,6 +165,7 @@ class EditProfileFragment : Fragment() {
         email.isEnabled = false
         location.setText(item.location)
         userDesc.setText(item.aboutUser)
+        if(!isRegistration) timeView.setText(item.totatl_time)
         if (vm.currentPhotoPath.isNotEmpty()) {
             userImage.setImageURI(Uri.parse(item.img))
         } else if (vm.currentPhotoPath.isEmpty() && item.img?.isNotEmpty() == true) {
@@ -490,6 +494,7 @@ class EditProfileFragment : Fragment() {
                 location = location.text.toString(),
                 img = item.img,
                 aboutUser = userDesc.text.toString(),
+                totatl_time = timeView.text.toString(),
                 skills = item.skills
             )
             item = vm.localProfile!!

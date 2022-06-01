@@ -148,7 +148,7 @@ class TimeSlotEditFragment : Fragment() {
             durationPicker.addOnPositiveButtonClickListener {
                 duration.setText(
                     String.format(
-                        "%d hours and %d minutes",
+                        "%dh:%dm",
                         durationPicker.hour,
                         durationPicker.minute
                     )

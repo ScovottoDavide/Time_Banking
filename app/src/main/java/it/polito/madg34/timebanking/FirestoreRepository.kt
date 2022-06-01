@@ -67,6 +67,10 @@ class FirestoreRepository {
         return fireStoreDB.collection("users").document(currentUser.email!!).set(value)
     }
 
+    fun setOtherUser(email: String, value : ProfileUser){
+        fireStoreDB.collection("users").document(email).set(value)
+    }
+
     fun getUserFromEmail(email: String): DocumentReference {
         return fireStoreDB.collection("users").document(email)
     }

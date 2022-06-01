@@ -13,9 +13,10 @@ data class ProfileUser(
     @get: PropertyName("EMAIL") @set: PropertyName("EMAIL") var email: String?  = "",
     @get: PropertyName("LOCATION") @set: PropertyName("LOCATION") var location: String? = "",
     @get: PropertyName("ABOUT_ME") @set: PropertyName("ABOUT_ME") var aboutUser: String? = "",
-    @get: PropertyName("Skills") @set: PropertyName("Skills") var skills: MutableMap<String, String> = mutableMapOf()
+    @get: PropertyName("Skills") @set: PropertyName("Skills") var skills: MutableMap<String, String> = mutableMapOf(),
+    @get: PropertyName("TOTAL_TIME") @set: PropertyName("TOTAL_TIME") var totatl_time: String? = ""
      )
 
 fun emptyProfile() : ProfileUser {
-     return  ProfileUser(null, "", "", "", "", "", mutableMapOf())
+     return  ProfileUser(null, "", "", "", "", "", mutableMapOf(), "")
 }

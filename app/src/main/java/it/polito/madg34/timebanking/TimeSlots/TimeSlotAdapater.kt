@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.get
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import it.polito.madg34.timebanking.FirestoreRepository
@@ -112,20 +113,34 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
             if (item.published_by != FirestoreRepository.currentUser.email) {
                 chat.visibility = View.VISIBLE
                 chat.setOnClickListener {
-                    val newChat = Chat("${item.id},${item.published_by}")
-                    if(vmChat.stringChat.contains(newChat.info)){
-                        vmMessages.currentRelatedAdv = item.id
-                        vmMessages.otherUserEmail = item.published_by
-                        vmMessages.loadMessages()
-                        navController.navigate(R.id.action_timeSlotListFragment_to_messageFragment)
-                    }else {
-                        vmChat.newChatAdd(newChat)?.addOnSuccessListener {
+                    val correct : Boolean = controlHour(item.duration)
+                    if(!correct){
+                        var isPopupOpenDiscard = true
+                        var alertDialog = androidx.appcompat.app.AlertDialog.Builder(holder.itemView.context)
+                            .setTitle("Warning!")
+                            .setMessage("your time is not enough")
+                            .setPositiveButton("Ok") { _, _ ->
+                                isPopupOpenDiscard = false
+                            }
+                            .show()
+                        alertDialog.setOnDismissListener { isPopupOpenDiscard = false }
+                    }else{
+                        val newChat = Chat("${item.id},${item.published_by}")
+                        if(vmChat.stringChat.contains(newChat.info)){
                             vmMessages.currentRelatedAdv = item.id
                             vmMessages.otherUserEmail = item.published_by
                             vmMessages.loadMessages()
                             navController.navigate(R.id.action_timeSlotListFragment_to_messageFragment)
+                        }else {
+                            vmChat.newChatAdd(newChat)?.addOnSuccessListener {
+                                vmMessages.currentRelatedAdv = item.id
+                                vmMessages.otherUserEmail = item.published_by
+                                vmMessages.loadMessages()
+                                navController.navigate(R.id.action_timeSlotListFragment_to_messageFragment)
+                            }
                         }
                     }
+
                 }
             } else {
                 chat.visibility = View.GONE
@@ -145,6 +160,25 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
     }
 
     override fun getItemCount(): Int = data.size
+
+    private fun controlHour(item : String): Boolean{
+        var item1= item.split(":").toTypedArray()
+        var sxItem1 = item1[0].removeSuffix("h")
+        var dxItem1 = item1[1].removeSuffix("m")
+
+        var item2 = vmProfile.getDBUser().value?.totatl_time?.split(":")?.toTypedArray()
+        var sxItem2 = item2?.get(0)?.removeSuffix("h")
+        var dxItem2 = item2?.get(1)?.removeSuffix("m")
+
+        if(sxItem2?.toInt()!! > sxItem1.toInt()){
+            return true
+        }else if (sxItem2?.toInt()!! == sxItem1.toInt()){
+            return dxItem2?.toInt()!! >= dxItem1.toInt()
+        }else{
+            return false
+        }
+    }
+
 
     private fun showPopUpDialog(
         holder: TimeSlotViewHolder,

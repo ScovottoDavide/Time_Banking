@@ -22,6 +22,8 @@ class ChatViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     private val serviceLocation: TextView = v.findViewById(R.id.serviceLocation)
     private val serviceDate: TextView = v.findViewById(R.id.serviceDate)
     private val statusButton: MaterialButton = v.findViewById(R.id.statusButton)
+    private val timeView: TextView = v.findViewById(R.id.earnTime)
+
 
     @SuppressLint("ResourceAsColor")
     fun bind(item: TimeSlot, userImg: String?, otherEmail: String) {
@@ -60,5 +62,6 @@ class ChatViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         serviceTitle.text = item.title
         serviceLocation.text = item.location
         serviceDate.text = item.date
+        timeView.text = item.duration
     }
 }

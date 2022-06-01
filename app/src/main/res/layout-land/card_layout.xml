@@ -116,27 +116,40 @@
             android:minHeight="48dp"
             app:srcCompat="@android:drawable/ic_menu_delete" />
 
+
         <TextView
             android:id="@+id/serviceLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/serviceTitle"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_toEndOf="@id/serviceImage"
             android:drawablePadding="2dp"
             android:gravity="center_vertical"
             android:text="@string/fullName"
             app:drawableStartCompat="@drawable/outline_location_on_24" />
 
+        <TextView
+            android:id="@+id/earnTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/serviceLocation"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_toEndOf="@id/serviceImage"
+            android:drawableLeft="@drawable/earn_time"
+            android:drawablePadding="2dp"
+            android:gravity="center_vertical"
+            android:text="Duration" />
 
         <TextView
             android:id="@+id/serviceDate"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/serviceLocation"
+            android:layout_below="@+id/earnTime"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_toEndOf="@id/serviceImage"
             android:drawablePadding="2dp"
             android:gravity="center_vertical"

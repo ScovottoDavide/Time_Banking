@@ -13,13 +13,13 @@ import android.widget.TableRow
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.textfield.TextInputLayout
 import it.polito.madg34.timebanking.Chat.ChatViewModel
 import it.polito.madg34.timebanking.FirestoreRepository
+import it.polito.madg34.timebanking.Profile.ProfileUser
+import it.polito.madg34.timebanking.Profile.ProfileViewModel
 import it.polito.madg34.timebanking.R
 import it.polito.madg34.timebanking.TimeSlots.TimeSlotViewModel
 
@@ -27,10 +27,12 @@ class MessageFragment : Fragment() {
     val vmMessage: MessagesViewModel by activityViewModels()
     val vmChat: ChatViewModel by activityViewModels()
     val vmTimeSlot: TimeSlotViewModel by activityViewModels()
+    val vmProfile: ProfileViewModel by activityViewModels()
 
     private var messagesToDisplay : List<Message> = emptyList()
 
     lateinit var messagesRV : RecyclerView
+
 
     lateinit var sendButton : Button
     lateinit var messageContent : EditText
@@ -122,6 +124,10 @@ class MessageFragment : Fragment() {
                 vmTimeSlot.currentShownAdv?.available = 0
                 vmTimeSlot.currentShownAdv?.accepted = vmMessage.otherUserEmail
                 vmTimeSlot.currentShownAdv?.let { it1 -> vmTimeSlot.updateAdv(it1) }
+
+                updateUserProfile()
+                vmMessage.modifyProfileInChat(vmMessage.otherUserEmail, vmTimeSlot.currentShownAdv?.duration)
+
                 isPopupOpenAccept = false
             }
             .setNegativeButton("No") { _, _ ->
@@ -131,6 +137,39 @@ class MessageFragment : Fragment() {
 
         alertDialog.setOnDismissListener { isPopupOpenAccept = false }
     }
+
+    private fun updateUserProfile(){
+        var item1= vmProfile.profile.value?.totatl_time?.split(":")?.toTypedArray()
+        var sxItem1 = item1?.get(0)?.removeSuffix("h")
+        var dxItem1 = item1?.get(1)?.removeSuffix("m")
+
+        var item2 = vmTimeSlot.currentShownAdv?.duration?.split(":")?.toTypedArray()
+        var sxItem2 = item2?.get(0)?.removeSuffix("h")
+        var dxItem2 = item2?.get(1)?.removeSuffix("m")
+
+        var m1 = (sxItem1?.toInt()!! * 60) + dxItem1!!.toInt()
+        var m2 = (sxItem2?.toInt()!! * 60) + dxItem2!!.toInt()
+
+        var minus = m1 + m2
+        Log.d("hm", minus.toString())
+
+        var i = 0
+        var h = 0
+        var m = 0
+        while (i < minus) {
+            m++
+            if (m == 60) {
+                h++
+                m = 0
+            }
+            i++
+        }
+        vmProfile.modifyUserProfile(
+            ProfileUser(vmProfile.profile?.value?.img,
+                vmProfile.profile?.value?.fullName,vmProfile.profile?.value?.nickname,vmProfile.profile?.value?.email,vmProfile.profile?.value?.location,
+                vmProfile.profile?.value?.aboutUser, vmProfile.profile?.value!!.skills,h.toString() + "h" + ":" + m.toString() + "m"))
+    }
+
 
     private fun popUpReject(){
         isPopupOpenDecline = true

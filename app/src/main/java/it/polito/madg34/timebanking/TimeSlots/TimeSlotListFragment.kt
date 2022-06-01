@@ -18,6 +18,7 @@ import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import it.polito.madg34.timebanking.R
 import it.polito.madg34.timebanking.HomeSkills.SkillsViewModel
+import it.polito.madg34.timebanking.Profile.ProfileViewModel
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,6 +27,8 @@ class TimeSlotListFragment : Fragment() {
 
     val vm: TimeSlotViewModel by activityViewModels()
     val vmSkills: SkillsViewModel by activityViewModels()
+    val vmProfile: ProfileViewModel by activityViewModels()
+
 
 
     private var timeSlots: MutableList<TimeSlot> = mutableListOf()
@@ -48,6 +51,7 @@ class TimeSlotListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val addButton: FloatingActionButton = view.findViewById(R.id.add_button)
         val fromSkillTitle : TextView = view.findViewById(R.id.chatTitle)
+        val timeView : TextView = view.findViewById(R.id.yourTime)
 
         vmSkills.fromHome.observe(viewLifecycleOwner) { fromHome ->
             if (fromHome) {
@@ -62,6 +66,8 @@ class TimeSlotListFragment : Fragment() {
                     } else {
                         emptyView = view.findViewById(R.id.emptyListTV)
                         emptyView.visibility = View.GONE
+                        timeView.visibility = View.VISIBLE
+                        timeView.setText(vmProfile.getDBUser().value?.totatl_time)
                         fromSkillTitle.setText(getString(R.string.ListOnlineServices))
                         timeSlotsRV = view.findViewById(R.id.ServicesList)
                         timeSlotsRV.layoutManager = LinearLayoutManager(this.context)

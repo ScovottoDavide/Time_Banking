@@ -31,6 +31,7 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     lateinit var myLocationView: TextInputEditText
     lateinit var userDesc: TextInputEditText
     lateinit var img_view: CircleImageView
+    lateinit var timeView : TextInputEditText
     private var profile: ProfileUser? = ProfileUser()
 
     //private val prova : ProfileUser = ProfileUser(null, "Ciao", "prova", "dddd", "dddd","CCC", mutableMapOf("Ciao" to "Ciao"))
@@ -55,6 +56,7 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         myLocationView = view.findViewById(R.id.outlinedLocationFixed)
         userDesc = view.findViewById(R.id.outlinedAboutmeFixed)
         img_view = view.findViewById(R.id.userImg)
+        timeView = view.findViewById(R.id.outlinedEarnTimeFixed)
 
 
         if (vm.clickedEmail.value != FirestoreRepository.currentUser.email && (vm.clickedEmail.value?.isNotEmpty() == true)) {
@@ -89,6 +91,7 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         emailView.setText(profile?.email)
         myLocationView.setText(profile?.location)
         userDesc.setText(profile?.aboutUser)
+        timeView.setText(profile?.totatl_time)
 
         val navView = activity?.findViewById<NavigationView>(R.id.nav_view)
         val header = navView?.getHeaderView(0)

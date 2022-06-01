@@ -17,6 +17,8 @@ class TimeSlotViewHolder(v : View) : RecyclerView.ViewHolder(v){
     private val serviceTitle : TextView = v.findViewById(R.id.serviceTitle)
     private val serviceLocation : TextView = v.findViewById(R.id.serviceLocation)
     private val serviceDate : TextView = v.findViewById(R.id.serviceDate)
+    private val earnTime : TextView = v.findViewById(R.id.earnTime)
+
 
     @SuppressLint("ResourceAsColor")
     fun bind(item : TimeSlot, userImg : String?) {
@@ -33,5 +35,6 @@ class TimeSlotViewHolder(v : View) : RecyclerView.ViewHolder(v){
         serviceTitle.text = item.title
         serviceLocation.text = item.location
         serviceDate.text = item.date
+        earnTime.text = item.duration
     }
 }

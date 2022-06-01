@@ -9,14 +9,15 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ListenerRegistration
 import it.polito.madg34.timebanking.FirestoreRepository
+import it.polito.madg34.timebanking.Profile.ProfileUser
 import java.lang.Exception
 
 class MessagesViewModel : ViewModel() {
 
-    val currentUserMessages : MutableLiveData<List<Message>> =
+    val currentUserMessages: MutableLiveData<List<Message>> =
         MutableLiveData<List<Message>>().also { loadMessages() }
 
-    val allMessages : MutableLiveData<List<Message>> =
+    val allMessages: MutableLiveData<List<Message>> =
         MutableLiveData<List<Message>>().also { getAllUnreadMessages() }
 
     var otherUserEmail = ""
@@ -29,38 +30,38 @@ class MessagesViewModel : ViewModel() {
 
 
     fun loadMessages() {
-        if(!currentRelatedAdv.isNullOrEmpty()){
-            listener1 = FirestoreRepository().getChatMessages(currentRelatedAdv).addSnapshotListener(
-                EventListener { value, e ->
-                    if (e != null) {
-                        currentUserMessages.value = emptyList()
-                        return@EventListener
-                    }
-                    if (value!!.documents.size > 0) {
-                        currentUserMessages.value = value.documents.filter {
-                            (it.getString("SENT_BY") == FirestoreRepository.currentUser.email &&
-                                    it.getString("RECEIVED_BY") == otherUserEmail)
-                                    ||
-                                    (it.getString("SENT_BY") == otherUserEmail &&
-                                            it.getString("RECEIVED_BY") == FirestoreRepository.currentUser.email)
-                        }.mapNotNull { d -> d.toMessageObject() }
-                        currentUserMessages.value = currentUserMessages.value?.sortedBy {
-                            it.timeStamp
+        if (!currentRelatedAdv.isNullOrEmpty()) {
+            listener1 =
+                FirestoreRepository().getChatMessages(currentRelatedAdv).addSnapshotListener(
+                    EventListener { value, e ->
+                        if (e != null) {
+                            currentUserMessages.value = emptyList()
+                            return@EventListener
                         }
-                        Log.d("EMAIL", currentUserMessages.value.toString())
-                    }
-                    else currentUserMessages.value = emptyList()
-                })
+                        if (value!!.documents.size > 0) {
+                            currentUserMessages.value = value.documents.filter {
+                                (it.getString("SENT_BY") == FirestoreRepository.currentUser.email &&
+                                        it.getString("RECEIVED_BY") == otherUserEmail)
+                                        ||
+                                        (it.getString("SENT_BY") == otherUserEmail &&
+                                                it.getString("RECEIVED_BY") == FirestoreRepository.currentUser.email)
+                            }.mapNotNull { d -> d.toMessageObject() }
+                            currentUserMessages.value = currentUserMessages.value?.sortedBy {
+                                it.timeStamp
+                            }
+                            Log.d("EMAIL", currentUserMessages.value.toString())
+                        } else currentUserMessages.value = emptyList()
+                    })
         }
     }
 
     private fun getAllUnreadMessages() {
-        FirestoreRepository().getAllMessages().addSnapshotListener(EventListener{ value, e ->
+        FirestoreRepository().getAllMessages().addSnapshotListener(EventListener { value, e ->
             if (e != null) {
                 allMessages.value = emptyList()
                 return@EventListener
             }
-            if(value!!.documents.size > 0){
+            if (value!!.documents.size > 0) {
                 allMessages.value = value.documents.mapNotNull { d -> d.toMessageObject() }
             }
         })
@@ -70,12 +71,13 @@ class MessagesViewModel : ViewModel() {
         return currentUserMessages
     }
 
-    fun getAllMessages() : LiveData<List<Message>>{
+    fun getAllMessages(): LiveData<List<Message>> {
         return allMessages
     }
 
     fun sendNewMessage(messageContent: String): Task<Void> {
-        val newMessage = Message("",
+        val newMessage = Message(
+            "",
             messageContent, 0, FirestoreRepository.currentUser.email!!, otherUserEmail,
             System.currentTimeMillis(), currentRelatedAdv
         )
@@ -83,8 +85,62 @@ class MessagesViewModel : ViewModel() {
         return FirestoreRepository().setMessage(newMessage)
     }
 
-    fun updateMessageRead(message : Message): Task<Void> {
+    fun updateMessageRead(message: Message): Task<Void> {
         return FirestoreRepository().updateMessageReadDB(message.id)
+    }
+
+    fun modifyProfileInChat(email: String, duration: String?) {
+        FirestoreRepository().getUserFromEmail(email).get().addOnSuccessListener {
+            var profileInChat: ProfileUser
+            if (it != null) {
+                profileInChat = it.toObject(ProfileUser::class.java)!!
+                var newTotalTime = convertTotalTime(profileInChat.totatl_time, duration)
+                if(newTotalTime != "false"){
+                    profileInChat.totatl_time = newTotalTime
+                    FirestoreRepository().setOtherUser(email, profileInChat)
+                }
+            }
+        }
+    }
+
+    private fun convertTotalTime(otherTime: String?, duration: String?): String {
+        Log.d("hm-1", duration!!)
+        var item1 = otherTime?.split(":")?.toTypedArray()
+        var sxItem1 = item1?.get(0)?.removeSuffix("h")
+        var dxItem1 = item1?.get(1)?.removeSuffix("m")
+
+        var item2 = duration?.split(":")?.toTypedArray()
+        var sxItem2 = item2?.get(0)?.removeSuffix("h")
+        var dxItem2 = item2?.get(1)?.removeSuffix("m")
+
+        if(sxItem1?.toInt()!! < sxItem2.toInt()){
+            return "false"
+        }else if (sxItem1?.toInt()!! == sxItem2.toInt()){
+            if (dxItem1?.toInt()!! < dxItem2.toInt())
+                return "false"
+        }
+
+        var m1 = (sxItem1?.toInt()!! * 60) + dxItem1!!.toInt()
+        var m2 = (sxItem2?.toInt()!! * 60) + dxItem2.toInt()
+
+        var minus = m1 - m2
+        Log.d("hm-2", minus.toString())
+
+        var i = 0
+        var h = 0
+        var m = 0
+        while (i < minus) {
+            m++
+            if (m == 60) {
+                h++
+                m = 0
+            }
+            i++
+        }
+        Log.d("hm-3", h.toString())
+        Log.d("hm-4", m.toString())
+
+        return h.toString() + "h" + ":" + m.toString() + "m"
     }
 
     private fun DocumentSnapshot.toMessageObject(): Message? {

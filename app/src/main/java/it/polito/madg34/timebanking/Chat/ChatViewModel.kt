@@ -35,7 +35,6 @@ class ChatViewModel : ViewModel() {
                         tmp.add(Chat(it))
                     }
                     currentChatList.value = tmp
-
                 }
             })
     }
