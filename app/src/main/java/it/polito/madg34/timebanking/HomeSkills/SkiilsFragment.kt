@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
 import it.polito.madg34.timebanking.R
+import it.polito.madg34.timebanking.TimeSlots.TimeSlotViewModel
 
 class SkillsFragment : Fragment() {
 

@@ -26,6 +26,7 @@ class ChatFragment : Fragment() {
 
     lateinit var chatRV: RecyclerView
     lateinit var titlePage : TextView
+    lateinit var emptyChat : TextView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,12 +41,14 @@ class ChatFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         titlePage = view.findViewById(R.id.chatTitle)
+        emptyChat = view.findViewById(R.id.emptyChat)
 
         vmChat.sentOrReceived.observe(viewLifecycleOwner){ sentOrreceived ->
             if(sentOrreceived){ // received
                 titlePage.setText("Incoming Requests")
                 vmChat.getCurrentChatReceivedList().observe(viewLifecycleOwner){
                     if(!it.isNullOrEmpty()){
+                        emptyChat.visibility = View.GONE
                         chatReceivedList = it
                         chatReceivedList.forEach {
                             it.info.split("|").forEach { s ->
@@ -61,12 +64,17 @@ class ChatFragment : Fragment() {
                                 chatRV.adapter = ChatAdapter(chatReceivedList, timeSlots)
                             }
                         }
+                    }else {
+                        emptyChat.setText(getString(R.string.chatReceived))
+                        emptyChat.visibility = View.VISIBLE
                     }
                 }
             }else {
                 titlePage.setText("Outgoing Requests")
                 vmChat.getCurrentChatList().observe(viewLifecycleOwner){ it1 ->
+                    Log.d("CIAO", "ciaooo")
                     if(!it1.isNullOrEmpty()){
+                        emptyChat.visibility = View.GONE
                         chatList = it1
                         chatList.forEach { c ->
                             c.info.split("|").forEach { s ->
@@ -82,7 +90,16 @@ class ChatFragment : Fragment() {
                                 chatRV.adapter = ChatAdapter(chatList, timeSlots)
                             }
                         }
+                    } else {
+                        emptyChat.setText(getString(R.string.chatSent))
+                        emptyChat.visibility = View.VISIBLE
                     }
+                }
+                if(chatList.isEmpty()){
+                    emptyChat.setText(getString(R.string.chatSent))
+                    emptyChat.visibility = View.VISIBLE
+                } else {
+                    emptyChat.visibility = View.GONE
                 }
             }
         }

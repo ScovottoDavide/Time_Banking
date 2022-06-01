@@ -33,6 +33,7 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>) :
 
     lateinit var chatButton: ImageButton
     lateinit var topCardTitle: TextView
+    lateinit var unreadMessages: TextView
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
         v = LayoutInflater.from(parent.context)
@@ -50,6 +51,7 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>) :
 
         chatButton = holder.itemView.findViewById(R.id.chatButton)
         topCardTitle = holder.itemView.findViewById(R.id.requester)
+        unreadMessages = holder.itemView.findViewById(R.id.tv_nav_drawer_count)
 
         val a = holder.itemView.context as AppCompatActivity
         val b =
@@ -66,23 +68,29 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>) :
         if (vmChat.sentOrReceived.value == true) { // received
             profileImageReceived = FirestoreRepository.currentUser.email!!
             vmProfile.loadChatImage(profileImageReceived).addOnSuccessListener {
-                if (it != null) {
-                    if (timeSlot != null) {
+                if (it != null)
+                    if (timeSlot != null)
                         holder.bind(timeSlot, vmProfile.chatImage.value, chatEntryEmail)
-                    }
-                }
             }
             topCardTitle.setText("${chatEntryEmail} contacted you")
         } else {
             profileImageReceived = chatEntryEmail
             vmProfile.loadChatImage(profileImageReceived).addOnSuccessListener {
-                if (it != null) {
-                    if (timeSlot != null) {
+                if (it != null)
+                    if (timeSlot != null)
                         holder.bind(timeSlot, vmProfile.chatImage.value, FirestoreRepository.currentUser.email!!)
-                    }
-                }
             }
             topCardTitle.setText("You contacted ${profileImageReceived}")
+        }
+
+        val unread = vmMessages.allMessages.value?.filter {
+            it.relatedAdv == chatEntryAdv && it.read == 0 && it.receivedBy == FirestoreRepository.currentUser.email!!
+        }?.size
+        if (unread == 0) {
+            unreadMessages.visibility = View.GONE
+        } else {
+            unreadMessages.visibility = View.VISIBLE
+            unreadMessages.setText("$unread")
         }
 
         chatButton.setOnClickListener {

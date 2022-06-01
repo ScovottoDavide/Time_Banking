@@ -58,4 +58,7 @@
 
     <string name="skillfragDesc">Welcome, find people which can save you time. Look for people that have the skills
     you need! </string>
+
+    <string name="chatReceived">You have not received any request yet.</string>
+    <string name="chatSent">You have not sent any request yet.</string>
 </resources>

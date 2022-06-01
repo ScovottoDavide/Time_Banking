@@ -137,7 +137,6 @@ class FirestoreRepository {
     }
 
     fun getAllSkills(): CollectionReference {
-
         return fireStoreDB.collection("skills")
     }
 

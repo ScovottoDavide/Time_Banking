@@ -14,10 +14,10 @@ import java.lang.Exception
 
 class MessagesViewModel : ViewModel() {
 
-    val currentUserMessages: MutableLiveData<List<Message>> =
+    val currentUserMessages : MutableLiveData<List<Message>> =
         MutableLiveData<List<Message>>().also { loadMessages() }
 
-    val allMessages: MutableLiveData<List<Message>> =
+    val allMessages : MutableLiveData<List<Message>> =
         MutableLiveData<List<Message>>().also { getAllUnreadMessages() }
 
     var otherUserEmail = ""
@@ -25,43 +25,44 @@ class MessagesViewModel : ViewModel() {
 
     var receivedReqNumber = 0
     var sentNumber = 0
+    var unreadMessagesOnCard = 0
 
     private var listener1: ListenerRegistration? = null
 
 
     fun loadMessages() {
-        if (!currentRelatedAdv.isNullOrEmpty()) {
-            listener1 =
-                FirestoreRepository().getChatMessages(currentRelatedAdv).addSnapshotListener(
-                    EventListener { value, e ->
-                        if (e != null) {
-                            currentUserMessages.value = emptyList()
-                            return@EventListener
+        if(!currentRelatedAdv.isNullOrEmpty()){
+            listener1 = FirestoreRepository().getChatMessages(currentRelatedAdv).addSnapshotListener(
+                EventListener { value, e ->
+                    if (e != null) {
+                        currentUserMessages.value = emptyList()
+                        return@EventListener
+                    }
+                    if (value!!.documents.size > 0) {
+                        currentUserMessages.value = value.documents.filter {
+                            (it.getString("SENT_BY") == FirestoreRepository.currentUser.email &&
+                                    it.getString("RECEIVED_BY") == otherUserEmail)
+                                    ||
+                                    (it.getString("SENT_BY") == otherUserEmail &&
+                                            it.getString("RECEIVED_BY") == FirestoreRepository.currentUser.email)
+                        }.mapNotNull { d -> d.toMessageObject() }
+                        currentUserMessages.value = currentUserMessages.value?.sortedBy {
+                            it.timeStamp
                         }
-                        if (value!!.documents.size > 0) {
-                            currentUserMessages.value = value.documents.filter {
-                                (it.getString("SENT_BY") == FirestoreRepository.currentUser.email &&
-                                        it.getString("RECEIVED_BY") == otherUserEmail)
-                                        ||
-                                        (it.getString("SENT_BY") == otherUserEmail &&
-                                                it.getString("RECEIVED_BY") == FirestoreRepository.currentUser.email)
-                            }.mapNotNull { d -> d.toMessageObject() }
-                            currentUserMessages.value = currentUserMessages.value?.sortedBy {
-                                it.timeStamp
-                            }
-                            Log.d("EMAIL", currentUserMessages.value.toString())
-                        } else currentUserMessages.value = emptyList()
-                    })
+                        Log.d("EMAIL", currentUserMessages.value.toString())
+                    }
+                    else currentUserMessages.value = emptyList()
+                })
         }
     }
 
     private fun getAllUnreadMessages() {
-        FirestoreRepository().getAllMessages().addSnapshotListener(EventListener { value, e ->
+        FirestoreRepository().getAllMessages().addSnapshotListener(EventListener{ value, e ->
             if (e != null) {
                 allMessages.value = emptyList()
                 return@EventListener
             }
-            if (value!!.documents.size > 0) {
+            if(value!!.documents.size > 0){
                 allMessages.value = value.documents.mapNotNull { d -> d.toMessageObject() }
             }
         })
@@ -71,13 +72,12 @@ class MessagesViewModel : ViewModel() {
         return currentUserMessages
     }
 
-    fun getAllMessages(): LiveData<List<Message>> {
+    fun getAllMessages() : LiveData<List<Message>>{
         return allMessages
     }
 
     fun sendNewMessage(messageContent: String): Task<Void> {
-        val newMessage = Message(
-            "",
+        val newMessage = Message("",
             messageContent, 0, FirestoreRepository.currentUser.email!!, otherUserEmail,
             System.currentTimeMillis(), currentRelatedAdv
         )
@@ -85,7 +85,16 @@ class MessagesViewModel : ViewModel() {
         return FirestoreRepository().setMessage(newMessage)
     }
 
-    fun updateMessageRead(message: Message): Task<Void> {
+    fun sendAutoRejectMessage(messageContent: String, to : String): Task<Void> {
+        val newMessage = Message("",
+            messageContent, 0, FirestoreRepository.currentUser.email!!, to,
+            System.currentTimeMillis(), currentRelatedAdv
+        )
+
+        return FirestoreRepository().setMessage(newMessage)
+    }
+
+    fun updateMessageRead(message : Message): Task<Void> {
         return FirestoreRepository().updateMessageReadDB(message.id)
     }
 

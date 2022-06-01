@@ -59,6 +59,7 @@ class TimeSlotListFragment : Fragment() {
                 vmSkills.getAdvsToDisplayFromSkill().observe(viewLifecycleOwner) {
                     if (!it.isNullOrEmpty()) {
                         timeSlotsFromSkill = it.filter{timeSlot ->  timeSlot.available==1} as MutableList<TimeSlot>
+                        Log.d("TIMESLOTS", it.toString())
                     }
                     if (timeSlotsFromSkill.size == 0) {
                         emptyView = view.findViewById(R.id.emptyListTV)

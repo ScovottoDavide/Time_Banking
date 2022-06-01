@@ -135,20 +135,23 @@ class MainActivity : AppCompatActivity() {
 
             vmMessages.getAllMessages().observe(this) {
                 val myAdvIds = ts.map { it.id }
-                val unread = it.filter {
-                    it.read == 0 && it.receivedBy == FirestoreRepository.currentUser.email!!
+                val unread = it.filter { m->
+                    m.read == 0 && m.receivedBy == FirestoreRepository.currentUser.email!!
                 }
-                homeNotificationCount = unread.count()
+                homeNotificationCount = unread.groupBy { m2 -> m2.relatedAdv }.count()
                 if(homeNotificationCount > 0){
                     homeNotificationTV.visibility = View.VISIBLE
                     homeNotificationTV.setText(homeNotificationCount.toString())
                 }
                 else homeNotificationTV.visibility = View.GONE
 
-                vmMessages.receivedReqNumber = unread.filter { myAdvIds.contains(it.relatedAdv) }.count()
+                vmMessages.receivedReqNumber = unread.filter { a -> myAdvIds.contains(a.relatedAdv) }
+                    .groupBy{ m2 -> m2.relatedAdv }.count()
                 vmMessages.sentNumber = homeNotificationCount - vmMessages.receivedReqNumber
+
                 val receivedTV = navView.menu.findItem(R.id.receivedReqs).actionView as MaterialTextView
                 val sentTV = navView.menu.findItem(R.id.sentReqs).actionView as MaterialTextView
+
                 if(vmMessages.receivedReqNumber > 0){
                     receivedTV.background = resources.getDrawable(R.drawable.nav_counter_bg)
                     receivedTV.setText("   " + vmMessages.receivedReqNumber.toString())
@@ -167,7 +170,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         vmSkills.getAllSkillsVM().observe(this) {
-            Log.d("HOME", it.toString())
             if (it.isEmpty() && navController.currentDestination?.id == navController.graph[R.id.skillsFragment].id) {
                 // Dirty way, trigger reacreation of fragment to show empty message
                 navController.navigate(R.id.skillsFragment)

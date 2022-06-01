@@ -6,14 +6,18 @@ import android.graphics.Color
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStoreOwner
+import androidx.lifecycle.get
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.button.MaterialButton
 import de.hdodenhof.circleimageview.CircleImageView
+import it.polito.madg34.timebanking.Messages.MessagesViewModel
+import it.polito.madg34.timebanking.Profile.ProfileViewModel
 import it.polito.madg34.timebanking.R
 import it.polito.madg34.timebanking.TimeSlots.TimeSlot
-
 
 class ChatViewHolder(v: View) : RecyclerView.ViewHolder(v) {
     private val serviceImage: CircleImageView = v.findViewById(R.id.serviceImage)

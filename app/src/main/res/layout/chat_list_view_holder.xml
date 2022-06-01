@@ -77,6 +77,20 @@
             android:minHeight="48dp"
             app:srcCompat="@drawable/chat_plus" />
 
+        <TextView
+            android:id="@+id/tv_nav_drawer_count"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_above="@id/chatButton"
+            android:layout_alignEnd="@id/chatButton"
+            android:layout_marginEnd="2dp"
+            android:layout_marginBottom="-15dp"
+            android:background="@drawable/menu_text_bg"
+            android:gravity="center"
+            android:text="10"
+            android:textColor="@android:color/white"
+            android:textSize="8dp" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/statusButton"
             android:layout_width="wrap_content"

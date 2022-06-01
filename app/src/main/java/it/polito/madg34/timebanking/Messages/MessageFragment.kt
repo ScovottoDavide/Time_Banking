@@ -129,6 +129,17 @@ class MessageFragment : Fragment() {
                 vmMessage.modifyProfileInChat(vmMessage.otherUserEmail, vmTimeSlot.currentShownAdv?.duration)
 
                 isPopupOpenAccept = false
+                val acceptedDefaultMessage = "I have accepted your request and also received the credit.\n" +
+                        "We will meet on ${vmTimeSlot.currentShownAdv?.date}.\nThank you!"
+                vmMessage.sendNewMessage(acceptedDefaultMessage)
+
+                val rejectedEmail = vmChat.currentChatReceivedList.value
+                    ?.filter{
+                        it.info.split(",")[0] == vmTimeSlot.currentShownAdv?.id
+                                && it.info.split(",")[1] != vmMessage.otherUserEmail
+                    }?.map{ it.info.split(",")[1] }
+                rejectedEmail?.forEach { vmMessage.sendAutoRejectMessage("Rejected", it) }
+                requireActivity().onBackPressed()
             }
             .setNegativeButton("No") { _, _ ->
                 isPopupOpenAccept = false
@@ -173,7 +184,7 @@ class MessageFragment : Fragment() {
 
     private fun popUpReject(){
         isPopupOpenDecline = true
-        alertDialog = AlertDialog.Builder(requireContext())
+        alertDecline = AlertDialog.Builder(requireContext())
             .setTitle("Warning!")
             .setMessage("Do you want to decline ${vmMessage.otherUserEmail} request?")
             .setPositiveButton("Yes") { _, _ ->
@@ -186,7 +197,7 @@ class MessageFragment : Fragment() {
             }
             .show()
 
-        alertDialog.setOnDismissListener { isPopupOpenDecline = false }
+        alertDecline.setOnDismissListener { isPopupOpenDecline = false }
     }
 
     private fun halfWidth(view: View) {
