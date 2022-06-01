@@ -648,9 +648,13 @@ class EditProfileFragment : Fragment() {
             .setMessage("Nickname already usedby another user. Please provide another nickname!")
             .setPositiveButton("OK") { _, _ ->
                 isNicknameDialogOpen = false
+                vm.needRegistration = true
             }
             .show()
-        dialogNickname.setOnDismissListener { isNicknameDialogOpen = false }
+        dialogNickname.setOnDismissListener {
+            isNicknameDialogOpen = false
+            vm.needRegistration = true
+        }
     }
 
     private fun infoPopup() {
