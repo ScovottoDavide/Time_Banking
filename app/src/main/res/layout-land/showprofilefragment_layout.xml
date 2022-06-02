@@ -61,6 +61,37 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
+            <TableRow
+                android:id="@+id/profileRow"
+                android:layout_width="400dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp">
+
+                <TextView
+                    android:id="@+id/AccountInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/accInfo"
+                    android:textAlignment="textStart"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
+
+                <EditText
+                    android:id="@+id/timeCredit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/currency_usd"
+                    android:enabled="false"
+                    android:text="TextView"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/LimeGreen"
+                    android:textSize="14sp" />
+            </TableRow>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedFullName"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -147,31 +178,6 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedLocationFixed"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#757575"
-                    android:enabled="false"
-                    tools:ignore="TextContrastCheck" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.divider.MaterialDivider
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/outlinedEarnTime"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Total Time"
-                app:boxStrokeWidth="2dp"
-                app:startIconDrawable="@drawable/earn_time">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/outlinedEarnTimeFixed"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="#757575"

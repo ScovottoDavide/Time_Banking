@@ -81,4 +81,8 @@ class ProfileViewModel : ViewModel() {
         }
     }
 
+    fun getRequesterCredit(emailRequester : String): Task<DocumentSnapshot> {
+        return FirestoreRepository().getRequesterCreditDB(emailRequester).get()
+    }
+
 }

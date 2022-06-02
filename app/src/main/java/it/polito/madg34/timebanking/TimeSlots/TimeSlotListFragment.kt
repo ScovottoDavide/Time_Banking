@@ -68,7 +68,7 @@ class TimeSlotListFragment : Fragment() {
                         emptyView = view.findViewById(R.id.emptyListTV)
                         emptyView.visibility = View.GONE
                         timeView.visibility = View.VISIBLE
-                        timeView.setText(vmProfile.getDBUser().value?.totatl_time)
+                        timeView.setText(vmProfile.getDBUser().value?.total_time)
                         fromSkillTitle.setText(getString(R.string.ListOnlineServices))
                         timeSlotsRV = view.findViewById(R.id.ServicesList)
                         timeSlotsRV.layoutManager = LinearLayoutManager(this.context)

@@ -49,6 +49,9 @@ class EditProfileFragment : Fragment() {
 
     private var h = 0
     private var w = 0
+    private var hTime = 0
+    private var wTime = 0
+
     private lateinit var bitmap: Bitmap
     lateinit var uri: Uri
     lateinit var file: File
@@ -66,7 +69,7 @@ class EditProfileFragment : Fragment() {
     lateinit var location: TextInputEditText
     lateinit var userDesc: TextInputEditText
     lateinit var userImage: CircleImageView
-    lateinit var timeView: TextInputEditText
+    lateinit var timeCredit : EditText
 
     lateinit var dialog: AlertDialog
     private var isLogOutDialogOpen = false
@@ -112,7 +115,7 @@ class EditProfileFragment : Fragment() {
         location = view.findViewById(R.id.outlinedLocationFixed)
         userDesc = view.findViewById(R.id.outlinedAboutmeFixed)
         userImage = view.findViewById(R.id.userImage)
-        timeView = view.findViewById(R.id.outlinedEarnTimeFixed)
+        timeCredit = view.findViewById(R.id.timeCredit)
 
         val buttonPopup = view.findViewById<ImageButton>(R.id.plus)
         buttonPopup.setOnClickListener(View.OnClickListener() {
@@ -150,7 +153,6 @@ class EditProfileFragment : Fragment() {
         if (isRegistration) {
             val title = view.findViewById<TextView>(R.id.AccountInfo)
             title.setText(getString(R.string.registration))
-            timeView.setText("1h:30m")
             if (!vm.showed) {
                 infoPopup()
                 vm.showed = true
@@ -165,7 +167,14 @@ class EditProfileFragment : Fragment() {
         email.isEnabled = false
         location.setText(item.location)
         userDesc.setText(item.aboutUser)
-        if(!isRegistration) timeView.setText(item.totatl_time)
+        val range = getTimeCreditRange(item.total_time)
+        if(range == -1)
+            timeCredit.setTextColor(resources.getColor(R.color.Red))
+        else if (range == 0)
+            timeCredit.setTextColor(resources.getColor(R.color.Orange))
+        else
+            timeCredit.setTextColor(resources.getColor(R.color.LimeGreen))
+        timeCredit.setText("Time credit: "+item.total_time)
         if (vm.currentPhotoPath.isNotEmpty()) {
             userImage.setImageURI(Uri.parse(item.img))
         } else if (vm.currentPhotoPath.isEmpty() && item.img?.isNotEmpty() == true) {
@@ -285,6 +294,7 @@ class EditProfileFragment : Fragment() {
             })
 
         constantScreenLayoutOnScrolling(view)
+        halfWidth(view)
         val buttonAddSkill = view.findViewById<TextView>(R.id.textSkills)
         buttonAddSkill.setOnClickListener {
             updateProfile()
@@ -457,6 +467,30 @@ class EditProfileFragment : Fragment() {
         })
     }
 
+    private fun halfWidth(view: View) {
+        val row = view.findViewById<TableRow>(R.id.profileRow)
+        val myAccount = view.findViewById<TextView>(R.id.AccountInfo)
+        val timeCredit = view.findViewById<EditText>(R.id.timeCredit)
+
+        row.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    hTime = row.height
+                    wTime = row.width
+                    myAccount.post { myAccount.layoutParams = TableRow.LayoutParams(wTime / 2, hTime) }
+                    timeCredit.post { timeCredit.layoutParams = TableRow.LayoutParams(wTime / 2, hTime) }
+                } else {
+                    hTime = row.height
+                    wTime = row.width
+                    myAccount.post { myAccount.layoutParams = TableRow.LayoutParams(wTime / 2, hTime) }
+                    timeCredit.post { timeCredit.layoutParams = TableRow.LayoutParams(wTime / 2, hTime) }
+                }
+                row.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.save_page, menu)
         return super.onCreateOptionsMenu(menu, inflater)
@@ -494,7 +528,7 @@ class EditProfileFragment : Fragment() {
                 location = location.text.toString(),
                 img = item.img,
                 aboutUser = userDesc.text.toString(),
-                totatl_time = timeView.text.toString(),
+                total_time = timeCredit.text.toString(),
                 skills = item.skills
             )
             item = vm.localProfile!!
@@ -693,6 +727,22 @@ class EditProfileFragment : Fragment() {
             outerAbout?.error = "Please tell something about you"
         }
     }
+    private fun getTimeCreditRange(item : String?) : Int{
+        val item1 = item?.split(":")?.toTypedArray()
+        val sxItem1 = item1?.get(0)?.removeSuffix("h")
+        val dxItem1 = item1?.get(1)?.removeSuffix("m")
+
+        if(sxItem1?.toInt() == 0){
+            if(dxItem1?.toInt() == 0)
+                return -1
+            else
+                return 0
+        } else if(sxItem1?.toInt()!! > 0){
+            return 1
+        }
+        return -1
+    }
+
 }
 
 

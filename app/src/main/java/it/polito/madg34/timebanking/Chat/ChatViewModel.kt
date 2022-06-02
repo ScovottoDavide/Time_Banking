@@ -25,6 +25,8 @@ class ChatViewModel : ViewModel() {
     var filteredTimeSlots : MutableList<TimeSlot> = mutableListOf()
     var filteredChat : MutableList<Chat> = mutableListOf()
 
+    var startNewChatPopUpOpen = false
+
     private fun loadChatSent() {
         listener1 = FirestoreRepository().getAllChatEmail()
             .addSnapshotListener(EventListener { value, e ->

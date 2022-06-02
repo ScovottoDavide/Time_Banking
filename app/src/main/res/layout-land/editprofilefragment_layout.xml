@@ -89,17 +89,35 @@
             android:layout_marginStart="5dp"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/AccountInfo"
-                android:layout_width="match_parent"
+            <TableRow
+                android:id="@+id/profileRow"
+                android:layout_width="340dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"
-                android:fontFamily="sans-serif-black"
-                android:text="@string/accInfo"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                android:textSize="20sp"
-                android:textStyle="italic" />
+                android:layout_marginEnd="16dp">
+
+                <TextView
+                    android:id="@+id/AccountInfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-black"
+                    android:text="@string/accInfo"
+                    android:textAlignment="textStart"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
+
+                <EditText
+                    android:id="@+id/timeCredit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableStart="@drawable/currency_usd"
+                    android:enabled="false"
+                    android:text="TextView"
+                    android:textAlignment="textStart"
+                    android:textColor="@color/LimeGreen"
+                    android:textSize="14sp" />
+            </TableRow>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedFullName"

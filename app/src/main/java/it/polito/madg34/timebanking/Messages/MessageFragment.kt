@@ -15,7 +15,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.Task
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.firestore.DocumentSnapshot
 import it.polito.madg34.timebanking.Chat.ChatViewModel
 import it.polito.madg34.timebanking.FirestoreRepository
 import it.polito.madg34.timebanking.Profile.ProfileUser
@@ -30,11 +32,9 @@ class MessageFragment : Fragment() {
     val vmProfile: ProfileViewModel by activityViewModels()
 
     private var messagesToDisplay : List<Message> = emptyList()
-    private var currentAdvOfMessages = ""
     private var emailsToReject : List<String> = emptyList()
 
     lateinit var messagesRV : RecyclerView
-
 
     lateinit var sendButton : Button
     lateinit var messageContent : EditText
@@ -42,12 +42,17 @@ class MessageFragment : Fragment() {
     lateinit var deny : MaterialButton
     lateinit var alertDialog : AlertDialog
     lateinit var alertDecline : AlertDialog
+    lateinit var alertCredit : AlertDialog
 
     private var h: Int = 0
     private var w: Int = 0
 
     private var isPopupOpenAccept = false
     private var isPopupOpenDecline = false
+    private var isPopupOpenCredit = false
+
+    private var requesterCredit = ""
+    private var canAccept = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +65,8 @@ class MessageFragment : Fragment() {
             popUpAccept()
         if(savedInstanceState?.getBoolean("isOpenDecline") == true)
             popUpReject()
+        if(savedInstanceState?.getBoolean("isOpenCredit") == true)
+            notEnoughCreditPopUp()
         return view
     }
 
@@ -106,12 +113,48 @@ class MessageFragment : Fragment() {
          *  4. Automatic refusal for other requester on the same adv
          * */
         accept.setOnClickListener{
-            popUpAccept()
+            /** Check requester credit is enough */
+            checkCredit(vmMessage.otherUserEmail).addOnSuccessListener {
+                if(canAccept)
+                    popUpAccept()
+                else
+                    notEnoughCreditPopUp()
+            }
         }
 
         /** Deny for the current requester */
         deny.setOnClickListener {
             popUpReject()
+        }
+    }
+
+    private fun notEnoughCreditPopUp() {
+        isPopupOpenCredit = true
+        alertCredit = AlertDialog.Builder(requireContext())
+            .setTitle("Warning!")
+            .setMessage("The requester ${vmMessage.otherUserEmail} does not have enough credit" +
+                    " to satisfy the duration requirements of offer. As a consequence " +
+                    "you cannot accept this request until the requester has enough credit!")
+            .setPositiveButton("Ok") { _, _ ->
+                isPopupOpenCredit = false
+            }
+            .show()
+        alertCredit.setOnDismissListener { isPopupOpenCredit = false }
+    }
+
+    private fun checkCredit(emailRequester : String): Task<DocumentSnapshot> {
+        return vmProfile.getRequesterCredit(emailRequester).addOnSuccessListener {
+            if(it != null){
+                requesterCredit = it.getString("TOTAL_TIME").toString()
+                val requesterPair = parseTimeCredit(requesterCredit)
+                val offerNeededCredit = parseTimeCredit(vmTimeSlot.currentShownAdv?.duration!!)
+                if(requesterPair.first < offerNeededCredit.first)
+                    canAccept = false
+                else if(requesterPair.first >= offerNeededCredit.first && requesterPair.second < offerNeededCredit.second)
+                    canAccept = false
+                else
+                    canAccept = true
+            }
         }
     }
 
@@ -130,7 +173,7 @@ class MessageFragment : Fragment() {
                     if(split[0] == vmTimeSlot.currentShownAdv?.id && split[1] != vmMessage.otherUserEmail)
                         if(vmTimeSlot.currentShownAdv?.refused?.isEmpty() == true)
                             vmTimeSlot.currentShownAdv?.refused = split[1]
-                        else
+                        else if(vmTimeSlot.currentShownAdv?.refused?.contains(split[1]) == false)
                             vmTimeSlot.currentShownAdv?.refused = "${vmTimeSlot.currentShownAdv?.refused},${split[1]}"
                 }
                 vmTimeSlot.currentShownAdv?.let { it1 -> vmTimeSlot.updateAdv(it1) }
@@ -160,7 +203,7 @@ class MessageFragment : Fragment() {
     }
 
     private fun updateUserProfile(){
-        val item1= vmProfile.profile.value?.totatl_time?.split(":")?.toTypedArray()
+        val item1= vmProfile.profile.value?.total_time?.split(":")?.toTypedArray()
         val sxItem1 = item1?.get(0)?.removeSuffix("h")
         val dxItem1 = item1?.get(1)?.removeSuffix("m")
 
@@ -198,9 +241,15 @@ class MessageFragment : Fragment() {
             .setTitle("Warning!")
             .setMessage("Do you want to decline ${vmMessage.otherUserEmail} request?")
             .setPositiveButton("Yes") { _, _ ->
-                vmTimeSlot.currentShownAdv?.refused = vmMessage.otherUserEmail
+                if(vmTimeSlot.currentShownAdv?.refused?.isEmpty() == true)
+                    vmTimeSlot.currentShownAdv?.refused = vmMessage.otherUserEmail
+                else
+                    vmTimeSlot.currentShownAdv?.refused = "${vmTimeSlot.currentShownAdv?.refused},${vmMessage.otherUserEmail}"
                 vmTimeSlot.currentShownAdv?.let { it1 -> vmTimeSlot.updateAdv(it1) }
                 isPopupOpenDecline = false
+                vmMessage.sendAutoRejectMessage("I'm sorry, your request has been rejected.\n" +
+                        "Hope we can help each other next time!", vmMessage.otherUserEmail)
+                requireActivity().onBackPressed()
             }
             .setNegativeButton("No") { _, _ ->
                 isPopupOpenDecline = false
@@ -234,9 +283,17 @@ class MessageFragment : Fragment() {
         })
     }
 
+    private fun parseTimeCredit(credit : String) : Pair<Int, Int> {
+        val split = credit.split(":").toTypedArray()
+        val hours = split[0].removeSuffix("h")
+        val minutes = split[1].removeSuffix("m")
+
+        return Pair(hours.toInt(), minutes.toInt())
+    }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putBoolean("isOpen", isPopupOpenAccept)
         outState.putBoolean("isOpenDecline", isPopupOpenDecline)
-    }
+        outState.putBoolean("isOpenCredit", isPopupOpenCredit)    }
 }

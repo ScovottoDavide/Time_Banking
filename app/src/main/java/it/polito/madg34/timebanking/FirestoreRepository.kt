@@ -228,4 +228,8 @@ class FirestoreRepository {
        return fireStoreDB.collection("messages").document(id).update("READ", 1)
     }
 
+    fun getRequesterCreditDB(emailRequester : String): DocumentReference {
+        return fireStoreDB.collection("users").document(emailRequester)
+    }
+
 }

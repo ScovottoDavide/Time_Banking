@@ -25,16 +25,17 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     private var h = 0
     private var w = 0
 
+    private var hTime = 0
+    private var wTime = 0
+
     lateinit var fullNameView: TextInputEditText
     lateinit var nicknameView: TextInputEditText
     lateinit var emailView: TextInputEditText
     lateinit var myLocationView: TextInputEditText
     lateinit var userDesc: TextInputEditText
     lateinit var img_view: CircleImageView
-    lateinit var timeView : TextInputEditText
+    lateinit var timeCredit : EditText
     private var profile: ProfileUser? = ProfileUser()
-
-    //private val prova : ProfileUser = ProfileUser(null, "Ciao", "prova", "dddd", "dddd","CCC", mutableMapOf("Ciao" to "Ciao"))
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,9 +44,9 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     ): View? {
         val view = inflater.inflate(R.layout.showprofilefragment_layout, container, false)
         setHasOptionsMenu(true)
+        halfWidth(view)
         return view
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,7 +57,7 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         myLocationView = view.findViewById(R.id.outlinedLocationFixed)
         userDesc = view.findViewById(R.id.outlinedAboutmeFixed)
         img_view = view.findViewById(R.id.userImg)
-        timeView = view.findViewById(R.id.outlinedEarnTimeFixed)
+        timeCredit = view.findViewById(R.id.timeCredit)
 
 
         if (vm.clickedEmail.value != FirestoreRepository.currentUser.email && (vm.clickedEmail.value?.isNotEmpty() == true)) {
@@ -91,7 +92,14 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         emailView.setText(profile?.email)
         myLocationView.setText(profile?.location)
         userDesc.setText(profile?.aboutUser)
-        timeView.setText(profile?.totatl_time)
+        val range = getTimeCreditRange(profile?.total_time)
+        if(range == -1)
+            timeCredit.setTextColor(resources.getColor(R.color.Red))
+        else if (range == 0)
+            timeCredit.setTextColor(resources.getColor(R.color.Orange))
+        else
+            timeCredit.setTextColor(resources.getColor(R.color.LimeGreen))
+        timeCredit.setText("Time credit: "+profile?.total_time)
 
         val navView = activity?.findViewById<NavigationView>(R.id.nav_view)
         val header = navView?.getHeaderView(0)
@@ -245,4 +253,43 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         }
     }
 
+    private fun halfWidth(view: View) {
+        val row = view.findViewById<TableRow>(R.id.profileRow)
+        val myAccount = view.findViewById<TextView>(R.id.AccountInfo)
+        val timeCredit = view.findViewById<EditText>(R.id.timeCredit)
+
+        row.viewTreeObserver.addOnGlobalLayoutListener(object :
+            ViewTreeObserver.OnGlobalLayoutListener {
+            override fun onGlobalLayout() {
+                if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    hTime = row.height
+                    wTime = row.width
+                    myAccount.post { myAccount.layoutParams = TableRow.LayoutParams(wTime / 2, hTime) }
+                    timeCredit.post { timeCredit.layoutParams = TableRow.LayoutParams(wTime / 2, hTime) }
+                } else {
+                    hTime = row.height
+                    wTime = row.width
+                    myAccount.post { myAccount.layoutParams = TableRow.LayoutParams(wTime / 2, hTime) }
+                    timeCredit.post { timeCredit.layoutParams = TableRow.LayoutParams(wTime / 2, hTime) }
+                }
+                row.viewTreeObserver.removeOnGlobalLayoutListener(this)
+            }
+        })
+    }
+
+    private fun getTimeCreditRange(item : String?) : Int{
+        val item1 = item?.split(":")?.toTypedArray()
+        val sxItem1 = item1?.get(0)?.removeSuffix("h")
+        val dxItem1 = item1?.get(1)?.removeSuffix("m")
+
+        if(sxItem1?.toInt() == 0){
+            if(dxItem1?.toInt() == 0)
+                return -1
+            else
+                return 0
+        } else if(sxItem1?.toInt()!! > 0){
+            return 1
+        }
+        return -1
+    }
 }

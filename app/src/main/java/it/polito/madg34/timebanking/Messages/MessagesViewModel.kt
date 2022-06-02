@@ -103,9 +103,9 @@ class MessagesViewModel : ViewModel() {
             var profileInChat: ProfileUser
             if (it != null) {
                 profileInChat = it.toObject(ProfileUser::class.java)!!
-                var newTotalTime = convertTotalTime(profileInChat.totatl_time, duration)
+                var newTotalTime = convertTotalTime(profileInChat.total_time, duration)
                 if(newTotalTime != "false"){
-                    profileInChat.totatl_time = newTotalTime
+                    profileInChat.total_time = newTotalTime
                     FirestoreRepository().setOtherUser(email, profileInChat)
                 }
             }

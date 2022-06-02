@@ -15,7 +15,6 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.get
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import it.polito.madg34.timebanking.FirestoreRepository
@@ -37,6 +36,7 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
     lateinit var vmMessages: MessagesViewModel
 
     lateinit var dialog: AlertDialog
+    lateinit var dialogChat: AlertDialog
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TimeSlotViewHolder {
         v = LayoutInflater.from(parent.context).inflate(R.layout.card_layout, parent, false)
@@ -59,7 +59,8 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
         }
 
         val a = holder.itemView.context as AppCompatActivity
-        val b = a.supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+        val b =
+            a.supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         val navController = b.navController
 
         if (vmSkills.viewProfilePopupOpen) {
@@ -113,34 +114,15 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
             if (item.published_by != FirestoreRepository.currentUser.email) {
                 chat.visibility = View.VISIBLE
                 chat.setOnClickListener {
-                    val correct : Boolean = controlHour(item.duration)
-                    if(!correct){
-                        var isPopupOpenDiscard = true
-                        var alertDialog = androidx.appcompat.app.AlertDialog.Builder(holder.itemView.context)
-                            .setTitle("Warning!")
-                            .setMessage("your time is not enough")
-                            .setPositiveButton("Ok") { _, _ ->
-                                isPopupOpenDiscard = false
-                            }
-                            .show()
-                        alertDialog.setOnDismissListener { isPopupOpenDiscard = false }
-                    }else{
-                        val newChat = Chat("${item.id},${item.published_by}")
-                        if(vmChat.stringChat.contains(newChat.info)){
-                            vmMessages.currentRelatedAdv = item.id
-                            vmMessages.otherUserEmail = item.published_by
-                            vmMessages.loadMessages()
-                            navController.navigate(R.id.action_timeSlotListFragment_to_messageFragment)
-                        }else {
-                            vmChat.newChatAdd(newChat)?.addOnSuccessListener {
-                                vmMessages.currentRelatedAdv = item.id
-                                vmMessages.otherUserEmail = item.published_by
-                                vmMessages.loadMessages()
-                                navController.navigate(R.id.action_timeSlotListFragment_to_messageFragment)
-                            }
-                        }
+                    val newChat = Chat("${item.id},${item.published_by}")
+                    if (vmChat.stringChat.contains(newChat.info)) {
+                        vmMessages.currentRelatedAdv = item.id
+                        vmMessages.otherUserEmail = item.published_by
+                        vmMessages.loadMessages()
+                        navController.navigate(R.id.action_timeSlotListFragment_to_messageFragment)
+                    } else {
+                       startNewChat(holder, item, newChat, navController)
                     }
-
                 }
             } else {
                 chat.visibility = View.GONE
@@ -161,24 +143,54 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
 
     override fun getItemCount(): Int = data.size
 
-    private fun controlHour(item : String): Boolean{
-        var item1= item.split(":").toTypedArray()
-        var sxItem1 = item1[0].removeSuffix("h")
-        var dxItem1 = item1[1].removeSuffix("m")
+    /** Time credit control has to be done after !!!! */
+    private fun controlHour(item: String): Boolean {
+        val item1 = item.split(":").toTypedArray()
+        val sxItem1 = item1[0].removeSuffix("h")
+        val dxItem1 = item1[1].removeSuffix("m")
 
-        var item2 = vmProfile.getDBUser().value?.totatl_time?.split(":")?.toTypedArray()
-        var sxItem2 = item2?.get(0)?.removeSuffix("h")
-        var dxItem2 = item2?.get(1)?.removeSuffix("m")
+        val item2 = vmProfile.getDBUser().value?.total_time?.split(":")?.toTypedArray()
+        val sxItem2 = item2?.get(0)?.removeSuffix("h")
+        val dxItem2 = item2?.get(1)?.removeSuffix("m")
 
-        if(sxItem2?.toInt()!! > sxItem1.toInt()){
+        if (sxItem2?.toInt()!! > sxItem1.toInt()) {
             return true
-        }else if (sxItem2?.toInt()!! == sxItem1.toInt()){
+        } else if (sxItem2.toInt() == sxItem1.toInt()) {
             return dxItem2?.toInt()!! >= dxItem1.toInt()
-        }else{
+        } else {
             return false
         }
     }
 
+    private fun startNewChat(
+        holder: TimeSlotViewHolder,
+        item: TimeSlot,
+        newChat : Chat,
+        navController: NavController
+    ){
+        vmChat.startNewChatPopUpOpen = true
+        dialogChat = AlertDialog.Builder(holder.itemView.context)
+            .setTitle("Message")
+            .setMessage("Do you want to send a new request for this offer to ${item.published_by}?\n"
+            +"A default message will be sent!")
+            .setPositiveButton("Yes") { _, _ ->
+                vmChat.startNewChatPopUpOpen = true
+                vmChat.newChatAdd(newChat)?.addOnSuccessListener {
+                    vmMessages.currentRelatedAdv = item.id
+                    vmMessages.otherUserEmail = item.published_by
+                    val acceptedDefaultMessage =
+                        "Hi ${item.published_by} I'm interested on this offer.\n"
+                    vmMessages.sendNewMessage(acceptedDefaultMessage)
+                    vmMessages.loadMessages()
+                    navController.navigate(R.id.action_timeSlotListFragment_to_messageFragment)
+                }
+            }
+            .setNegativeButton("No") { _, _ ->
+                vmSkills.viewProfilePopupOpen = false
+            }
+            .show()
+        dialogChat.setOnDismissListener { vmChat.startNewChatPopUpOpen = false }
+    }
 
     private fun showPopUpDialog(
         holder: TimeSlotViewHolder,
