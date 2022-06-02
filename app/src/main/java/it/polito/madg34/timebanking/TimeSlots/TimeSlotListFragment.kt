@@ -230,7 +230,6 @@ class TimeSlotListFragment : Fragment() {
             val formatted: String = format.format(utc.time)
             vm.filteredTimeSlots = mutableListOf()
             timeSlotsFromSkill.forEach {
-                Log.d("DATEE", "it ${it.date}, formatted $formatted")
                 if(it.date == formatted)
                     vm.filteredTimeSlots.add(it)
             }

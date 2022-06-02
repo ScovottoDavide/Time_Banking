@@ -193,6 +193,10 @@ class TimeSlotEditFragment : Fragment() {
                             || menuSkills.editText?.text.isNullOrEmpty()
                         )
                             formCheck()
+                        else if(duration.text.toString() == "0h:0m"){
+                            val outerDuration : TextInputLayout = view.findViewById(R.id.outlinedDuration)!!
+                            outerDuration.error =  "Duration cannot be zero!"
+                        }
                         else {
                             if (index >= 0 && index <= vm.currentUserAdvs.value?.size!!) {
                                 vm.currentUserAdvs.value?.get(index).also {

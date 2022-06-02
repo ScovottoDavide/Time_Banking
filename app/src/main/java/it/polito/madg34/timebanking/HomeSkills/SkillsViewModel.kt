@@ -44,8 +44,15 @@ class SkillsViewModel : ViewModel() {
                 val tmp = it.getString("RELATED_ADVS")?.split(",")
                 tmp?.forEach { t ->
                     FirestoreRepository().getAdvFromDocId(t)?.get()?.addOnSuccessListener { d ->
-                        if (d.get("AVAILABLE")?.toString()?.toInt() != 0)
-                            localSkills.set(it.id, Skills(t))
+                        if (d.get("AVAILABLE")?.toString()?.toInt() != 0){
+                            if(localSkills.get(it.id) == null)
+                                localSkills.put(it.id, Skills(t))
+                            else{
+                                val inMap = localSkills.get(it.id)
+                                inMap?.relatedAdvs = inMap?.relatedAdvs + "," + t
+                                localSkills.put(it.id, inMap!!)
+                            }
+                        }
                         allSkills.value = localSkills
                     }
                 }

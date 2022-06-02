@@ -30,6 +30,8 @@ class MessageFragment : Fragment() {
     val vmProfile: ProfileViewModel by activityViewModels()
 
     private var messagesToDisplay : List<Message> = emptyList()
+    private var currentAdvOfMessages = ""
+    private var emailsToReject : List<String> = emptyList()
 
     lateinit var messagesRV : RecyclerView
 
@@ -123,22 +125,30 @@ class MessageFragment : Fragment() {
             .setPositiveButton("Yes") { _, _ ->
                 vmTimeSlot.currentShownAdv?.available = 0
                 vmTimeSlot.currentShownAdv?.accepted = vmMessage.otherUserEmail
+                vmChat.getCurrentChatReceivedList().value?.forEach {
+                    val split = it.info.split(",")
+                    if(split[0] == vmTimeSlot.currentShownAdv?.id && split[1] != vmMessage.otherUserEmail)
+                        if(vmTimeSlot.currentShownAdv?.refused?.isEmpty() == true)
+                            vmTimeSlot.currentShownAdv?.refused = split[1]
+                        else
+                            vmTimeSlot.currentShownAdv?.refused = "${vmTimeSlot.currentShownAdv?.refused},${split[1]}"
+                }
                 vmTimeSlot.currentShownAdv?.let { it1 -> vmTimeSlot.updateAdv(it1) }
 
                 updateUserProfile()
                 vmMessage.modifyProfileInChat(vmMessage.otherUserEmail, vmTimeSlot.currentShownAdv?.duration)
 
-                isPopupOpenAccept = false
                 val acceptedDefaultMessage = "I have accepted your request and also received the credit.\n" +
                         "We will meet on ${vmTimeSlot.currentShownAdv?.date}.\nThank you!"
                 vmMessage.sendNewMessage(acceptedDefaultMessage)
+                if(vmTimeSlot.currentShownAdv?.refused?.isNotEmpty() == true){
+                    emailsToReject = vmTimeSlot.currentShownAdv?.refused?.split(",")!!
+                    emailsToReject.forEach {
+                        vmMessage.sendAutoRejectMessage("Your request has benn rejected", it)
+                    }
+                }
 
-                val rejectedEmail = vmChat.currentChatReceivedList.value
-                    ?.filter{
-                        it.info.split(",")[0] == vmTimeSlot.currentShownAdv?.id
-                                && it.info.split(",")[1] != vmMessage.otherUserEmail
-                    }?.map{ it.info.split(",")[1] }
-                rejectedEmail?.forEach { vmMessage.sendAutoRejectMessage("Rejected", it) }
+                isPopupOpenAccept = false
                 requireActivity().onBackPressed()
             }
             .setNegativeButton("No") { _, _ ->
@@ -150,18 +160,18 @@ class MessageFragment : Fragment() {
     }
 
     private fun updateUserProfile(){
-        var item1= vmProfile.profile.value?.totatl_time?.split(":")?.toTypedArray()
-        var sxItem1 = item1?.get(0)?.removeSuffix("h")
-        var dxItem1 = item1?.get(1)?.removeSuffix("m")
+        val item1= vmProfile.profile.value?.totatl_time?.split(":")?.toTypedArray()
+        val sxItem1 = item1?.get(0)?.removeSuffix("h")
+        val dxItem1 = item1?.get(1)?.removeSuffix("m")
 
-        var item2 = vmTimeSlot.currentShownAdv?.duration?.split(":")?.toTypedArray()
-        var sxItem2 = item2?.get(0)?.removeSuffix("h")
-        var dxItem2 = item2?.get(1)?.removeSuffix("m")
+        val item2 = vmTimeSlot.currentShownAdv?.duration?.split(":")?.toTypedArray()
+        val sxItem2 = item2?.get(0)?.removeSuffix("h")
+        val dxItem2 = item2?.get(1)?.removeSuffix("m")
 
-        var m1 = (sxItem1?.toInt()!! * 60) + dxItem1!!.toInt()
-        var m2 = (sxItem2?.toInt()!! * 60) + dxItem2!!.toInt()
+        val m1 = (sxItem1?.toInt()!! * 60) + dxItem1!!.toInt()
+        val m2 = (sxItem2?.toInt()!! * 60) + dxItem2!!.toInt()
 
-        var minus = m1 + m2
+        val minus = m1 + m2
         Log.d("hm", minus.toString())
 
         var i = 0
@@ -176,9 +186,9 @@ class MessageFragment : Fragment() {
             i++
         }
         vmProfile.modifyUserProfile(
-            ProfileUser(vmProfile.profile?.value?.img,
-                vmProfile.profile?.value?.fullName,vmProfile.profile?.value?.nickname,vmProfile.profile?.value?.email,vmProfile.profile?.value?.location,
-                vmProfile.profile?.value?.aboutUser, vmProfile.profile?.value!!.skills,h.toString() + "h" + ":" + m.toString() + "m"))
+            ProfileUser(vmProfile.profile.value?.img,
+                vmProfile.profile.value?.fullName,vmProfile.profile.value?.nickname,vmProfile.profile.value?.email,vmProfile.profile.value?.location,
+                vmProfile.profile.value?.aboutUser, vmProfile.profile.value!!.skills,h.toString() + "h" + ":" + m.toString() + "m"))
     }
 
 

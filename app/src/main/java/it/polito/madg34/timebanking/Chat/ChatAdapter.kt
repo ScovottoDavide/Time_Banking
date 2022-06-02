@@ -85,6 +85,7 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>) :
 
         val unread = vmMessages.allMessages.value?.filter {
             it.relatedAdv == chatEntryAdv && it.read == 0 && it.receivedBy == FirestoreRepository.currentUser.email!!
+                    && it.sentBy == chatEntryEmail
         }?.size
         if (unread == 0) {
             unreadMessages.visibility = View.GONE

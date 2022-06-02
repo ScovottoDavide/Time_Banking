@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.*
 import it.polito.madg34.timebanking.FirestoreRepository
+import it.polito.madg34.timebanking.HomeSkills.Skills
 import it.polito.madg34.timebanking.TimeSlots.TimeSlot
 
 class ChatViewModel : ViewModel() {
@@ -18,6 +19,11 @@ class ChatViewModel : ViewModel() {
 
     private var listener1: ListenerRegistration? = null
     private var listener2: ListenerRegistration? = null
+
+    var selection = MutableLiveData(0)
+    var filtered: MutableLiveData<Boolean> = MutableLiveData(false)
+    var filteredTimeSlots : MutableList<TimeSlot> = mutableListOf()
+    var filteredChat : MutableList<Chat> = mutableListOf()
 
     private fun loadChatSent() {
         listener1 = FirestoreRepository().getAllChatEmail()

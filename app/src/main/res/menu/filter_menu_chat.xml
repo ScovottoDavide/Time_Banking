@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/date"
+        android:checkable="true"
+        android:title="Filter by date"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/accepted"
+        android:checkable="true"
+        android:title="Filter accepted"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/rejected"
+        android:checkable="true"
+        android:title="Filter rejected"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/nothing"
+        android:title="Clear filters"
+        app:showAsAction="always" />
+</menu>

@@ -138,7 +138,7 @@ class MainActivity : AppCompatActivity() {
                 val unread = it.filter { m->
                     m.read == 0 && m.receivedBy == FirestoreRepository.currentUser.email!!
                 }
-                homeNotificationCount = unread.groupBy { m2 -> m2.relatedAdv }.count()
+                homeNotificationCount = unread.groupBy { m2 -> Pair(m2.relatedAdv,m2.sentBy)}.count()
                 if(homeNotificationCount > 0){
                     homeNotificationTV.visibility = View.VISIBLE
                     homeNotificationTV.setText(homeNotificationCount.toString())
@@ -146,7 +146,7 @@ class MainActivity : AppCompatActivity() {
                 else homeNotificationTV.visibility = View.GONE
 
                 vmMessages.receivedReqNumber = unread.filter { a -> myAdvIds.contains(a.relatedAdv) }
-                    .groupBy{ m2 -> m2.relatedAdv }.count()
+                    .groupBy{ m2 -> Pair(m2.relatedAdv,m2.sentBy) }.count()
                 vmMessages.sentNumber = homeNotificationCount - vmMessages.receivedReqNumber
 
                 val receivedTV = navView.menu.findItem(R.id.receivedReqs).actionView as MaterialTextView
@@ -265,11 +265,13 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.receivedReqs -> {
                     vmChat.sentOrReceived.value = true
+                    vmChat.filtered.value = false
                     navController.navigate(R.id.chatFragment)
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
                 R.id.sentReqs -> {
                     vmChat.sentOrReceived.value = false
+                    vmChat.filtered.value = false
                     navController.navigate(R.id.chatFragment)
                     drawerLayout.closeDrawer(GravityCompat.START)
                 }
