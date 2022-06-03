@@ -248,7 +248,11 @@ class MainActivity : AppCompatActivity() {
                     } else if (navController.currentDestination?.id == navController.graph[R.id.showProfileFragment].id && vmSkills.fromHome.value!!) {
                         vmSkills.fromHome.value = false
                         navController.navigate(R.id.timeSlotListFragment)
-                    } else if (navController.currentDestination?.id == navController.graph[R.id.chatFragment].id) {
+                    }else if (navController.currentDestination?.id == navController.graph[R.id.skillsFragment].id) {
+                        vmSkills.fromHome.value = false
+                        navController.navigate(R.id.timeSlotListFragment)
+                    }
+                    else if (navController.currentDestination?.id == navController.graph[R.id.chatFragment].id) {
                         vmSkills.fromHome.value = false
                         navController.navigate(R.id.timeSlotListFragment)
                     }

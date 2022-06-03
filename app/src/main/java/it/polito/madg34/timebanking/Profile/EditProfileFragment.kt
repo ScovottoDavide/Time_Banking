@@ -528,7 +528,7 @@ class EditProfileFragment : Fragment() {
                 location = location.text.toString(),
                 img = item.img,
                 aboutUser = userDesc.text.toString(),
-                total_time = timeCredit.text.toString(),
+                total_time = item.total_time,
                 skills = item.skills
             )
             item = vm.localProfile!!
