@@ -211,6 +211,7 @@ class TimeSlotEditFragment : Fragment() {
                                     it?.related_skill = menuSkills.editText?.text.toString()
                                     vm.currentShownAdv = vm.currentUserAdvs.value?.get(index)!!
                                     vm.updateAdv(vm.currentUserAdvs.value?.get(index)!!)
+                                    vmSkill.fromHome.value = vmSkill.fromHome.value
                                     Snackbar.make(
                                         view,
                                         "Service successfully edited!",

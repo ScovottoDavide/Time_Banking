@@ -48,7 +48,7 @@ class ChatViewHolder(v: View) : RecyclerView.ViewHolder(v) {
             statusButton.strokeColor = cls
             statusButton.setTextColor(cls)
             statusButton.setText("Accepted")
-        } else if (item.refused.isNotEmpty() && !item.refused.contains(otherEmail)) {
+        } else if (!item.refused.contains(otherEmail)) {
             val cls = ColorStateList.valueOf(Color.parseColor("#ffa500"))
             statusButton.strokeColor = cls
             statusButton.setTextColor(cls)
