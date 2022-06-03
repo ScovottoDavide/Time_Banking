@@ -107,10 +107,11 @@ private fun DocumentSnapshot.toTimeSlotObject(): TimeSlot? {
         val related_skill = get("RELATED_SKILL") as String
         val available = get("AVAILABLE") as Long
         val index = get("INDEX") as Long
+        val reviews = get("REVIEWS") as String
 
         TimeSlot(
             id, title, description, date, time, duration, location, email, related_skill,
-            index.toInt(), available.toInt()
+            index.toInt(), available.toInt(), reviews
         )
 
     } catch (e: Exception) {

@@ -19,8 +19,9 @@ data class TimeSlot(
     @get: PropertyName("INDEX") @set: PropertyName("INDEX") var index: Int,
     @get: PropertyName("AVAILABLE") @set: PropertyName("AVAILABLE") var available: Int,
     @get: PropertyName("REFUSED") @set: PropertyName("REFUSED") var refused: String = "",
-    @get: PropertyName("ACCEPTED") @set: PropertyName("ACCEPTED") var accepted: String = ""
-)
+    @get: PropertyName("ACCEPTED") @set: PropertyName("ACCEPTED") var accepted: String = "",
+    @get: PropertyName("REVIEWS") @set: PropertyName("REVIEWS") var reviews: String = ""
+    )
 
 fun emptyTimeSlot(): TimeSlot {
     return TimeSlot("", "", "", "", "", "", "",

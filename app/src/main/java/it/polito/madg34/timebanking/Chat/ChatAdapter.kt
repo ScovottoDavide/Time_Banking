@@ -7,7 +7,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
+import android.widget.RatingBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
@@ -24,7 +26,11 @@ import it.polito.madg34.timebanking.R
 import it.polito.madg34.timebanking.TimeSlots.TimeSlot
 import it.polito.madg34.timebanking.TimeSlots.TimeSlotViewModel
 
-class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>, val lifecycleOwner: LifecycleOwner) :
+class ChatAdapter(
+    val chatList: List<Chat>,
+    val timeSlots: List<TimeSlot>,
+    val lifecycleOwner: LifecycleOwner
+) :
     RecyclerView.Adapter<ChatViewHolder>() {
     lateinit var v: View
 
@@ -38,7 +44,11 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>, val l
     lateinit var topCardTitle: TextView
     lateinit var unreadMessages: TextView
     lateinit var dialog: AlertDialog
-    lateinit var reviewButton : MaterialButton
+    lateinit var reviewButton: MaterialButton
+
+    lateinit var reviewDialog: AlertDialog
+
+    var rateValue = 0f
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
         v = LayoutInflater.from(parent.context)
@@ -83,9 +93,9 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>, val l
             topCardTitle.setOnClickListener {
                 viewProfile(holder, chatEntryEmail, navController)
             }
-            if(timeSlot?.accepted == vmMessages.otherUserEmail){
+            if (timeSlot?.accepted == chatEntryEmail) {
                 reviewButton.visibility = View.VISIBLE
-            }else{
+            } else {
                 reviewButton.visibility = View.GONE
             }
         } else {
@@ -100,14 +110,14 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>, val l
                         )
             }
             topCardTitle.setText("You contacted ${profileImageReceived}")
-            if(timeSlot?.accepted == FirestoreRepository.currentUser.email){
+            if (timeSlot?.accepted == FirestoreRepository.currentUser.email) {
                 reviewButton.visibility = View.VISIBLE
-            }else{
+            } else {
                 reviewButton.visibility = View.GONE
             }
         }
 
-        vmMessages.getAllMessages().observe(lifecycleOwner){
+        vmMessages.getAllMessages().observe(lifecycleOwner) {
             val unread = it.filter {
                 it.relatedAdv == chatEntryAdv && it.read == 0 && it.receivedBy == FirestoreRepository.currentUser.email!!
                         && it.sentBy == chatEntryEmail
@@ -133,6 +143,34 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>, val l
             vmSkills.fromHome.value = true
             navController.navigate(R.id.action_chatFragment_to_timeSlotDetailsFragment)
         }
+
+        reviewButton.setOnClickListener {
+            ratingPopup(holder, timeSlot!!)
+        }
+    }
+
+    fun ratingPopup(holder: ChatViewHolder, timeS: TimeSlot) {
+        val reviewDialogBuilder: AlertDialog.Builder = AlertDialog.Builder(holder.itemView.context)
+        val view =
+            LayoutInflater.from(holder.itemView.context).inflate(R.layout.rating_popup, null, false)
+
+        val rb: RatingBar = view.findViewById(R.id.ratingBar)
+        rb.setOnRatingBarChangeListener(RatingBar.OnRatingBarChangeListener { ratingBar, fl, b ->
+            rateValue = fl
+        })
+
+        val button: Button = view.findViewById(R.id.btnSubRating)
+        button.setOnClickListener {
+            updateProfileReview(timeS.accepted, rateValue, vmChat.sentOrReceived.value!!)
+        }
+
+        reviewDialogBuilder.setView(view)
+        reviewDialog = reviewDialogBuilder.create()
+        reviewDialog.show()
+    }
+
+    fun updateProfileReview(email: String, value: Float, which: Boolean) {
+        vmProfile.updateUserReview(email, value, which)
     }
 
     fun viewProfile(holder: ChatViewHolder, chatEntryMail: String, navController: NavController) {

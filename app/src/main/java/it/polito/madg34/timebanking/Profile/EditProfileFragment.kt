@@ -529,7 +529,11 @@ class EditProfileFragment : Fragment() {
                 img = item.img,
                 aboutUser = userDesc.text.toString(),
                 total_time = item.total_time,
-                skills = item.skills
+                skills = item.skills,
+                requesterScore = item.requesterScore,
+                requesterNumber = item.requesterNumber,
+                offererScore = item.offererScore,
+                offererNumber = item.offererNumber
             )
             item = vm.localProfile!!
         }

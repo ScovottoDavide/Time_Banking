@@ -100,10 +100,10 @@ class MessagesViewModel : ViewModel() {
 
     fun modifyProfileInChat(email: String, duration: String?) {
         FirestoreRepository().getUserFromEmail(email).get().addOnSuccessListener {
-            var profileInChat: ProfileUser
+            val profileInChat: ProfileUser
             if (it != null) {
                 profileInChat = it.toObject(ProfileUser::class.java)!!
-                var newTotalTime = convertTotalTime(profileInChat.total_time, duration)
+                val newTotalTime = convertTotalTime(profileInChat.total_time, duration)
                 if(newTotalTime != "false"){
                     profileInChat.total_time = newTotalTime
                     FirestoreRepository().setOtherUser(email, profileInChat)
@@ -114,25 +114,25 @@ class MessagesViewModel : ViewModel() {
 
     private fun convertTotalTime(otherTime: String?, duration: String?): String {
         Log.d("hm-1", duration!!)
-        var item1 = otherTime?.split(":")?.toTypedArray()
-        var sxItem1 = item1?.get(0)?.removeSuffix("h")
-        var dxItem1 = item1?.get(1)?.removeSuffix("m")
+        val item1 = otherTime?.split(":")?.toTypedArray()
+        val sxItem1 = item1?.get(0)?.removeSuffix("h")
+        val dxItem1 = item1?.get(1)?.removeSuffix("m")
 
-        var item2 = duration?.split(":")?.toTypedArray()
-        var sxItem2 = item2?.get(0)?.removeSuffix("h")
-        var dxItem2 = item2?.get(1)?.removeSuffix("m")
+        val item2 = duration.split(":").toTypedArray()
+        val sxItem2 = item2.get(0).removeSuffix("h")
+        val dxItem2 = item2.get(1).removeSuffix("m")
 
         if(sxItem1?.toInt()!! < sxItem2.toInt()){
             return "false"
-        }else if (sxItem1?.toInt()!! == sxItem2.toInt()){
+        }else if (sxItem1.toInt() == sxItem2.toInt()){
             if (dxItem1?.toInt()!! < dxItem2.toInt())
                 return "false"
         }
 
-        var m1 = (sxItem1?.toInt()!! * 60) + dxItem1!!.toInt()
-        var m2 = (sxItem2?.toInt()!! * 60) + dxItem2.toInt()
+        val m1 = (sxItem1.toInt() * 60) + dxItem1!!.toInt()
+        val m2 = (sxItem2.toInt() * 60) + dxItem2.toInt()
 
-        var minus = m1 - m2
+        val minus = m1 - m2
         Log.d("hm-2", minus.toString())
 
         var i = 0
@@ -146,9 +146,6 @@ class MessagesViewModel : ViewModel() {
             }
             i++
         }
-        Log.d("hm-3", h.toString())
-        Log.d("hm-4", m.toString())
-
         return h.toString() + "h" + ":" + m.toString() + "m"
     }
 

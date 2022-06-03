@@ -85,4 +85,21 @@ class ProfileViewModel : ViewModel() {
         return FirestoreRepository().getRequesterCreditDB(emailRequester).get()
     }
 
+    fun updateUserReview(email:String, value: Float, which : Boolean): Task<DocumentSnapshot> {
+        var previousUser : ProfileUser
+        return FirestoreRepository().getUserFromEmail(email).get().addOnSuccessListener {
+            if(it != null){
+                previousUser = it.toObject(ProfileUser::class.java)!!
+                if(which){
+                    previousUser.requesterScore?.plus(value)
+                    previousUser.requesterNumber?.plus(1)
+                }else{
+                    previousUser.offererScore?.plus(value)
+                    previousUser.offererNumber?.plus(1)
+                }
+                FirestoreRepository().setOtherUser(email, previousUser)
+            }
+        }
+    }
+
 }

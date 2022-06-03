@@ -35,6 +35,12 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     lateinit var userDesc: TextInputEditText
     lateinit var img_view: CircleImageView
     lateinit var timeCredit : EditText
+    lateinit var requesterMean : TextView
+    lateinit var requesterRB : RatingBar
+    lateinit var requesterNumber : TextView
+    lateinit var offererMean : TextView
+    lateinit var offererRB : RatingBar
+    lateinit var offererNumber : TextView
     private var profile: ProfileUser? = ProfileUser()
 
     override fun onCreateView(
@@ -58,7 +64,12 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         userDesc = view.findViewById(R.id.outlinedAboutmeFixed)
         img_view = view.findViewById(R.id.userImg)
         timeCredit = view.findViewById(R.id.timeCredit)
-
+        requesterMean = view.findViewById(R.id.requesterMean)
+        requesterRB = view.findViewById(R.id.requesterRatingBar)
+        requesterNumber = view.findViewById(R.id.numberRatingRequester)
+        offererMean = view.findViewById(R.id.offererMean)
+        offererRB = view.findViewById(R.id.offererRatingBar)
+        offererNumber = view.findViewById(R.id.numberRatingOfferer)
 
         if (vm.clickedEmail.value != FirestoreRepository.currentUser.email && (vm.clickedEmail.value?.isNotEmpty() == true)) {
             Log.d("EMAIL", vm.clickedEmail.value.toString() + " : " + FirestoreRepository.currentUser.email)
@@ -101,6 +112,22 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         else
             timeCredit.setTextColor(resources.getColor(R.color.LimeGreen))
         timeCredit.setText("Time credit: "+profile?.total_time)
+        if(profile?.requesterNumber!! == 0){
+            requesterMean.setText("0")
+        }else{
+            requesterMean.setText((profile?.requesterScore?.div(profile?.requesterNumber!!)).toString())
+        }
+        requesterRB.rating = profile?.requesterScore?.div(profile?.requesterNumber!!)!!
+        requesterNumber.setText("${profile?.requesterNumber} requester reviews")
+
+        if(profile?.offererNumber!! == 0){
+            offererMean.setText("0")
+        }else{
+            offererMean.setText((profile?.offererScore?.div(profile?.offererNumber!!)).toString())
+
+        }
+        offererRB.rating = profile?.offererScore?.div(profile?.offererNumber!!)!!
+        offererNumber.setText("${profile?.offererNumber} offerer reviews")
 
         val navView = activity?.findViewById<NavigationView>(R.id.nav_view)
         val header = navView?.getHeaderView(0)
