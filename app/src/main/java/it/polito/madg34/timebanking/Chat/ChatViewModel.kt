@@ -26,6 +26,8 @@ class ChatViewModel : ViewModel() {
     var filteredChat : MutableList<Chat> = mutableListOf()
 
     var startNewChatPopUpOpen = false
+    var viewProfilePopupOpen = false
+    var control = 0
 
     private fun loadChatSent() {
         listener1 = FirestoreRepository().getAllChatEmail()

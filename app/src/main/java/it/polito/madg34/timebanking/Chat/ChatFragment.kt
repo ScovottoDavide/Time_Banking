@@ -95,7 +95,6 @@ class ChatFragment : Fragment() {
             } else {
                 titlePage.setText("Outgoing Requests")
                 vmChat.getCurrentChatList().observe(viewLifecycleOwner) { it1 ->
-                    Log.d("CIAO", "ciaooo")
                     if (!it1.isNullOrEmpty()) {
                         emptyChat.visibility = View.GONE
                         chatList = it1

@@ -9,15 +9,18 @@ import android.widget.TableRow
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import it.polito.madg34.timebanking.Chat.Chat
 import it.polito.madg34.timebanking.Chat.ChatViewModel
 import it.polito.madg34.timebanking.FirestoreRepository
 import it.polito.madg34.timebanking.Profile.ProfileViewModel
 import it.polito.madg34.timebanking.R
 import it.polito.madg34.timebanking.HomeSkills.SkillsViewModel
+import it.polito.madg34.timebanking.Messages.MessagesViewModel
 
 class TimeSlotDetailsFragment : Fragment() {
 
@@ -25,9 +28,10 @@ class TimeSlotDetailsFragment : Fragment() {
     val vmSkills: SkillsViewModel by activityViewModels()
     val vmProfile: ProfileViewModel by activityViewModels()
     val vmChat: ChatViewModel by activityViewModels()
+    val vmMessages : MessagesViewModel by activityViewModels()
 
 
-
+    lateinit var dialogChat : AlertDialog
     private var h: Int = 0
     private var w: Int = 0
 
@@ -96,6 +100,18 @@ class TimeSlotDetailsFragment : Fragment() {
             }
         }
 
+        chat.setOnClickListener{
+            val newChat = Chat("${item!!.id},${item.published_by}")
+            if (vmChat.stringChat.contains(newChat.info)) {
+                vmMessages.currentRelatedAdv = item.id
+                vmMessages.otherUserEmail = item.published_by
+                vmMessages.loadMessages()
+                findNavController().navigate(R.id.action_timeSlotDetailsFragment_to_messageFragment)
+            } else {
+                startNewChat( item, newChat)
+            }
+        }
+
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
@@ -106,6 +122,34 @@ class TimeSlotDetailsFragment : Fragment() {
                     }
                 }
             })
+    }
+
+    private fun startNewChat(
+        item: TimeSlot,
+        newChat : Chat,
+    ){
+        vmChat.startNewChatPopUpOpen = true
+        dialogChat = AlertDialog.Builder(requireContext())
+            .setTitle("Message")
+            .setMessage("Do you want to send a new request for this offer to ${item.published_by}?\n"
+                    +"A default message will be sent!")
+            .setPositiveButton("Yes") { _, _ ->
+                vmChat.startNewChatPopUpOpen = true
+                vmChat.newChatAdd(newChat)?.addOnSuccessListener {
+                    vmMessages.currentRelatedAdv = item.id
+                    vmMessages.otherUserEmail = item.published_by
+                    val acceptedDefaultMessage =
+                        "Hi ${item.published_by} I'm interested on this offer.\n"
+                    vmMessages.sendNewMessage(acceptedDefaultMessage)
+                    vmMessages.loadMessages()
+                    findNavController().navigate(R.id.action_timeSlotDetailsFragment_to_messageFragment)
+                }
+            }
+            .setNegativeButton("No") { _, _ ->
+                vmSkills.viewProfilePopupOpen = false
+            }
+            .show()
+        dialogChat.setOnDismissListener { vmChat.startNewChatPopUpOpen = false }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

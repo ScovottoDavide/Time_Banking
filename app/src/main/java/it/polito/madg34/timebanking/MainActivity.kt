@@ -148,11 +148,13 @@ class MainActivity : AppCompatActivity() {
                 vmMessages.receivedReqNumber = unread.filter { a -> myAdvIds.contains(a.relatedAdv) }
                     .groupBy{ m2 -> Pair(m2.relatedAdv,m2.sentBy) }.count()
                 vmMessages.sentNumber = homeNotificationCount - vmMessages.receivedReqNumber
+                Log.d("STAMPA2", vmMessages.receivedReqNumber.toString())
 
                 val receivedTV = navView.menu.findItem(R.id.receivedReqs).actionView as MaterialTextView
                 val sentTV = navView.menu.findItem(R.id.sentReqs).actionView as MaterialTextView
 
                 if(vmMessages.receivedReqNumber > 0){
+                    receivedTV.visibility = View.VISIBLE
                     receivedTV.background = resources.getDrawable(R.drawable.nav_counter_bg)
                     receivedTV.setText("   " + vmMessages.receivedReqNumber.toString())
                 }
@@ -160,6 +162,7 @@ class MainActivity : AppCompatActivity() {
                     receivedTV.visibility = View.GONE
                 }
                 if(vmMessages.sentNumber > 0){
+                    sentTV.visibility = View.VISIBLE
                     sentTV.background = resources.getDrawable(R.drawable.nav_counter_bg)
                     sentTV.setText("   " + vmMessages.sentNumber.toString())
                 }
