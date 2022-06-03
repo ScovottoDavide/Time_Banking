@@ -73,11 +73,11 @@ class ChatFragment : Fragment() {
                                 vmChat.filtered.observe(viewLifecycleOwner){ filtered ->
                                     if(filtered)
                                         if(vmChat.filteredTimeSlots.isEmpty())
-                                            chatRV.adapter = ChatAdapter(emptyList(), emptyList())
+                                            chatRV.adapter = ChatAdapter(emptyList(), emptyList(),viewLifecycleOwner)
                                         else
-                                            chatRV.adapter = ChatAdapter(vmChat.filteredChat, vmChat.filteredTimeSlots)
+                                            chatRV.adapter = ChatAdapter(vmChat.filteredChat, vmChat.filteredTimeSlots, viewLifecycleOwner)
                                     else
-                                        chatRV.adapter = ChatAdapter(chatReceivedList, timeSlots)
+                                        chatRV.adapter = ChatAdapter(chatReceivedList, timeSlots, viewLifecycleOwner)
                                 }
                             }
                         }
@@ -112,11 +112,11 @@ class ChatFragment : Fragment() {
                                 vmChat.filtered.observe(viewLifecycleOwner){ filtered ->
                                     if(filtered)
                                         if(vmChat.filteredTimeSlots.isEmpty())
-                                            chatRV.adapter = ChatAdapter(emptyList(), emptyList())
+                                            chatRV.adapter = ChatAdapter(emptyList(), emptyList(), viewLifecycleOwner)
                                         else
-                                            chatRV.adapter = ChatAdapter(vmChat.filteredChat, vmChat.filteredTimeSlots)
+                                            chatRV.adapter = ChatAdapter(vmChat.filteredChat, vmChat.filteredTimeSlots, viewLifecycleOwner)
                                     else
-                                        chatRV.adapter = ChatAdapter(chatList, timeSlots)
+                                        chatRV.adapter = ChatAdapter(chatList, timeSlots, viewLifecycleOwner)
                                 }
                             }
                         }
@@ -153,15 +153,15 @@ class ChatFragment : Fragment() {
                 val filteredList = newText?.let { filter(timeSlots, it) }
                 if(vmChat.sentOrReceived.value == true){ //received
                     if(filteredList.isNullOrEmpty())
-                        chatRV.adapter = ChatAdapter(emptyList(), emptyList())
+                        chatRV.adapter = ChatAdapter(emptyList(), emptyList(),viewLifecycleOwner)
                     else
-                        chatRV.adapter = ChatAdapter(chatReceivedList, filteredList)
+                        chatRV.adapter = ChatAdapter(chatReceivedList, filteredList, viewLifecycleOwner)
                     chatRV.adapter?.notifyDataSetChanged()
                 }else {
                     if(filteredList.isNullOrEmpty())
-                        chatRV.adapter = ChatAdapter(emptyList(), emptyList())
+                        chatRV.adapter = ChatAdapter(emptyList(), emptyList(), viewLifecycleOwner)
                     else
-                        chatRV.adapter = ChatAdapter(chatList, filteredList)
+                        chatRV.adapter = ChatAdapter(chatList, filteredList, viewLifecycleOwner)
                     chatRV.adapter?.notifyDataSetChanged()
                 }
                 return true

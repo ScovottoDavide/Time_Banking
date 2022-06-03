@@ -10,9 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelStoreOwner
-import androidx.lifecycle.get
+import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
@@ -25,7 +23,7 @@ import it.polito.madg34.timebanking.R
 import it.polito.madg34.timebanking.TimeSlots.TimeSlot
 import it.polito.madg34.timebanking.TimeSlots.TimeSlotViewModel
 
-class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>) :
+class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>, val lifecycleOwner: LifecycleOwner) :
     RecyclerView.Adapter<ChatViewHolder>() {
     lateinit var v: View
 
@@ -99,15 +97,17 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>) :
             topCardTitle.setText("You contacted ${profileImageReceived}")
         }
 
-        val unread = vmMessages.allMessages.value?.filter {
-            it.relatedAdv == chatEntryAdv && it.read == 0 && it.receivedBy == FirestoreRepository.currentUser.email!!
-                    && it.sentBy == chatEntryEmail
-        }?.size
-        if (unread == 0) {
-            unreadMessages.visibility = View.GONE
-        } else {
-            unreadMessages.visibility = View.VISIBLE
-            unreadMessages.setText("$unread")
+        vmMessages.getAllMessages().observe(lifecycleOwner){
+            val unread = it.filter {
+                it.relatedAdv == chatEntryAdv && it.read == 0 && it.receivedBy == FirestoreRepository.currentUser.email!!
+                        && it.sentBy == chatEntryEmail
+            }.size
+            if (unread == 0) {
+                unreadMessages.visibility = View.GONE
+            } else {
+                unreadMessages.visibility = View.VISIBLE
+                unreadMessages.setText("$unread")
+            }
         }
 
         chatButton.setOnClickListener {

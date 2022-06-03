@@ -148,7 +148,6 @@ class MainActivity : AppCompatActivity() {
                 vmMessages.receivedReqNumber = unread.filter { a -> myAdvIds.contains(a.relatedAdv) }
                     .groupBy{ m2 -> Pair(m2.relatedAdv,m2.sentBy) }.count()
                 vmMessages.sentNumber = homeNotificationCount - vmMessages.receivedReqNumber
-                Log.d("STAMPA2", vmMessages.receivedReqNumber.toString())
 
                 val receivedTV = navView.menu.findItem(R.id.receivedReqs).actionView as MaterialTextView
                 val sentTV = navView.menu.findItem(R.id.sentReqs).actionView as MaterialTextView
