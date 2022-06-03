@@ -64,8 +64,8 @@ class SkillsViewModel : ViewModel() {
 
 fun loadSkillAdvs() {
     val listAdvsToRetrieve = stringAdvs.split(",")
-    val tmpList: MutableList<TimeSlot> = mutableListOf()
-    currentSkillAdvs.value = emptyList()
+    var tmpList: MutableList<TimeSlot> = mutableListOf()
+    Log.d("PROVA", listAdvsToRetrieve.toString())
     listAdvsToRetrieve.forEach { adv ->
         listener2 = FirestoreRepository().getAdvFromDocId(adv)
             ?.addSnapshotListener(EventListener { value, e ->
@@ -73,7 +73,14 @@ fun loadSkillAdvs() {
                     currentSkillAdvs.value = null
                     return@EventListener
                 }
-                value!!.toTimeSlotObject()?.let { tmpList.add(it) }
+                value!!.toTimeSlotObject()?.let { t ->
+                    if(tmpList.map { it.id }.contains(t.id)){
+                       val index =  tmpList.map { it.id }.indexOf(t.id)
+                        tmpList[index] = t
+                    }else{
+                        tmpList.add(t)
+                    }
+                }
                 currentSkillAdvs.value = tmpList
             })
     }

@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.android.material.timepicker.MaterialTimePicker
 import com.google.android.material.timepicker.TimeFormat
 import it.polito.madg34.timebanking.FirestoreRepository
+import it.polito.madg34.timebanking.HomeSkills.SkillsViewModel
 import it.polito.madg34.timebanking.Profile.ProfileViewModel
 import it.polito.madg34.timebanking.R
 import java.text.SimpleDateFormat
@@ -30,6 +31,7 @@ class TimeSlotEditFragment : Fragment() {
 
     val vm: TimeSlotViewModel by activityViewModels()
     val vmProfile: ProfileViewModel by activityViewModels()
+    val vmSkill : SkillsViewModel by activityViewModels()
 
 
     private var h: Int = 0
