@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.button.MaterialButton
 import de.hdodenhof.circleimageview.CircleImageView
+import it.polito.madg34.timebanking.FirestoreRepository
 import it.polito.madg34.timebanking.Messages.MessagesViewModel
 import it.polito.madg34.timebanking.Profile.ProfileViewModel
 import it.polito.madg34.timebanking.R
@@ -47,21 +48,16 @@ class ChatViewHolder(v: View) : RecyclerView.ViewHolder(v) {
             statusButton.strokeColor = cls
             statusButton.setTextColor(cls)
             statusButton.setText("Accepted")
-        } else if (item.accepted.isNotEmpty() && otherEmail != item.accepted) {
-            val cls = ColorStateList.valueOf(Color.parseColor("#ff0000"))
-            statusButton.strokeColor = cls
-            statusButton.setTextColor(cls)
-            statusButton.setText("Rejected")
-        } else if (item.refused.isNotEmpty()) {
-            val cls = ColorStateList.valueOf(Color.parseColor("#ff0000"))
-            statusButton.strokeColor = cls
-            statusButton.setTextColor(cls)
-            statusButton.setText("Rejected")
-        } else {
+        } else if (item.refused.isNotEmpty() && !item.refused.contains(otherEmail)) {
             val cls = ColorStateList.valueOf(Color.parseColor("#ffa500"))
             statusButton.strokeColor = cls
             statusButton.setTextColor(cls)
             statusButton.setText("Pending")
+        } else {
+            val cls = ColorStateList.valueOf(Color.parseColor("#ff0000"))
+            statusButton.strokeColor = cls
+            statusButton.setTextColor(cls)
+            statusButton.setText("Rejected")
         }
         serviceTitle.text = item.title
         serviceLocation.text = item.location

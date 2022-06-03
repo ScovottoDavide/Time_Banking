@@ -65,6 +65,7 @@ class SkillsViewModel : ViewModel() {
 fun loadSkillAdvs() {
     val listAdvsToRetrieve = stringAdvs.split(",")
     val tmpList: MutableList<TimeSlot> = mutableListOf()
+    currentSkillAdvs.value = emptyList()
     listAdvsToRetrieve.forEach { adv ->
         listener2 = FirestoreRepository().getAdvFromDocId(adv)
             ?.addSnapshotListener(EventListener { value, e ->

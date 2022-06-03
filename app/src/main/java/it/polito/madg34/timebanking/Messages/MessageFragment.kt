@@ -85,7 +85,11 @@ class MessageFragment : Fragment() {
             if(vmTimeSlot.currentShownAdv?.refused?.isEmpty() == true && vmTimeSlot.currentShownAdv?.accepted?.isEmpty() == true){
                 accept.visibility = View.VISIBLE
                 deny.visibility = View.VISIBLE
-            }else{
+            } else if(vmTimeSlot.currentShownAdv?.refused?.contains(vmMessage.otherUserEmail) == false){
+                accept.visibility = View.VISIBLE
+                deny.visibility = View.VISIBLE
+            }
+            else{
                 accept.visibility = View.GONE
                 deny.visibility = View.GONE
             }
