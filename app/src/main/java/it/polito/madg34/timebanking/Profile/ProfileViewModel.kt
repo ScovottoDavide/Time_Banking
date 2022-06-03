@@ -1,5 +1,6 @@
 package it.polito.madg34.timebanking.Profile
 
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.*
 import com.google.android.gms.tasks.Task
@@ -91,11 +92,11 @@ class ProfileViewModel : ViewModel() {
             if(it != null){
                 previousUser = it.toObject(ProfileUser::class.java)!!
                 if(which){
-                    previousUser.requesterScore?.plus(value)
-                    previousUser.requesterNumber?.plus(1)
+                    previousUser.requesterScore = previousUser.requesterScore?.plus(value)
+                    previousUser.requesterNumber = previousUser.requesterNumber?.plus(1)
                 }else{
-                    previousUser.offererScore?.plus(value)
-                    previousUser.offererNumber?.plus(1)
+                    previousUser.offererScore = previousUser.offererScore?.plus(value)
+                    previousUser.offererNumber = previousUser.offererNumber?.plus(1)
                 }
                 FirestoreRepository().setOtherUser(email, previousUser)
             }

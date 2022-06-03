@@ -17,7 +17,10 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.tasks.Task
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.DocumentSnapshot
 import it.polito.madg34.timebanking.FirestoreRepository
 import it.polito.madg34.timebanking.HomeSkills.SkillsViewModel
 import it.polito.madg34.timebanking.Messages.MessagesViewModel
@@ -145,7 +148,13 @@ class ChatAdapter(
         }
 
         reviewButton.setOnClickListener {
-            ratingPopup(holder, timeSlot!!)
+            if(timeSlot!!.reviews.contains(timeSlot.accepted) && vmChat.sentOrReceived.value!!){
+                Snackbar.make(holder.itemView, "You have already reviewed this advertisement!", Snackbar.LENGTH_SHORT).show()
+            }else if(timeSlot.reviews.contains(timeSlot.published_by) && vmChat.sentOrReceived.value == false){
+                Snackbar.make(holder.itemView, "You have already reviewed this advertisement!", Snackbar.LENGTH_SHORT).show()
+            }else{
+                ratingPopup(holder, timeSlot)
+            }
         }
     }
 
@@ -161,7 +170,26 @@ class ChatAdapter(
 
         val button: Button = view.findViewById(R.id.btnSubRating)
         button.setOnClickListener {
-            updateProfileReview(timeS.accepted, rateValue, vmChat.sentOrReceived.value!!)
+            if(vmChat.sentOrReceived.value!!){
+                updateProfileReview(timeS.accepted, rateValue, vmChat.sentOrReceived.value!!).addOnSuccessListener {
+                    if(timeS.reviews.isEmpty()){
+                        timeS.reviews = timeS.accepted
+                    }else{
+                        timeS.reviews = "${timeS.reviews},${timeS.accepted}"
+                    }
+                    vmTimeSlot.updateAdv(timeS)
+                }
+            }else{
+                updateProfileReview(timeS.published_by, rateValue, vmChat.sentOrReceived.value!!).addOnSuccessListener {
+                    if(timeS.reviews.isEmpty()){
+                        timeS.reviews = timeS.published_by
+                    }else{
+                        timeS.reviews = "${timeS.reviews},${timeS.published_by}"
+                    }
+                    vmTimeSlot.updateAdv(timeS)
+                }
+            }
+
         }
 
         reviewDialogBuilder.setView(view)
@@ -169,8 +197,9 @@ class ChatAdapter(
         reviewDialog.show()
     }
 
-    fun updateProfileReview(email: String, value: Float, which: Boolean) {
-        vmProfile.updateUserReview(email, value, which)
+    fun updateProfileReview(email: String, value: Float, which: Boolean): Task<DocumentSnapshot> {
+        return vmProfile.updateUserReview(email, value, which)
+
     }
 
     fun viewProfile(holder: ChatViewHolder, chatEntryMail: String, navController: NavController) {
