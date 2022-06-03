@@ -91,6 +91,81 @@
                     android:textColor="@color/LimeGreen"
                     android:textSize="14sp" />
             </TableRow>
+            <TableRow
+                android:id="@+id/ratingRequesterRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp">
+
+                <TextView
+                    android:id="@+id/requesterMean"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:text="4.9"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
+
+                <RatingBar
+                    android:id="@+id/requesterRatingBar"
+                    style="?android:attr/ratingBarStyleIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:max="5" />
+
+                <TextView
+                    android:id="@+id/numberRatingRequester"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:text="1500 requester reviews"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/ratingOffererRow"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp">
+
+                <TextView
+                    android:id="@+id/offererMean"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:text="4.9"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textSize="20sp"
+                    android:textStyle="italic" />
+
+                <RatingBar
+                    android:id="@+id/offererRatingBar"
+                    style="?android:attr/ratingBarStyleIndicator"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:max="5" />
+
+                <TextView
+                    android:id="@+id/numberRatingOfferer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:fontFamily="sans-serif-black"
+                    android:gravity="center"
+                    android:text="150 offerer reviews"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:textSize="16sp"
+                    android:textStyle="italic" />
+
+            </TableRow>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedFullName"

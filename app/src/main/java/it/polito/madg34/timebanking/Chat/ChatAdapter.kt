@@ -15,6 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import it.polito.madg34.timebanking.FirestoreRepository
 import it.polito.madg34.timebanking.HomeSkills.SkillsViewModel
 import it.polito.madg34.timebanking.Messages.MessagesViewModel
@@ -37,6 +38,7 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>, val l
     lateinit var topCardTitle: TextView
     lateinit var unreadMessages: TextView
     lateinit var dialog: AlertDialog
+    lateinit var reviewButton : MaterialButton
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
         v = LayoutInflater.from(parent.context)
@@ -55,6 +57,7 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>, val l
         chatButton = holder.itemView.findViewById(R.id.chatButton)
         topCardTitle = holder.itemView.findViewById(R.id.requester)
         unreadMessages = holder.itemView.findViewById(R.id.tv_nav_drawer_count)
+        reviewButton = holder.itemView.findViewById(R.id.reviewButton)
 
         val a = holder.itemView.context as AppCompatActivity
         val b =
@@ -68,9 +71,6 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>, val l
         var profileImageReceived = ""
         val timeSlot = timeSlots.find { it.id == chatEntryAdv }
 
-//        if (vmChat.viewProfilePopupOpen) {
-//            viewProfile(holder, chatEntryEmail, navController)
-//        }
         if (vmChat.sentOrReceived.value == true) { // received
             profileImageReceived = FirestoreRepository.currentUser.email!!
             vmProfile.loadChatImage(profileImageReceived).addOnSuccessListener {
@@ -82,6 +82,11 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>, val l
             topCardTitle.setText(Html.fromHtml(text))
             topCardTitle.setOnClickListener {
                 viewProfile(holder, chatEntryEmail, navController)
+            }
+            if(timeSlot?.accepted == vmMessages.otherUserEmail){
+                reviewButton.visibility = View.VISIBLE
+            }else{
+                reviewButton.visibility = View.GONE
             }
         } else {
             profileImageReceived = chatEntryEmail
@@ -95,6 +100,11 @@ class ChatAdapter(val chatList: List<Chat>, val timeSlots: List<TimeSlot>, val l
                         )
             }
             topCardTitle.setText("You contacted ${profileImageReceived}")
+            if(timeSlot?.accepted == FirestoreRepository.currentUser.email){
+                reviewButton.visibility = View.VISIBLE
+            }else{
+                reviewButton.visibility = View.GONE
+            }
         }
 
         vmMessages.getAllMessages().observe(lifecycleOwner){

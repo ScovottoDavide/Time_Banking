@@ -106,6 +106,8 @@
             app:strokeWidth="1dp"/>
 
 
+
+
         <TextView
             android:id="@+id/serviceTitle"
             android:layout_width="match_parent"
@@ -151,6 +153,23 @@
             android:gravity="center_vertical"
             android:text="Duration" />
 
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/reviewButton"
+            android:layout_width="wrap_content"
+            android:layout_height="37dp"
+            android:layout_below="@+id/chatButton"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="0dp"
+            android:clickable="false"
+            android:text="Send Review"
+            android:textColor="@color/Green"
+            android:textSize="8sp"
+            android:visibility="gone"
+            app:backgroundTint="@color/White"
+            app:strokeColor="@color/Green"
+            app:strokeWidth="1dp" />
 
         <TextView
             android:id="@+id/serviceDate"
