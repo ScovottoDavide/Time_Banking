@@ -70,14 +70,26 @@ class ChatFragment : Fragment() {
                                 timeSlots = it1
                                 chatRV = view.findViewById(R.id.ChatList)
                                 chatRV.layoutManager = LinearLayoutManager(this.context)
-                                vmChat.filtered.observe(viewLifecycleOwner){ filtered ->
-                                    if(filtered)
-                                        if(vmChat.filteredTimeSlots.isEmpty())
-                                            chatRV.adapter = ChatAdapter(emptyList(), emptyList(),viewLifecycleOwner)
+                                vmChat.filtered.observe(viewLifecycleOwner) { filtered ->
+                                    if (filtered)
+                                        if (vmChat.filteredTimeSlots.isEmpty())
+                                            chatRV.adapter = ChatAdapter(
+                                                emptyList(),
+                                                emptyList(),
+                                                viewLifecycleOwner
+                                            )
                                         else
-                                            chatRV.adapter = ChatAdapter(vmChat.filteredChat, vmChat.filteredTimeSlots, viewLifecycleOwner)
+                                            chatRV.adapter = ChatAdapter(
+                                                vmChat.filteredChat,
+                                                vmChat.filteredTimeSlots,
+                                                viewLifecycleOwner
+                                            )
                                     else
-                                        chatRV.adapter = ChatAdapter(chatReceivedList, timeSlots, viewLifecycleOwner)
+                                        chatRV.adapter = ChatAdapter(
+                                            chatReceivedList,
+                                            timeSlots,
+                                            viewLifecycleOwner
+                                        )
                                 }
                             }
                         }
@@ -109,14 +121,23 @@ class ChatFragment : Fragment() {
                                 timeSlots = it2
                                 chatRV = view.findViewById(R.id.ChatList)
                                 chatRV.layoutManager = LinearLayoutManager(this.context)
-                                vmChat.filtered.observe(viewLifecycleOwner){ filtered ->
-                                    if(filtered)
-                                        if(vmChat.filteredTimeSlots.isEmpty())
-                                            chatRV.adapter = ChatAdapter(emptyList(), emptyList(), viewLifecycleOwner)
+                                vmChat.filtered.observe(viewLifecycleOwner) { filtered ->
+                                    if (filtered)
+                                        if (vmChat.filteredTimeSlots.isEmpty())
+                                            chatRV.adapter = ChatAdapter(
+                                                emptyList(),
+                                                emptyList(),
+                                                viewLifecycleOwner
+                                            )
                                         else
-                                            chatRV.adapter = ChatAdapter(vmChat.filteredChat, vmChat.filteredTimeSlots, viewLifecycleOwner)
+                                            chatRV.adapter = ChatAdapter(
+                                                vmChat.filteredChat,
+                                                vmChat.filteredTimeSlots,
+                                                viewLifecycleOwner
+                                            )
                                     else
-                                        chatRV.adapter = ChatAdapter(chatList, timeSlots, viewLifecycleOwner)
+                                        chatRV.adapter =
+                                            ChatAdapter(chatList, timeSlots, viewLifecycleOwner)
                                 }
                             }
                         }
@@ -151,14 +172,15 @@ class ChatFragment : Fragment() {
             @SuppressLint("NotifyDataSetChanged")
             override fun onQueryTextChange(newText: String?): Boolean {
                 val filteredList = newText?.let { filter(timeSlots, it) }
-                if(vmChat.sentOrReceived.value == true){ //received
-                    if(filteredList.isNullOrEmpty())
-                        chatRV.adapter = ChatAdapter(emptyList(), emptyList(),viewLifecycleOwner)
+                if (vmChat.sentOrReceived.value == true) { //received
+                    if (filteredList.isNullOrEmpty())
+                        chatRV.adapter = ChatAdapter(emptyList(), emptyList(), viewLifecycleOwner)
                     else
-                        chatRV.adapter = ChatAdapter(chatReceivedList, filteredList, viewLifecycleOwner)
+                        chatRV.adapter =
+                            ChatAdapter(chatReceivedList, filteredList, viewLifecycleOwner)
                     chatRV.adapter?.notifyDataSetChanged()
-                }else {
-                    if(filteredList.isNullOrEmpty())
+                } else {
+                    if (filteredList.isNullOrEmpty())
                         chatRV.adapter = ChatAdapter(emptyList(), emptyList(), viewLifecycleOwner)
                     else
                         chatRV.adapter = ChatAdapter(chatList, filteredList, viewLifecycleOwner)
@@ -182,22 +204,28 @@ class ChatFragment : Fragment() {
                     if (item != null) {
                         when (item.itemId) {
                             R.id.date -> {
-                                vmChat.selection.value = item.itemId
-                                filterByDate()
+                                if(chatList.isNotEmpty() || chatReceivedList.isNotEmpty()){
+                                    vmChat.selection.value = item.itemId
+                                    filterByDate()
+                                }
                                 true
                             }
                             R.id.accepted -> {
-                                vmChat.selection.value = item.itemId
-                                filterAccepted()
-                                vmChat.filtered.value = true
-                                chatRV.adapter?.notifyDataSetChanged()
+                                if(chatList.isNotEmpty() || chatReceivedList.isNotEmpty()){
+                                    vmChat.selection.value = item.itemId
+                                    filterAccepted()
+                                    vmChat.filtered.value = true
+                                    chatRV.adapter?.notifyDataSetChanged()
+                                }
                                 true
                             }
                             R.id.rejected -> {
-                                vmChat.selection.value = item.itemId
-                                filterRejected()
-                                vmChat.filtered.value = true
-                                chatRV.adapter?.notifyDataSetChanged()
+                                if(chatList.isNotEmpty() || chatReceivedList.isNotEmpty()){
+                                    vmChat.selection.value = item.itemId
+                                    filterRejected()
+                                    vmChat.filtered.value = true
+                                    chatRV.adapter?.notifyDataSetChanged()
+                                }
                                 true
                             }
                             R.id.nothing -> {
@@ -224,7 +252,9 @@ class ChatFragment : Fragment() {
     private fun filter(mList: List<TimeSlot>, newText: String): List<TimeSlot> {
         val filteredList: MutableList<TimeSlot> = ArrayList()
         for (item in mList) {
-            if (item.location.lowercase().contains(newText.lowercase()) || item.title.lowercase().contains(newText.lowercase())) {
+            if (item.location.lowercase().contains(newText.lowercase()) || item.title.lowercase()
+                    .contains(newText.lowercase())
+            ) {
                 filteredList.add(item)
             }
         }
@@ -246,12 +276,12 @@ class ChatFragment : Fragment() {
             val formatted: String = format.format(utc.time)
             vmChat.filteredTimeSlots = mutableListOf()
             vmChat.filteredChat = mutableListOf()
-            timeSlots.forEach { t->
-                if(t.date == formatted)
+            timeSlots.forEach { t ->
+                if (t.date == formatted)
                     vmChat.filteredTimeSlots.add(t)
             }
-            vmChat.filteredTimeSlots.forEach {
-                vmChat.filteredChat.add(Chat(it.id+","+it.published_by))
+            vmChat.filteredTimeSlots.forEach { t ->
+                vmChat.filteredChat.add(Chat("${t.id},${t.published_by}"))
             }
             vmChat.filtered.value = true
             chatRV.adapter?.notifyDataSetChanged()
@@ -261,14 +291,22 @@ class ChatFragment : Fragment() {
     private fun filterAccepted() {
         vmChat.filteredTimeSlots = mutableListOf()
         vmChat.filteredChat = mutableListOf()
-        if(vmChat.sentOrReceived.value!!){
-            vmChat.filteredTimeSlots = timeSlots.filter { it.accepted.isNotEmpty() }.distinct() as MutableList<TimeSlot>
+        if (vmChat.sentOrReceived.value!!) {
+            val tmp = timeSlots.filter { it.accepted.isNotEmpty() }.distinct()
+            if (tmp.isEmpty())
+                vmChat.filteredTimeSlots = mutableListOf()
+            else
+                vmChat.filteredTimeSlots = tmp.toMutableList()
             vmChat.filteredTimeSlots.forEach {
                 vmChat.filteredChat.add(Chat("${it.id},${it.accepted}"))
             }
-        }else {
-            vmChat.filteredTimeSlots = timeSlots.filter { it.accepted==FirestoreRepository.currentUser.email!! }
-                .distinct() as MutableList<TimeSlot>
+        } else {
+            val tmp = timeSlots.filter { it.accepted == FirestoreRepository.currentUser.email!! }
+                .distinct()
+            if (tmp.isEmpty())
+                vmChat.filteredTimeSlots = mutableListOf()
+            else
+                vmChat.filteredTimeSlots = tmp.toMutableList()
             vmChat.filteredTimeSlots.forEach {
                 vmChat.filteredChat.add(Chat("${it.id},${it.published_by}"))
             }
@@ -278,8 +316,12 @@ class ChatFragment : Fragment() {
     private fun filterRejected() {
         vmChat.filteredTimeSlots = mutableListOf()
         vmChat.filteredChat = mutableListOf()
-        if(vmChat.sentOrReceived.value!!){
-            vmChat.filteredTimeSlots = timeSlots.filter { it.refused.isNotEmpty() }.distinct() as MutableList<TimeSlot>
+        if (vmChat.sentOrReceived.value!!) {
+            val tmp = timeSlots.filter { it.refused.isNotEmpty() }.distinct()
+            if (tmp.isEmpty())
+                vmChat.filteredTimeSlots = mutableListOf()
+            else
+                vmChat.filteredTimeSlots = tmp.toMutableList()
             vmChat.filteredTimeSlots.forEach {
                 val splitReject = it.refused.split(",")
                 splitReject.forEach { s ->
@@ -287,17 +329,22 @@ class ChatFragment : Fragment() {
                 }
             }
         } else {
-            vmChat.filteredTimeSlots = timeSlots.filter { it.refused.contains(FirestoreRepository.currentUser.email!!) }
-                .distinct() as MutableList<TimeSlot>
+            val tmp =
+                timeSlots.filter { it.refused.contains(FirestoreRepository.currentUser.email!!) }
+                    .distinct()
+            if (tmp.isEmpty())
+                vmChat.filteredTimeSlots = mutableListOf()
+            else
+                vmChat.filteredTimeSlots = tmp.toMutableList()
             vmChat.filteredTimeSlots.forEach {
                 vmChat.filteredChat.add(Chat("${it.id},${it.published_by}"))
             }
         }
     }
 
-    private fun watchFilterMenu(menu : Menu){
-        vmChat.selection.observe(viewLifecycleOwner){
-            when(it){
+    private fun watchFilterMenu(menu: Menu) {
+        vmChat.selection.observe(viewLifecycleOwner) {
+            when (it) {
                 R.id.date -> {
                     val menuItem = menu.findItem(R.id.date)
                     menuItem.isChecked = true

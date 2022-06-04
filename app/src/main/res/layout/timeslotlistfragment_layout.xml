@@ -77,6 +77,7 @@
             android:id="@+id/SkillNameRow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:backgroundTint="@color/White"
             android:checkable="false"
             android:fontFamily="sans-serif-black"

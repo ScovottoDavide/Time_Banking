@@ -52,6 +52,7 @@ class TimeSlotListFragment : Fragment() {
         val fromSkillTitle : TextView = view.findViewById(R.id.chatTitle)
         val timeView : EditText = view.findViewById(R.id.timeCredit)
         val skillName : Chip = view.findViewById(R.id.SkillNameRow)
+        val row : TableRow = view.findViewById(R.id.profileRow)
 
         vmSkills.fromHome.observe(viewLifecycleOwner) { fromHome ->
             if (fromHome) {
@@ -66,7 +67,7 @@ class TimeSlotListFragment : Fragment() {
                     } else {
                         emptyView = view.findViewById(R.id.emptyListTV)
                         emptyView.visibility = View.GONE
-                        timeView.visibility = View.VISIBLE
+                        row.visibility = View.VISIBLE
                         val range = getTimeCreditRange(vmProfile.getDBUser().value?.total_time)
                         if(range == -1)
                             timeView.setTextColor(resources.getColor(R.color.Red))
@@ -97,6 +98,7 @@ class TimeSlotListFragment : Fragment() {
                     if (timeSlots.size == 0) {
                         emptyView = view.findViewById(R.id.emptyListTV)
                         emptyView.visibility = View.VISIBLE
+                        row.visibility = View.GONE
                         addButton.setOnClickListener {
                             findNavController().navigate(
                                 R.id.action_timeSlotListFragment_to_timeSlotEditFragment2,
@@ -106,6 +108,7 @@ class TimeSlotListFragment : Fragment() {
                     } else {
                         emptyView = view.findViewById(R.id.emptyListTV)
                         emptyView.visibility = View.GONE
+                        row.visibility = View.GONE
                         timeSlotsRV = view.findViewById(R.id.ServicesList)
                         timeSlotsRV.layoutManager = LinearLayoutManager(this.context)
                         timeSlotsRV.adapter = TimeSlotAdapter(timeSlots)
