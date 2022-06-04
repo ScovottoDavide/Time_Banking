@@ -15,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.Task
 import com.google.android.material.button.MaterialButton
@@ -189,7 +188,7 @@ class ChatAdapter(
                     vmTimeSlot.updateAdv(timeS)
                 }
             }
-
+            reviewDialog.dismiss()
         }
 
         reviewDialogBuilder.setView(view)
