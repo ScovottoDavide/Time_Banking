@@ -232,10 +232,9 @@ class MessageFragment : Fragment() {
             }
             i++
         }
-        vmProfile.modifyUserProfile(
-            ProfileUser(vmProfile.profile.value?.img,
-                vmProfile.profile.value?.fullName,vmProfile.profile.value?.nickname,vmProfile.profile.value?.email,vmProfile.profile.value?.location,
-                vmProfile.profile.value?.aboutUser, vmProfile.profile.value!!.skills,h.toString() + "h" + ":" + m.toString() + "m"))
+        val item: ProfileUser = vmProfile.profile as ProfileUser
+        item.total_time = h.toString() + "h" + ":" + m.toString() + "m"
+        vmProfile.modifyUserProfile(item)
     }
 
 

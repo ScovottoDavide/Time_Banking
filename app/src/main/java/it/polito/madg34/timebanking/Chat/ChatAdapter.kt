@@ -189,7 +189,7 @@ class ChatAdapter(
                     vmTimeSlot.updateAdv(timeS)
                 }
             }
-
+            reviewDialog.dismiss()
         }
 
         reviewDialogBuilder.setView(view)
