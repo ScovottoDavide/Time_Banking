@@ -155,6 +155,8 @@ class MessageFragment : Fragment() {
                 if(requesterPair.first < offerNeededCredit.first)
                     canAccept = false
                 else if(requesterPair.first >= offerNeededCredit.first && requesterPair.second < offerNeededCredit.second)
+                    canAccept = true
+                else if(requesterPair.first == offerNeededCredit.first && requesterPair.second < offerNeededCredit.second)
                     canAccept = false
                 else
                     canAccept = true

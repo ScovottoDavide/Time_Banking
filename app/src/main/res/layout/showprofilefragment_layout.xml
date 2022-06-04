@@ -114,8 +114,8 @@
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
                     android:text="1500 requester reviews"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textSize="16sp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="14sp"
                     android:textStyle="italic" />
 
             </TableRow>
@@ -152,8 +152,8 @@
                     android:fontFamily="sans-serif-black"
                     android:gravity="center"
                     android:text="150 offerer reviews"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                    android:textSize="16sp"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textSize="14sp"
                     android:textStyle="italic" />
 
             </TableRow>
