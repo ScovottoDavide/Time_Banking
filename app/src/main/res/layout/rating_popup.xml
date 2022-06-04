@@ -4,26 +4,44 @@
 
 
     <TextView
-        android:id="@+id/offererMean"
+        android:id="@+id/offerer"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
         android:fontFamily="sans-serif-black"
         android:gravity="center"
-        android:text="How was your experience with luciorocco@hotmail.it?"
+        android:text="How was your experience with "
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-        android:textSize="20sp"
+        android:textSize="16sp"
+        android:textStyle="italic" />
+
+    <TextView
+        android:id="@+id/offererEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="sans-serif-black"
+        android:gravity="center"
+        android:text="Email"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+        android:textSize="16sp"
         android:textStyle="italic" />
 
     <RatingBar
+        android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/ratingBar"
-        android:numStars="5"
-        android:stepSize="0.5"
         android:layout_above="@+id/btnSubRating"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="48dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="26dp"
+        android:numStars="5"
+        android:stepSize="0.5" />
 
     <Button
         android:layout_width="wrap_content"

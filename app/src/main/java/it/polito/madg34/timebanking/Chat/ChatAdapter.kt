@@ -162,6 +162,12 @@ class ChatAdapter(
         val view =
             LayoutInflater.from(holder.itemView.context).inflate(R.layout.rating_popup, null, false)
 
+        val emailInPopup = view.findViewById<TextView>(R.id.offererEmail)
+        if(vmChat.sentOrReceived.value!!)
+            emailInPopup.setText(timeS.accepted+"?")
+        else
+            emailInPopup.setText(timeS.published_by+"?")
+
         val rb: RatingBar = view.findViewById(R.id.ratingBar)
         rb.setOnRatingBarChangeListener(RatingBar.OnRatingBarChangeListener { ratingBar, fl, b ->
             rateValue = fl
