@@ -20,6 +20,7 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
     var userUri = ""
     var filtered : MutableLiveData<Boolean> = MutableLiveData(false)
     var filteredTimeSlots : MutableList<TimeSlot> = mutableListOf()
+    var userNickaname = ""
 
     private var listener1: ListenerRegistration? = null
     private var listener2: ListenerRegistration? = null
@@ -100,6 +101,7 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
         return FirestoreRepository().getUserFromEmail(email).get().addOnSuccessListener { res ->
             if (res != null) {
                 userUri = res.getString("uri").toString()
+                userNickaname = res.getString("NICKNAME").toString()
             }
         }
     }

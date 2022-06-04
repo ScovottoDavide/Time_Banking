@@ -1,6 +1,7 @@
 package it.polito.madg34.timebanking.TimeSlots
 
 import android.annotation.SuppressLint
+import android.provider.ContactsContract
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -9,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import de.hdodenhof.circleimageview.CircleImageView
 import it.polito.madg34.timebanking.R
+import org.w3c.dom.Text
 
 class TimeSlotViewHolder(v : View) : RecyclerView.ViewHolder(v){
 
@@ -18,10 +20,11 @@ class TimeSlotViewHolder(v : View) : RecyclerView.ViewHolder(v){
     private val serviceLocation : TextView = v.findViewById(R.id.serviceLocation)
     private val serviceDate : TextView = v.findViewById(R.id.serviceDate)
     private val earnTime : TextView = v.findViewById(R.id.earnTime)
+    private val userNicknameTV : TextView = v.findViewById(R.id.publishedTV)
 
 
     @SuppressLint("ResourceAsColor")
-    fun bind(item : TimeSlot, userImg : String?) {
+    fun bind(item : TimeSlot, userImg : String?, userNickname: String?) {
         if(userImg.isNullOrEmpty()){
             serviceImage.visibility = View.INVISIBLE
             serviceImage2.visibility = View.VISIBLE
@@ -36,5 +39,6 @@ class TimeSlotViewHolder(v : View) : RecyclerView.ViewHolder(v){
         serviceLocation.text = item.location
         serviceDate.text = item.date
         earnTime.text = item.duration
+        userNicknameTV.text = userNickname
     }
 }

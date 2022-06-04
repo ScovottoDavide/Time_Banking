@@ -16,6 +16,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
 import it.polito.madg34.timebanking.FirestoreRepository
 import it.polito.madg34.timebanking.Messages.MessagesViewModel
@@ -53,8 +54,9 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
         val item = data[position] // access data item
         vmTimeSlot.getImageFromEmail(item.published_by).addOnCompleteListener {
             if (it.isSuccessful) {
-                Log.d("IMG", vmTimeSlot.userUri)
-                holder.bind(item, vmTimeSlot.userUri)
+                if(item.published_by == FirestoreRepository.currentUser.email)
+                    vmTimeSlot.userNickaname = "Me"
+                holder.bind(item, vmTimeSlot.userUri, vmTimeSlot.userNickaname)
             }
         }
 
@@ -78,7 +80,7 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
 
         val deleteButton = holder.itemView.findViewById<ImageButton>(R.id.deleteCard)
         if (vmSkills.fromHome.value!!) {
-            deleteButton.visibility = View.INVISIBLE
+            deleteButton.visibility = View.GONE
         } else {
             deleteButton.visibility = View.VISIBLE
             deleteButton.setOnClickListener {
@@ -96,7 +98,7 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
 
         val editCardViewButton: ImageButton = holder.itemView.findViewById(R.id.editCard)
         if (vmSkills.fromHome.value!!) {
-            editCardViewButton.visibility = View.INVISIBLE
+            editCardViewButton.visibility = View.GONE
         } else {
             editCardViewButton.visibility = View.VISIBLE
             // Click Listener on the edit Button of the Card
@@ -138,7 +140,7 @@ class TimeSlotAdapter(val data: MutableList<TimeSlot>) :
                 showPopUpDialog(holder, item, navController)
             }
         } else
-            viewProfileButton.visibility = View.INVISIBLE
+            viewProfileButton.visibility = View.GONE
     }
 
     override fun getItemCount(): Int = data.size

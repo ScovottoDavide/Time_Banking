@@ -39,7 +39,7 @@
             android:id="@+id/serviceImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="50dp"
             android:contentDescription="@string/app_name"
             android:padding="5dp"
             android:visibility="visible"
@@ -50,7 +50,7 @@
             android:id="@+id/serviceImage2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="50dp"
             android:contentDescription="@string/app_name"
             android:padding="5dp"
             android:src="@drawable/menu_icon"
@@ -62,6 +62,7 @@
             android:id="@+id/serviceTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/suffix"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@id/serviceImage"
@@ -74,6 +75,24 @@
 
         <!--Text VIew to display COurse Rating-->
         <!--Image used in present in drawable folder-->
+        <TextView
+            android:id="@+id/suffix"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Published by: "
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/publishedTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_toEndOf="@id/suffix"
+            android:text="TextView"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textStyle="italic" />
+
         <ImageButton
             android:id="@+id/editCard"
             android:layout_width="wrap_content"

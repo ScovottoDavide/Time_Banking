@@ -234,7 +234,7 @@ class MessageFragment : Fragment() {
             }
             i++
         }
-        val item: ProfileUser = vmProfile.profile as ProfileUser
+        val item: ProfileUser = vmProfile.profile.value as ProfileUser
         item.total_time = h.toString() + "h" + ":" + m.toString() + "m"
         vmProfile.modifyUserProfile(item)
     }
