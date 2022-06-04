@@ -148,9 +148,9 @@ class ChatAdapter(
 
         reviewButton.setOnClickListener {
             if(timeSlot!!.reviews.contains(timeSlot.accepted) && vmChat.sentOrReceived.value!!){
-                Snackbar.make(holder.itemView, "You have already reviewed this advertisement!", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(holder.itemView, "You have alread sent a review!", Snackbar.LENGTH_SHORT).show()
             }else if(timeSlot.reviews.contains(timeSlot.published_by) && vmChat.sentOrReceived.value == false){
-                Snackbar.make(holder.itemView, "You have already reviewed this advertisement!", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(holder.itemView, "You have already sent a review!", Snackbar.LENGTH_SHORT).show()
             }else{
                 ratingPopup(holder, timeSlot)
             }
@@ -197,8 +197,12 @@ class ChatAdapter(
     }
 
     fun updateProfileReview(email: String, value: Float, which: Boolean): Task<DocumentSnapshot> {
-        return vmProfile.updateUserReview(email, value, which)
-
+        return vmProfile.updateUserReview(email, value, which).addOnSuccessListener {
+            val messageContent = "I have sent you a review based on my experience with you.\n" +
+                    "I gave you a score of $value. Thank you for your collaboration\n" +
+                    "and hope we will meet in other occasions."
+            vmMessages.sendAutoRejectMessage(messageContent, email)
+        }
     }
 
     fun viewProfile(holder: ChatViewHolder, chatEntryMail: String, navController: NavController) {

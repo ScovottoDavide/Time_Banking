@@ -14,6 +14,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.chip.Chip
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import it.polito.madg34.timebanking.R
@@ -28,8 +29,6 @@ class TimeSlotListFragment : Fragment() {
     val vm: TimeSlotViewModel by activityViewModels()
     val vmSkills: SkillsViewModel by activityViewModels()
     val vmProfile: ProfileViewModel by activityViewModels()
-
-
 
     private var timeSlots: MutableList<TimeSlot> = mutableListOf()
     private var timeSlotsFromSkill: MutableList<TimeSlot> = mutableListOf()
@@ -51,7 +50,8 @@ class TimeSlotListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val addButton: FloatingActionButton = view.findViewById(R.id.add_button)
         val fromSkillTitle : TextView = view.findViewById(R.id.chatTitle)
-        val timeView : TextView = view.findViewById(R.id.yourTime)
+        val timeView : EditText = view.findViewById(R.id.timeCredit)
+        val skillName : Chip = view.findViewById(R.id.SkillNameRow)
 
         vmSkills.fromHome.observe(viewLifecycleOwner) { fromHome ->
             if (fromHome) {
@@ -59,7 +59,6 @@ class TimeSlotListFragment : Fragment() {
                 vmSkills.getAdvsToDisplayFromSkill().observe(viewLifecycleOwner) {
                     if (!it.isNullOrEmpty()) {
                         timeSlotsFromSkill = it.filter{timeSlot ->  timeSlot.available==1} as MutableList<TimeSlot>
-                        Log.d("TIMESLOTS", it.toString())
                     }
                     if (timeSlotsFromSkill.size == 0) {
                         emptyView = view.findViewById(R.id.emptyListTV)
@@ -68,7 +67,16 @@ class TimeSlotListFragment : Fragment() {
                         emptyView = view.findViewById(R.id.emptyListTV)
                         emptyView.visibility = View.GONE
                         timeView.visibility = View.VISIBLE
-                        timeView.setText(vmProfile.getDBUser().value?.total_time)
+                        val range = getTimeCreditRange(vmProfile.getDBUser().value?.total_time)
+                        if(range == -1)
+                            timeView.setTextColor(resources.getColor(R.color.Red))
+                        else if (range == 0)
+                            timeView.setTextColor(resources.getColor(R.color.Orange))
+                        else
+                            timeView.setTextColor(resources.getColor(R.color.LimeGreen))
+                        timeView.setText("Time credit: " + vmProfile.getDBUser().value?.total_time)
+                        skillName.setText(timeSlotsFromSkill[0].related_skill)
+                        skillName.isChecked = true
                         fromSkillTitle.setText(getString(R.string.ListOnlineServices))
                         timeSlotsRV = view.findViewById(R.id.ServicesList)
                         timeSlotsRV.layoutManager = LinearLayoutManager(this.context)
@@ -255,5 +263,21 @@ class TimeSlotListFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun getTimeCreditRange(item : String?) : Int{
+        val item1 = item?.split(":")?.toTypedArray()
+        val sxItem1 = item1?.get(0)?.removeSuffix("h")
+        val dxItem1 = item1?.get(1)?.removeSuffix("m")
+
+        if(sxItem1?.toInt() == 0){
+            if(dxItem1?.toInt() == 0)
+                return -1
+            else
+                return 0
+        } else if(sxItem1?.toInt()!! > 0){
+            return 1
+        }
+        return -1
     }
 }

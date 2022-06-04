@@ -1,5 +1,6 @@
 package it.polito.madg34.timebanking.Messages
 
+import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TableRow
@@ -31,18 +33,18 @@ class MessageFragment : Fragment() {
     val vmTimeSlot: TimeSlotViewModel by activityViewModels()
     val vmProfile: ProfileViewModel by activityViewModels()
 
-    private var messagesToDisplay : List<Message> = emptyList()
-    private var emailsToReject : List<String> = emptyList()
+    private var messagesToDisplay: List<Message> = emptyList()
+    private var emailsToReject: List<String> = emptyList()
 
-    lateinit var messagesRV : RecyclerView
+    lateinit var messagesRV: RecyclerView
 
-    lateinit var sendButton : Button
-    lateinit var messageContent : EditText
-    lateinit var accept : MaterialButton
-    lateinit var deny : MaterialButton
-    lateinit var alertDialog : AlertDialog
-    lateinit var alertDecline : AlertDialog
-    lateinit var alertCredit : AlertDialog
+    lateinit var sendButton: Button
+    lateinit var messageContent: EditText
+    lateinit var accept: MaterialButton
+    lateinit var deny: MaterialButton
+    lateinit var alertDialog: AlertDialog
+    lateinit var alertDecline: AlertDialog
+    lateinit var alertCredit: AlertDialog
 
     private var h: Int = 0
     private var w: Int = 0
@@ -61,11 +63,11 @@ class MessageFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.messages_list_fragment, container, false)
         halfWidth(view)
-        if(savedInstanceState?.getBoolean("isOpen") == true)
+        if (savedInstanceState?.getBoolean("isOpen") == true)
             popUpAccept()
-        if(savedInstanceState?.getBoolean("isOpenDecline") == true)
+        if (savedInstanceState?.getBoolean("isOpenDecline") == true)
             popUpReject()
-        if(savedInstanceState?.getBoolean("isOpenCredit") == true)
+        if (savedInstanceState?.getBoolean("isOpenCredit") == true)
             notEnoughCreditPopUp()
         return view
     }
@@ -76,20 +78,20 @@ class MessageFragment : Fragment() {
         sendButton = view.findViewById(R.id.button_gchat_send)
         messageContent = view.findViewById(R.id.edit_gchat_message)
         sendButton.setOnClickListener {
-            if(messageContent.text.isNotEmpty())
+            if (messageContent.text.isNotEmpty())
                 vmMessage.sendNewMessage(messageContent.text.toString())
             messageContent.setText("")
         }
 
-        if(vmChat.sentOrReceived.value == true){ // received
-            if(vmTimeSlot.currentShownAdv?.refused?.isEmpty() == true && vmTimeSlot.currentShownAdv?.accepted?.isEmpty() == true){
+        if (vmChat.sentOrReceived.value == true) { // received
+            if (vmTimeSlot.currentShownAdv?.refused?.isEmpty() == true && vmTimeSlot.currentShownAdv?.accepted?.isEmpty() == true) {
                 accept.visibility = View.VISIBLE
                 deny.visibility = View.VISIBLE
-            } else if(vmTimeSlot.currentShownAdv?.refused?.contains(vmMessage.otherUserEmail) == false){
+            } else if (vmTimeSlot.currentShownAdv?.refused?.contains(vmMessage.otherUserEmail) == false
+                && vmTimeSlot.currentShownAdv?.accepted?.contains(vmMessage.otherUserEmail) == false) {
                 accept.visibility = View.VISIBLE
                 deny.visibility = View.VISIBLE
-            }
-            else{
+            } else {
                 accept.visibility = View.GONE
                 deny.visibility = View.GONE
             }
@@ -98,15 +100,16 @@ class MessageFragment : Fragment() {
             deny.visibility = View.GONE
         }
 
-        vmMessage.getCurrentUserMessages().observe(viewLifecycleOwner){
-            if(it != null){
+        vmMessage.getCurrentUserMessages().observe(viewLifecycleOwner) {
+            if (it != null) {
                 messagesToDisplay = it
-                val messagesRead = messagesToDisplay.filter { it.sentBy != FirestoreRepository.currentUser.email!! }
+                val messagesRead =
+                    messagesToDisplay.filter { it.sentBy != FirestoreRepository.currentUser.email!! }
                 messagesRead.forEach { m -> vmMessage.updateMessageRead(m) }
                 messagesRV = view.findViewById(R.id.recycler_gchat)
                 messagesRV.layoutManager = LinearLayoutManager(this.context)
                 messagesRV.adapter = MessageListAdapter(messagesToDisplay)
-                if(messagesToDisplay.isNotEmpty())
+                if (messagesToDisplay.isNotEmpty())
                     messagesRV.smoothScrollToPosition(messagesToDisplay.size - 1)
             }
         }
@@ -116,10 +119,10 @@ class MessageFragment : Fragment() {
          *  3. Remove timeslot from online (done through point 1)
          *  4. Automatic refusal for other requester on the same adv
          * */
-        accept.setOnClickListener{
+        accept.setOnClickListener {
             /** Check requester credit is enough */
             checkCredit(vmMessage.otherUserEmail).addOnSuccessListener {
-                if(canAccept)
+                if (canAccept)
                     popUpAccept()
                 else
                     notEnoughCreditPopUp()
@@ -136,9 +139,11 @@ class MessageFragment : Fragment() {
         isPopupOpenCredit = true
         alertCredit = AlertDialog.Builder(requireContext())
             .setTitle("Warning!")
-            .setMessage("The requester ${vmMessage.otherUserEmail} does not have enough credit" +
-                    " to satisfy the duration requirements of offer. As a consequence " +
-                    "you cannot accept this request until the requester has enough credit!")
+            .setMessage(
+                "The requester ${vmMessage.otherUserEmail} does not have enough credit" +
+                        " to satisfy the duration requirements of offer. As a consequence " +
+                        "you cannot accept this request until the requester has enough credit!"
+            )
             .setPositiveButton("Ok") { _, _ ->
                 isPopupOpenCredit = false
             }
@@ -146,17 +151,17 @@ class MessageFragment : Fragment() {
         alertCredit.setOnDismissListener { isPopupOpenCredit = false }
     }
 
-    private fun checkCredit(emailRequester : String): Task<DocumentSnapshot> {
+    private fun checkCredit(emailRequester: String): Task<DocumentSnapshot> {
         return vmProfile.getRequesterCredit(emailRequester).addOnSuccessListener {
-            if(it != null){
+            if (it != null) {
                 requesterCredit = it.getString("TOTAL_TIME").toString()
                 val requesterPair = parseTimeCredit(requesterCredit)
                 val offerNeededCredit = parseTimeCredit(vmTimeSlot.currentShownAdv?.duration!!)
-                if(requesterPair.first < offerNeededCredit.first)
+                if (requesterPair.first < offerNeededCredit.first)
                     canAccept = false
-                else if(requesterPair.first >= offerNeededCredit.first && requesterPair.second < offerNeededCredit.second)
+                else if (requesterPair.first >= offerNeededCredit.first && requesterPair.second < offerNeededCredit.second)
                     canAccept = true
-                else if(requesterPair.first == offerNeededCredit.first && requesterPair.second < offerNeededCredit.second)
+                else if (requesterPair.first == offerNeededCredit.first && requesterPair.second < offerNeededCredit.second)
                     canAccept = false
                 else
                     canAccept = true
@@ -164,33 +169,40 @@ class MessageFragment : Fragment() {
         }
     }
 
-    private fun popUpAccept(){
+    private fun popUpAccept() {
         isPopupOpenAccept = true
         alertDialog = AlertDialog.Builder(requireContext())
             .setTitle("Warning!")
-            .setMessage("Accepting the request made by ${vmMessage.otherUserEmail} will automatically trigger" +
-                    " the refusal of all the other requests you received on this advertisement.\n" +
-                    "Do you want to continue?")
+            .setMessage(
+                "Accepting the request made by ${vmMessage.otherUserEmail} will automatically trigger" +
+                        " the refusal of all the other requests you received on this advertisement.\n" +
+                        "Do you want to continue?"
+            )
             .setPositiveButton("Yes") { _, _ ->
                 vmTimeSlot.currentShownAdv?.available = 0
                 vmTimeSlot.currentShownAdv?.accepted = vmMessage.otherUserEmail
                 vmChat.getCurrentChatReceivedList().value?.forEach {
                     val split = it.info.split(",")
-                    if(split[0] == vmTimeSlot.currentShownAdv?.id && split[1] != vmMessage.otherUserEmail)
-                        if(vmTimeSlot.currentShownAdv?.refused?.isEmpty() == true)
+                    if (split[0] == vmTimeSlot.currentShownAdv?.id && split[1] != vmMessage.otherUserEmail)
+                        if (vmTimeSlot.currentShownAdv?.refused?.isEmpty() == true)
                             vmTimeSlot.currentShownAdv?.refused = split[1]
-                        else if(vmTimeSlot.currentShownAdv?.refused?.contains(split[1]) == false)
-                            vmTimeSlot.currentShownAdv?.refused = "${vmTimeSlot.currentShownAdv?.refused},${split[1]}"
+                        else if (vmTimeSlot.currentShownAdv?.refused?.contains(split[1]) == false)
+                            vmTimeSlot.currentShownAdv?.refused =
+                                "${vmTimeSlot.currentShownAdv?.refused},${split[1]}"
                 }
                 vmTimeSlot.currentShownAdv?.let { it1 -> vmTimeSlot.updateAdv(it1) }
 
                 updateUserProfile()
-                vmMessage.modifyProfileInChat(vmMessage.otherUserEmail, vmTimeSlot.currentShownAdv?.duration)
+                vmMessage.modifyProfileInChat(
+                    vmMessage.otherUserEmail,
+                    vmTimeSlot.currentShownAdv?.duration
+                )
 
-                val acceptedDefaultMessage = "I have accepted your request and also received the credit.\n" +
-                        "We will meet on ${vmTimeSlot.currentShownAdv?.date}.\nThank you!"
+                val acceptedDefaultMessage =
+                    "I have accepted your request and also received the credit.\n" +
+                            "We will meet on ${vmTimeSlot.currentShownAdv?.date}.\nThank you!"
                 vmMessage.sendNewMessage(acceptedDefaultMessage)
-                if(vmTimeSlot.currentShownAdv?.refused?.isNotEmpty() == true){
+                if (vmTimeSlot.currentShownAdv?.refused?.isNotEmpty() == true) {
                     emailsToReject = vmTimeSlot.currentShownAdv?.refused?.split(",")!!
                     emailsToReject.forEach {
                         vmMessage.sendAutoRejectMessage("Your request has benn rejected", it)
@@ -198,6 +210,7 @@ class MessageFragment : Fragment() {
                 }
 
                 isPopupOpenAccept = false
+                closeKeyboard()
                 requireActivity().onBackPressed()
             }
             .setNegativeButton("No") { _, _ ->
@@ -208,8 +221,8 @@ class MessageFragment : Fragment() {
         alertDialog.setOnDismissListener { isPopupOpenAccept = false }
     }
 
-    private fun updateUserProfile(){
-        val item1= vmProfile.profile.value?.total_time?.split(":")?.toTypedArray()
+    private fun updateUserProfile() {
+        val item1 = vmProfile.profile.value?.total_time?.split(":")?.toTypedArray()
         val sxItem1 = item1?.get(0)?.removeSuffix("h")
         val dxItem1 = item1?.get(1)?.removeSuffix("m")
 
@@ -240,20 +253,23 @@ class MessageFragment : Fragment() {
     }
 
 
-    private fun popUpReject(){
+    private fun popUpReject() {
         isPopupOpenDecline = true
         alertDecline = AlertDialog.Builder(requireContext())
             .setTitle("Warning!")
             .setMessage("Do you want to decline ${vmMessage.otherUserEmail} request?")
             .setPositiveButton("Yes") { _, _ ->
-                if(vmTimeSlot.currentShownAdv?.refused?.isEmpty() == true)
+                if (vmTimeSlot.currentShownAdv?.refused?.isEmpty() == true)
                     vmTimeSlot.currentShownAdv?.refused = vmMessage.otherUserEmail
                 else
-                    vmTimeSlot.currentShownAdv?.refused = "${vmTimeSlot.currentShownAdv?.refused},${vmMessage.otherUserEmail}"
+                    vmTimeSlot.currentShownAdv?.refused =
+                        "${vmTimeSlot.currentShownAdv?.refused},${vmMessage.otherUserEmail}"
                 vmTimeSlot.currentShownAdv?.let { it1 -> vmTimeSlot.updateAdv(it1) }
                 isPopupOpenDecline = false
-                vmMessage.sendAutoRejectMessage("I'm sorry, your request has been rejected.\n" +
-                        "Hope we can help each other next time!", vmMessage.otherUserEmail)
+                vmMessage.sendAutoRejectMessage(
+                    "I'm sorry, your request has been rejected.\n" +
+                            "Hope we can help each other next time!", vmMessage.otherUserEmail
+                )
                 requireActivity().onBackPressed()
             }
             .setNegativeButton("No") { _, _ ->
@@ -288,7 +304,7 @@ class MessageFragment : Fragment() {
         })
     }
 
-    private fun parseTimeCredit(credit : String) : Pair<Int, Int> {
+    private fun parseTimeCredit(credit: String): Pair<Int, Int> {
         val split = credit.split(":").toTypedArray()
         val hours = split[0].removeSuffix("h")
         val minutes = split[1].removeSuffix("m")
@@ -300,5 +316,15 @@ class MessageFragment : Fragment() {
         super.onSaveInstanceState(outState)
         outState.putBoolean("isOpen", isPopupOpenAccept)
         outState.putBoolean("isOpenDecline", isPopupOpenDecline)
-        outState.putBoolean("isOpenCredit", isPopupOpenCredit)    }
+        outState.putBoolean("isOpenCredit", isPopupOpenCredit)
+    }
+
+    private fun closeKeyboard() {
+        // this will give us the view which is currently focus in this layout
+        val v: View? = this.view?.findFocus()
+
+        val manager: InputMethodManager =
+            context?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(v?.windowToken, 0)
+    }
 }

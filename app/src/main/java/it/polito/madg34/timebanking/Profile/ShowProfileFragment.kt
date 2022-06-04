@@ -103,7 +103,6 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         emailView.setText(profile?.email)
         myLocationView.setText(profile?.location)
         userDesc.setText(profile?.aboutUser)
-        Log.d("NUMBER", profile?.total_time.toString())
         val range = getTimeCreditRange(profile?.total_time)
         if(range == -1)
             timeCredit.setTextColor(resources.getColor(R.color.Red))
