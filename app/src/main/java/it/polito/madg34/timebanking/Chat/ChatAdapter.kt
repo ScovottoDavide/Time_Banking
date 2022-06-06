@@ -19,12 +19,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.gms.tasks.Task
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.DocumentSnapshot
 import it.polito.madg34.timebanking.FirestoreRepository
 import it.polito.madg34.timebanking.HomeSkills.SkillsViewModel
 import it.polito.madg34.timebanking.Messages.MessagesViewModel
 import it.polito.madg34.timebanking.Profile.ProfileViewModel
 import it.polito.madg34.timebanking.R
+import it.polito.madg34.timebanking.Review.Review
+import it.polito.madg34.timebanking.Review.ReviewViewModel
 import it.polito.madg34.timebanking.TimeSlots.TimeSlot
 import it.polito.madg34.timebanking.TimeSlots.TimeSlotViewModel
 
@@ -41,12 +44,15 @@ class ChatAdapter(
     lateinit var vmChat: ChatViewModel
     lateinit var vmTimeSlot: TimeSlotViewModel
     lateinit var vmSkills: SkillsViewModel
+    lateinit var vmReview : ReviewViewModel
 
     lateinit var chatButton: ImageButton
     lateinit var topCardTitle: TextView
     lateinit var unreadMessages: TextView
     lateinit var dialog: AlertDialog
     lateinit var reviewButton: MaterialButton
+    lateinit var comment : TextInputEditText
+
 
     lateinit var reviewDialog: AlertDialog
 
@@ -65,6 +71,7 @@ class ChatAdapter(
         vmChat = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
         vmTimeSlot = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
         vmSkills = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
+        vmReview = ViewModelProvider(holder.itemView.context as ViewModelStoreOwner).get()
 
         chatButton = holder.itemView.findViewById(R.id.chatButton)
         topCardTitle = holder.itemView.findViewById(R.id.requester)
@@ -163,6 +170,7 @@ class ChatAdapter(
             LayoutInflater.from(holder.itemView.context).inflate(R.layout.rating_popup, null, false)
 
         val emailInPopup = view.findViewById<TextView>(R.id.offererEmail)
+        comment = view.findViewById(R.id.outlinedCommentFixed)
         if(vmChat.sentOrReceived.value!!)
             emailInPopup.setText(timeS.accepted+"?")
         else
@@ -183,6 +191,8 @@ class ChatAdapter(
                         timeS.reviews = "${timeS.reviews},${timeS.accepted}"
                     }
                     vmTimeSlot.updateAdv(timeS)
+                    vmReview.saveReview(Review(comment.text.toString(), timeS.id, timeS.accepted, FirestoreRepository.currentUser.email, System.currentTimeMillis(), rateValue, 1))
+
                 }
             }else{
                 updateProfileReview(timeS.published_by, rateValue, vmChat.sentOrReceived.value!!).addOnSuccessListener {
@@ -192,6 +202,7 @@ class ChatAdapter(
                         timeS.reviews = "${timeS.reviews},${timeS.published_by}"
                     }
                     vmTimeSlot.updateAdv(timeS)
+                    vmReview.saveReview(Review(comment.text.toString(), timeS.id, timeS.published_by, FirestoreRepository.currentUser.email, System.currentTimeMillis(), rateValue,0 ))
                 }
             }
             reviewDialog.dismiss()

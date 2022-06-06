@@ -10,6 +10,7 @@ import it.polito.madg34.timebanking.Messages.Message
 import it.polito.madg34.timebanking.Profile.ProfileUser
 import it.polito.madg34.timebanking.TimeSlots.TimeSlot
 import it.polito.madg34.timebanking.Chat.Chat
+import it.polito.madg34.timebanking.Review.Review
 
 class FirestoreRepository {
     private var fireStoreDB = FirebaseFirestore.getInstance()
@@ -230,6 +231,14 @@ class FirestoreRepository {
 
     fun getRequesterCreditDB(emailRequester : String): DocumentReference {
         return fireStoreDB.collection("users").document(emailRequester)
+    }
+
+    fun getReviews(email : String): Query {
+        return fireStoreDB.collection("reviews").whereEqualTo("REVIEWEE", email)
+    }
+
+    fun saveNewReview(review : Review): Task<Void> {
+        return fireStoreDB.collection("reviews").document().set(review)
     }
 
 }
