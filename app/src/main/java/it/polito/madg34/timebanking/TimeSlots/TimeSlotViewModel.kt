@@ -106,6 +106,10 @@ class TimeSlotViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun getAdvForReview(id : String) : DocumentReference? {
+        return FirestoreRepository().getAdvFromDocId(id)
+    }
+
     private fun DocumentSnapshot.toTimeSlotObject(): TimeSlot? {
         return try {
             val id = get("ID") as String

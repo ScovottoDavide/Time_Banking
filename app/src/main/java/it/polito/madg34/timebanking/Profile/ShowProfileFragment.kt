@@ -1,7 +1,9 @@
 package it.polito.madg34.timebanking.Profile
 
 import android.content.res.Configuration
+import android.opengl.Visibility
 import android.os.Bundle
+import android.text.Html
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -14,13 +16,16 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.github.florent37.expansionpanel.ExpansionHeader
 import com.github.florent37.expansionpanel.ExpansionLayout
 import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import de.hdodenhof.circleimageview.CircleImageView
 import it.polito.madg34.timebanking.FirestoreRepository
 import it.polito.madg34.timebanking.R
+import it.polito.madg34.timebanking.Review.ReviewViewModel
 
 class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     val vm: ProfileViewModel by activityViewModels()
+    val vmReview: ReviewViewModel by activityViewModels()
 
     private var h = 0
     private var w = 0
@@ -34,13 +39,13 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
     lateinit var myLocationView: TextInputEditText
     lateinit var userDesc: TextInputEditText
     lateinit var img_view: CircleImageView
-    lateinit var timeCredit : EditText
-    lateinit var requesterMean : TextView
-    lateinit var requesterRB : RatingBar
-    lateinit var requesterNumber : TextView
-    lateinit var offererMean : TextView
-    lateinit var offererRB : RatingBar
-    lateinit var offererNumber : TextView
+    lateinit var timeCredit: EditText
+    lateinit var requesterMean: TextView
+    lateinit var requesterRB: RatingBar
+    lateinit var requesterNumber: TextView
+    lateinit var offererMean: TextView
+    lateinit var offererRB: RatingBar
+    lateinit var offererNumber: TextView
     private var profile: ProfileUser? = ProfileUser()
 
     override fun onCreateView(
@@ -72,7 +77,10 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         offererNumber = view.findViewById(R.id.numberRatingOfferer)
 
         if (vm.clickedEmail.value != FirestoreRepository.currentUser.email && (vm.clickedEmail.value?.isNotEmpty() == true)) {
-            Log.d("EMAIL", vm.clickedEmail.value.toString() + " : " + FirestoreRepository.currentUser.email)
+            Log.d(
+                "EMAIL",
+                vm.clickedEmail.value.toString() + " : " + FirestoreRepository.currentUser.email
+            )
             vm.clickedEmail.observe(viewLifecycleOwner) {
                 if (it == null)
                     Toast.makeText(context, "Firebase Failure!", Toast.LENGTH_LONG).show()
@@ -104,29 +112,36 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         myLocationView.setText(profile?.location)
         userDesc.setText(profile?.aboutUser)
         val range = getTimeCreditRange(profile?.total_time)
-        if(range == -1)
+        if (range == -1)
             timeCredit.setTextColor(resources.getColor(R.color.Red))
         else if (range == 0)
             timeCredit.setTextColor(resources.getColor(R.color.Orange))
         else
             timeCredit.setTextColor(resources.getColor(R.color.LimeGreen))
-        timeCredit.setText("Time credit: "+profile?.total_time)
-        if(profile?.requesterNumber!! == 0){
+        timeCredit.setText("Time credit: " + profile?.total_time)
+        if (FirestoreRepository.currentUser.email == profile?.email) {
+            timeCredit.visibility = View.VISIBLE
+        } else {
+            timeCredit.visibility = View.GONE
+        }
+        if (profile?.requesterNumber!! == 0) {
             requesterMean.setText("0")
-        }else{
+        } else {
             requesterMean.setText((profile?.requesterScore?.div(profile?.requesterNumber!!)).toString())
         }
         requesterRB.rating = profile?.requesterScore?.div(profile?.requesterNumber!!)!!
-        requesterNumber.setText("${profile?.requesterNumber} requester reviews")
+        val linkRequester = "<a href=''> ${profile?.requesterNumber} requester reviews </a>"
+        requesterNumber.setText(Html.fromHtml(linkRequester))
 
-        if(profile?.offererNumber!! == 0){
+        if (profile?.offererNumber!! == 0) {
             offererMean.setText("0")
-        }else{
+        } else {
             offererMean.setText((profile?.offererScore?.div(profile?.offererNumber!!)).toString())
 
         }
         offererRB.rating = profile?.offererScore?.div(profile?.offererNumber!!)!!
-        offererNumber.setText("${profile?.offererNumber} offerer reviews")
+        val linkOfferer = "<a href=''> ${profile?.offererNumber} offerer reviews </a>"
+        offererNumber.setText(Html.fromHtml(linkOfferer))
 
         val navView = activity?.findViewById<NavigationView>(R.id.nav_view)
         val header = navView?.getHeaderView(0)
@@ -151,6 +166,32 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
         profile?.skills?.forEach {
             setSkills(it.key, it.value, view)
         }
+
+
+        requesterNumber.setOnClickListener {
+            if (requesterNumber.text.split(" ")[0].toInt() > 0) {
+                vm.clickedEmail.value = profile?.email
+                vmReview.type = 1
+                findNavController().navigate(R.id.action_showProfileFragment_to_reviewFragment)
+            } else {
+                Snackbar.make(requireView(), "There are no reviews yet.", Snackbar.LENGTH_SHORT)
+                    .show()
+            }
+        }
+
+
+
+        offererNumber.setOnClickListener {
+            if (offererNumber.text.split(" ")[0].toInt() > 0) {
+                vm.clickedEmail.value = profile?.email
+                vmReview.type = 0
+                findNavController().navigate(R.id.action_showProfileFragment_to_reviewFragment)
+            } else {
+                Snackbar.make(requireView(), "There are no reviews yet.", Snackbar.LENGTH_SHORT)
+                    .show()
+            }
+        }
+
     }
 
     private fun setSkills(skill: String, description: String, view: View) {
@@ -291,30 +332,38 @@ class ShowProfileFragment : Fragment(R.layout.showprofilefragment_layout) {
                 if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT) {
                     hTime = row.height
                     wTime = row.width
-                    myAccount.post { myAccount.layoutParams = TableRow.LayoutParams(wTime / 2, hTime) }
-                    timeCredit.post { timeCredit.layoutParams = TableRow.LayoutParams(wTime / 2, hTime) }
+                    myAccount.post {
+                        myAccount.layoutParams = TableRow.LayoutParams(wTime / 2, hTime)
+                    }
+                    timeCredit.post {
+                        timeCredit.layoutParams = TableRow.LayoutParams(wTime / 2, hTime)
+                    }
                 } else {
                     hTime = row.height
                     wTime = row.width
-                    myAccount.post { myAccount.layoutParams = TableRow.LayoutParams(wTime / 2, hTime) }
-                    timeCredit.post { timeCredit.layoutParams = TableRow.LayoutParams(wTime / 2, hTime) }
+                    myAccount.post {
+                        myAccount.layoutParams = TableRow.LayoutParams(wTime / 2, hTime)
+                    }
+                    timeCredit.post {
+                        timeCredit.layoutParams = TableRow.LayoutParams(wTime / 2, hTime)
+                    }
                 }
                 row.viewTreeObserver.removeOnGlobalLayoutListener(this)
             }
         })
     }
 
-    private fun getTimeCreditRange(item : String?) : Int{
+    private fun getTimeCreditRange(item: String?): Int {
         val item1 = item?.split(":")?.toTypedArray()
         val sxItem1 = item1?.get(0)?.removeSuffix("h")
         val dxItem1 = item1?.get(1)?.removeSuffix("m")
 
-        if(sxItem1?.toInt() == 0){
-            if(dxItem1?.toInt() == 0)
+        if (sxItem1?.toInt() == 0) {
+            if (dxItem1?.toInt() == 0)
                 return -1
             else
                 return 0
-        } else if(sxItem1?.toInt()!! > 0){
+        } else if (sxItem1?.toInt()!! > 0) {
             return 1
         }
         return -1

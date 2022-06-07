@@ -203,7 +203,8 @@ class MainActivity : AppCompatActivity() {
     private fun NavigationIconClickListener() {
         toolbar.setNavigationOnClickListener {
             if (navController.currentDestination?.id == navController.graph[R.id.timeSlotDetailsFragment].id ||
-                navController.currentDestination?.id == navController.graph[R.id.messageFragment].id
+                navController.currentDestination?.id == navController.graph[R.id.messageFragment].id ||
+                navController.currentDestination?.id == navController.graph[R.id.reviewFragment].id
             )
                 onBackPressed()
             else if (navController.currentDestination?.id == navController.graph[R.id.editSkillFragment].id
@@ -302,7 +303,8 @@ class MainActivity : AppCompatActivity() {
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
             } else if (destination.id == R.id.timeSlotEditFragment || destination.id == R.id.timeSlotDetailsFragment
                 || destination.id == R.id.editProfileFragment || destination.id == R.id.editSkillFragment
-                || destination.id == R.id.addSkillFragment || destination.id == R.id.messageFragment
+                || destination.id == R.id.addSkillFragment || destination.id == R.id.messageFragment ||
+                destination.id == R.id.reviewFragment
             ) {
                 homeNotificationTV.visibility = View.GONE
                 drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
