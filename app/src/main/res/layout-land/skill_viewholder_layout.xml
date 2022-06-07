@@ -5,14 +5,14 @@
     android:layout_height="wrap_content"
     android:layout_margin="16dp"
     app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="15dp"
+    app:cardCornerRadius="8dp"
     app:cardElevation="8dp"
     app:cardMaxElevation="10dp"
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="false"
-    app:contentPadding="20dp"
-    app:strokeColor="@color/Custom1"
-    app:strokeWidth="3dp">
+    app:contentPadding="10dp"
+    app:strokeColor="@color/black"
+    app:strokeWidth="1dp">
 
     <!--
         In the above cardview widget
@@ -37,11 +37,10 @@
             android:layout_alignParentTop="true"
             android:layout_marginStart="10dp"
             android:drawableEnd="@drawable/arrow_right_bold_outline"
-            android:gravity="center_vertical"
             android:textColor="@color/black"
-            android:textSize="24dp"
+            android:textSize="18sp"
             android:textStyle="bold"
-            app:drawableTint="@color/Custom1" />
+            app:drawableTint="@color/Gray" />
 
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>

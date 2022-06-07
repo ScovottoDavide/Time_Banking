@@ -118,45 +118,6 @@
         <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout/showprofilefragment_layout.xml" value="0.24791666666666667" />
         <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout/timeslotdetailsfragment_layout.xml" value="0.36770833333333336" />
         <entry key="..\:/Users/lucio/OneDrive/Documenti/GitHub/Time_Banking/app/src/main/res/layout/timesloteditfragment_layout.xml" value="0.36770833333333336" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/addskillfragment_layout.xml" value="0.359375" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/auth_activity.xml" value="0.359375" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/card_layout.xml" value="0.359375" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/chat_list_fragment.xml" value="0.5458333333333333" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/chat_list_view_holder.xml" value="0.5458333333333333" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/editprofilefragment_layout.xml" value="0.359375" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/editskillfragment_layout.xml" value="0.35520833333333335" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/list_skills.xml" value="0.4119791666666667" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/message_receive_layout.xml" value="0.5458333333333333" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/message_send_layout.xml" value="0.5458333333333333" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/messages_list_fragment.xml" value="0.5458333333333333" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/navview_header.xml" value="0.35520833333333335" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/showprofilefragment_layout.xml" value="0.5458333333333333" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/skill_viewholder_layout.xml" value="0.5458333333333333" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/skillsfragment_layout.xml" value="0.5458333333333333" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/timeslotdetailsfragment_layout.xml" value="0.5458333333333333" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/timesloteditfragment_layout.xml" value="0.5458333333333333" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout-land/timeslotlistfragment_layout.xml" value="0.5458333333333333" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/activity_main.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/addskillfragment_layout.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/auth_activity.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/card_layout.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/chat_list_fragment.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/chat_list_view_holder.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/editprofilefragment_layout.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/editskillfragment_layout.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/list_skills.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/menu_counter.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/message_receive_layout.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/message_send_layout.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/messages_list_fragment.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/navview_header.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/rating_popup.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/showprofilefragment_layout.xml" value="0.33" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/skill_viewholder_layout.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/skillsfragment_layout.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/timeslotdetailsfragment_layout.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/timesloteditfragment_layout.xml" value="0.371875" />
-        <entry key="..\:/Users/ricev/AndroidStudioProjects/Time_Banking_final/app/src/main/res/layout/timeslotlistfragment_layout.xml" value="0.371875" />
       </map>
     </option>
   </component>

@@ -19,7 +19,6 @@ class TimeSlotViewHolder(v : View) : RecyclerView.ViewHolder(v){
     private val serviceTitle : TextView = v.findViewById(R.id.serviceTitle)
     private val serviceLocation : TextView = v.findViewById(R.id.serviceLocation)
     private val serviceDate : TextView = v.findViewById(R.id.serviceDate)
-    private val serviceSkill : TextView = v.findViewById(R.id.serviceSkill)
     private val earnTime : TextView = v.findViewById(R.id.earnTime)
     private val userNicknameTV : TextView = v.findViewById(R.id.publishedTV)
 
@@ -39,7 +38,6 @@ class TimeSlotViewHolder(v : View) : RecyclerView.ViewHolder(v){
         serviceTitle.text = item.title
         serviceLocation.text = item.location
         serviceDate.text = item.date
-        serviceSkill.text = item.related_skill
         earnTime.text = item.duration
         userNicknameTV.text = userNickname
     }

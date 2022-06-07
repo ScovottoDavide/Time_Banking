@@ -19,8 +19,7 @@
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="@drawable/menu_icon"
             app:title="@string/app_name"
-            app:titleCentered="true"
-            app:titleTextAppearance="@style/TextAppearance.AppCompat.Display1"/>
+            app:titleCentered="true"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -30,10 +29,9 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/barTitle"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@color/white"
-        android:textColorLink="@color/Custom1"
-        android:textSize="34sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

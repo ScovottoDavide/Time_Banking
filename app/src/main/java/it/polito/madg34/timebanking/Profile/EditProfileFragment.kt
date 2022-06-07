@@ -331,10 +331,8 @@ class EditProfileFragment : Fragment() {
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
-            marginStart = 100
-            topMargin = 5
-            bottomMargin = 5
-            gravity = Gravity.CENTER_VERTICAL
+            marginStart = 80
+            topMargin = 20
         }
         tv.id = indexName
         tv.text = skill
@@ -353,7 +351,7 @@ class EditProfileFragment : Fragment() {
             wid,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
-        arrowLayoutParams.gravity = Gravity.CENTER_VERTICAL
+        arrowLayoutParams.gravity = Gravity.CENTER_VERTICAL or Gravity.END
 
 
         /** Allow the user to modify the skill **/
@@ -362,12 +360,9 @@ class EditProfileFragment : Fragment() {
             LinearLayout.LayoutParams.WRAP_CONTENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
-            bottomMargin = 2
-            topMargin = 2
-            gravity = Gravity.CENTER_VERTICAL
+            bottomMargin = 5
         }
-        pencil.setBackgroundColor(getResources().getColor(R.color.Custom3)) // sfondo trasparente del pencil
-        pencil.setColorFilter(getResources().getColor(R.color.Custom1))  //Custom1 è il rosso dell'app, si può mettere un grigio se troppo
+        pencil.setBackgroundColor(getResources().getColor(R.color.white))
 
         /** Add the Text and the Arrow to build the header of each skill **/
         expH.addView(arrow, arrowLayoutParams)
@@ -380,9 +375,7 @@ class EditProfileFragment : Fragment() {
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         ).apply {
-            marginStart = 150
-            topMargin = 2
-            bottomMargin = 2
+            marginStart = 20
         }
 
         /** Text View for the description **/
@@ -390,11 +383,7 @@ class EditProfileFragment : Fragment() {
         expansionText.layoutParams = LinearLayout.LayoutParams(
             LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
-        ).apply {
-            marginStart = 5
-            topMargin = 5
-            bottomMargin = 5
-        }
+        ).apply { marginStart = 5 }
         expansionText.id = indexDesc
         expansionText.setTextAppearance(
             activity,

@@ -19,8 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="@string/app_name"
-            app:titleCentered="true"
-            app:titleTextAppearance="@style/TextAppearance.AppCompat.Display1" />
+            app:titleCentered="true" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -102,10 +101,10 @@
         android:fontFamily="monospace"
         android:text="TimeEarn"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@color/Custom1"
+        android:textColor="@color/Brown"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/homepageLogo"
+        app:layout_constraintEnd_toStartOf="@+id/imageView"
         app:layout_constraintHorizontal_bias="0.661"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

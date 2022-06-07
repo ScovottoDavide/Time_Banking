@@ -12,8 +12,8 @@
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="false"
     app:contentPadding="10dp"
-    app:strokeColor="@color/Custom1"
-    app:strokeWidth="2dp">
+    app:strokeColor="@color/black"
+    app:strokeWidth="1dp">
 
     <!--
         In the above cardview widget
@@ -39,7 +39,7 @@
             android:id="@+id/serviceImage"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="50dp"
             android:contentDescription="@string/app_name"
             android:padding="5dp"
             android:visibility="visible"
@@ -50,7 +50,7 @@
             android:id="@+id/serviceImage2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="50dp"
             android:contentDescription="@string/app_name"
             android:padding="5dp"
             android:src="@drawable/menu_icon"
@@ -67,26 +67,11 @@
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@id/serviceImage"
             android:drawableStart="@drawable/format_title"
-            android:drawableTint="@color/Custom1"
+            android:drawableTint="@color/Gray"
             android:text="@string/fullName"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/serviceSkill"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/serviceTitle"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
-            android:layout_toEndOf="@id/serviceImage"
-            android:drawablePadding="2dp"
-            android:drawableStart="@drawable/account_cog_outline"
-            android:drawableTint="@color/Gray"
-            android:gravity="center_vertical"
-            android:text="@string/fullName"
-            android:textColor="#252222" />
 
         <!--Text VIew to display COurse Rating-->
         <!--Image used in present in drawable folder-->
@@ -116,15 +101,14 @@
             android:backgroundTint="@color/white"
             android:contentDescription="@string/editSkillTitle"
             android:minHeight="48dp"
-            android:tint="@color/DarkGray"
             app:srcCompat="@drawable/outline_edit_24" />
 
         <ImageButton
             android:id="@+id/chatButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignEnd="@id/serviceSkill"
-            android:backgroundTint="@color/Custom1"
+            android:layout_alignEnd="@id/serviceTitle"
+            android:backgroundTint="@color/Goldenrod"
             android:contentDescription="Chat :"
             android:minHeight="48dp"
             android:visibility="gone"
@@ -141,7 +125,6 @@
             android:backgroundTint="@color/white"
             android:contentDescription="@string/editSkillTitle"
             android:minHeight="48dp"
-            android:tint="@color/DarkGray"
             app:srcCompat="@android:drawable/ic_menu_delete" />
 
 
@@ -154,23 +137,20 @@
             android:layout_marginTop="-35dp"
             android:layout_marginEnd="0dp"
             android:text="view profile"
-            android:textColor="@color/White"
-            android:textSize="10sp" />
+            android:textSize="8sp" />
 
 
         <TextView
             android:id="@+id/serviceLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/serviceSkill"
+            android:layout_below="@id/serviceTitle"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:layout_toEndOf="@id/serviceImage"
             android:drawablePadding="2dp"
-            android:drawableTint="@color/Gray"
             android:gravity="center_vertical"
             android:text="@string/fullName"
-            android:textColor="#252222"
             app:drawableStartCompat="@drawable/outline_location_on_24" />
 
         <TextView
@@ -179,14 +159,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/serviceLocation"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:layout_toEndOf="@id/serviceImage"
-            android:drawableTint="@color/Gray"
+            android:drawableLeft="@drawable/earn_time"
             android:drawablePadding="2dp"
             android:gravity="center_vertical"
-            android:text="Duration"
-            android:textColor="#252222"
-            app:drawableLeftCompat="@drawable/earn_time" />
+            android:text="Duration" />
 
         <TextView
             android:id="@+id/serviceDate"
@@ -194,13 +172,11 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/earnTime"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:layout_toEndOf="@id/serviceImage"
             android:drawablePadding="2dp"
-            android:drawableTint="@color/Gray"
             android:gravity="center_vertical"
             android:text="@string/fullName"
-            android:textColor="#252222"
             app:drawableStartCompat="@android:drawable/ic_menu_my_calendar" />
 
     </RelativeLayout>

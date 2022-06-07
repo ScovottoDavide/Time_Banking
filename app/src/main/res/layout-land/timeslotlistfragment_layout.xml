@@ -19,8 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="@string/app_name"
-            app:titleCentered="true"
-            app:titleTextAppearance="@style/TextAppearance.AppCompat.Display1" />
+            app:titleCentered="true"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -82,7 +81,7 @@
             app:checkedIconTint="@color/Black"
             app:checkedIconVisible="true"
             app:chipIconTint="@color/Black"
-            app:chipStrokeColor="@color/Custom1"
+            app:chipStrokeColor="@color/Goldenrod"
             app:chipStrokeWidth="2dp" />
 
         <EditText
@@ -91,7 +90,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="330dp"
             android:drawableStart="@drawable/currency_usd"
-            android:drawableTint="@color/Custom1"
             android:enabled="false"
             android:text="TextView"
             android:textAlignment="textStart"

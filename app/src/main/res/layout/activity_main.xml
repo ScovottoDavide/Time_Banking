@@ -28,14 +28,11 @@
                 style="@style/Theme.TimeBanking"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/Custom1"
+                android:background="@color/Goldenrod"
                 app:menu="@menu/nav_menu"
                 app:navigationIcon="@drawable/menu_icon"
-                app:navigationIconTint="?attr/colorSurface"
                 app:title="@string/app_name"
-                app:titleCentered="true"
-                app:titleTextAppearance="@style/TextAppearance.AppCompat.Display1"
-                app:titleTextColor="?attr/colorSurface"/>
+                app:titleCentered="true" />
 
             <TextView
                 android:id="@+id/tv_nav_drawer_count"

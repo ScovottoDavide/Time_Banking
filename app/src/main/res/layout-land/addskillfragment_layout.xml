@@ -8,14 +8,13 @@
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/Custom1"
+        android:background="?attr/colorPrimary"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        app:titleTextAppearance="@style/TextAppearance.AppCompat.Display1" />
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <TextView
         android:id="@+id/barTitle"
@@ -23,10 +22,9 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:text="@string/barTitle"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@color/white"
-        android:textColorLink="@color/Custom1"
-        android:textSize="34sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
