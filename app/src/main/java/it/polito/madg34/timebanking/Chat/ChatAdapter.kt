@@ -159,6 +159,7 @@ class ChatAdapter(
             }else if(timeSlot.reviews.contains(timeSlot.published_by) && vmChat.sentOrReceived.value == false){
                 Snackbar.make(holder.itemView, "You have already sent a review!", Snackbar.LENGTH_SHORT).show()
             }else{
+                vmMessages.currentRelatedAdv = chatEntryAdv
                 ratingPopup(holder, timeSlot)
             }
         }
