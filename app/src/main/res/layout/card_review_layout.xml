@@ -58,7 +58,7 @@
             android:id="@+id/Score"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="119dp"
+            android:layout_marginStart="89dp"
             android:layout_toEndOf="@id/suffix"
             android:text="4.9" />
 
