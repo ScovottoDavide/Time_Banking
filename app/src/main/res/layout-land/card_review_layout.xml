@@ -123,15 +123,26 @@
             android:text="@string/fullName"
             app:drawableStartCompat="@drawable/account_cog_outline" />
 
-        <TextView
-            android:id="@+id/commentReview"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedFullName"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="Comment"
             android:layout_below="@id/relatedSkill"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:text="Comment..." />
+            app:boxStrokeWidth="1dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/commentReview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:textColor="@color/Black" />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>
