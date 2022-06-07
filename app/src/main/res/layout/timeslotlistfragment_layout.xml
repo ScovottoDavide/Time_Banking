@@ -19,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="@string/app_name"
-            app:titleCentered="true"/>
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -84,13 +85,13 @@
             android:text="@string/accInfo"
             android:textAlignment="textStart"
             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textStyle="italic"
             app:checkedIconEnabled="false"
             app:checkedIconTint="@color/Black"
             app:checkedIconVisible="true"
             app:chipIconTint="@color/Black"
-            app:chipStrokeColor="@color/Goldenrod"
+            app:chipStrokeColor="@color/Custom1"
             app:chipStrokeWidth="2dp" />
 
         <EditText
@@ -99,11 +100,12 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:drawableStart="@drawable/currency_usd"
+            android:drawableTint="@color/Custom1"
             android:enabled="false"
             android:text="TextView"
             android:textAlignment="textStart"
-            android:textColor="@color/LimeGreen"
-            android:textSize="14sp" />
+            android:textColor="@color/Custom1"
+            android:textSize="20sp" />
 
     </TableRow>
 
@@ -138,7 +140,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:contentDescription="@string/Date"
-        app:backgroundTint="@color/Goldenrod"
+        app:backgroundTint="@color/Custom1"
         app:layout_constraintBottom_toBottomOf="@+id/ServicesList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.926"

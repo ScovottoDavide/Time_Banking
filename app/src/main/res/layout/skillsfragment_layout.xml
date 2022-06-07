@@ -19,7 +19,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="@string/app_name"
-            app:titleCentered="true" />
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -87,29 +88,32 @@
         android:id="@+id/homepageLogo"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:layout_marginEnd="48dp"
         android:layout_marginBottom="84dp"
         android:visibility="invisible"
         app:layout_constraintBottom_toTopOf="@+id/emptyListTV"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/homepageAppName"
+        app:layout_constraintHorizontal_bias="0.79"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/time_management" />
 
     <TextView
         android:id="@+id/homepageAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="28dp"
         android:fontFamily="monospace"
         android:text="TimeEarn"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:textColor="@color/Brown"
+        android:textColor="@color/Custom1"
+        android:textSize="24sp"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView"
-        app:layout_constraintHorizontal_bias="0.661"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.416" />
+        app:layout_constraintVertical_bias="0.528" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emptyListTV"

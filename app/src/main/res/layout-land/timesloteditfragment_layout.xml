@@ -25,7 +25,7 @@
         android:text="@string/barTitle"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -40,7 +40,7 @@
         android:layout_height="45dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:gravity="start|center_vertical"
+        android:gravity="center|center_vertical"
         android:text="@string/EditService"
         android:textAppearance="@style/TextAppearance.AppCompat.Body2"
         android:textSize="24sp"
@@ -76,7 +76,8 @@
                 android:hint="@string/Title"
                 app:errorEnabled="true"
                 app:boxStrokeWidth="1dp"
-                app:startIconDrawable="@drawable/format_title">
+                app:startIconDrawable="@drawable/format_title"
+                app:startIconTint="@color/Custom1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedTitleFixed"
@@ -95,7 +96,8 @@
                 android:hint="@string/Description"
                 app:errorEnabled="true"
                 app:startIconCheckable="false"
-                app:startIconDrawable="@drawable/text_long">
+                app:startIconDrawable="@drawable/text_long"
+                app:startIconTint="@color/Custom1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedDescriptionFixed"
@@ -122,7 +124,7 @@
                     app:startIconCheckable="true"
                     app:errorEnabled="true"
                     app:startIconDrawable="@android:drawable/ic_menu_my_calendar"
-                    app:startIconTint="@color/black">
+                    app:startIconTint="@color/Custom1">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/outlinedDateFixed"
@@ -143,7 +145,7 @@
                     app:startIconCheckable="true"
                     app:errorEnabled="true"
                     app:startIconDrawable="@android:drawable/ic_menu_recent_history"
-                    app:startIconTint="@color/black">
+                    app:startIconTint="@color/Custom1">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/outlinedTimeFixed"
@@ -165,7 +167,8 @@
                 android:layout_marginBottom="8dp"
                 android:hint="@string/Duration"
                 app:errorEnabled="true"
-                app:startIconDrawable="@drawable/timer_sand">
+                app:startIconDrawable="@drawable/timer_sand"
+                app:startIconTint="@color/Custom1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedDurationFixed"
@@ -186,7 +189,7 @@
                 android:hint="@string/Location"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/outline_location_on_24"
-                app:startIconTint="@color/black">
+                app:startIconTint="@color/Custom1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedLocationFixed"
@@ -206,7 +209,7 @@
                 android:hint="@string/emailHint2"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/outline_email_24"
-                app:startIconTint="@color/black">
+                app:startIconTint="@color/Custom1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedMailFixed"
@@ -230,7 +233,7 @@
                     android:id="@+id/skillsAutocomplete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/White"
+                    android:backgroundTint="?attr/colorSurface"
                     android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>

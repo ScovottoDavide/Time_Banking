@@ -21,7 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="@string/app_name"
-            app:titleCentered="true"/>
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Display1"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -42,10 +43,11 @@
             android:id="@+id/userImage"
             android:layout_width="match_parent"
             android:layout_height="300dp"
+            android:layout_marginStart="5dp"
             android:contentDescription="@string/picutureTest"
             android:src="@drawable/user_icon"
-            app:civ_border_color="#FF000000"
-            app:civ_border_width="1dp"
+            app:civ_border_color="@color/Custom1"
+            app:civ_border_width="4dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/scrollViewShow"
             app:layout_constraintHorizontal_bias="0.5"
@@ -62,8 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_marginEnd="50dp"
-            android:layout_marginBottom="20dp"
-            android:backgroundTint="@color/GhostWhite"
+            android:layout_marginBottom="60dp"
             android:contentDescription="@string/picutureTest"
             android:minHeight="48dp"
             android:onClick="showPopup"
@@ -112,11 +113,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/currency_usd"
+                    android:drawableTint="@color/Custom1"
                     android:enabled="false"
                     android:text="TextView"
                     android:textAlignment="textStart"
-                    android:textColor="@color/LimeGreen"
-                    android:textSize="14sp" />
+                    android:textColor="@color/Custom1"
+                    android:textSize="18sp" />
             </TableRow>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -197,25 +199,6 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/outlinedEarnTime"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Total Time"
-                app:boxStrokeWidth="2dp"
-                app:startIconDrawable="@drawable/earn_time">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/outlinedEarnTimeFixed"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="#757575"
-                    android:enabled="false"
-                    tools:ignore="TextContrastCheck" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/outlinedAboutMe"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
@@ -244,7 +227,7 @@
                 android:paddingBottom="5dp"
                 android:text="@string/skills"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textSize="14sp"
+                android:textSize="18sp"
                 android:textStyle="italic"
                 app:drawableEndCompat="@drawable/outline_add_circle_outline_24" />
 

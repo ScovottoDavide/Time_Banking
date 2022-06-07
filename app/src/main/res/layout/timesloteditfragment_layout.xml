@@ -9,6 +9,9 @@
         android:id="@+id/toolbarLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -20,7 +23,8 @@
             android:layout_height="?attr/actionBarSize"
             app:menu="@menu/pencil_menu"
             app:title="@string/app_name"
-            app:titleCentered="true"/>
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.AppCompat.Display1"/>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -32,7 +36,7 @@
         android:text="@string/barTitle"
         android:textAppearance="@style/TextAppearance.AppCompat"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -83,7 +87,8 @@
                 android:hint="@string/Title"
                 app:boxStrokeWidth="1dp"
                 app:errorEnabled="true"
-                app:startIconDrawable="@drawable/format_title">
+                app:startIconDrawable="@drawable/format_title"
+                app:startIconTint="@color/Custom1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedTitleFixed"
@@ -101,7 +106,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/Description"
                 app:errorEnabled="true"
-                app:startIconDrawable="@drawable/text_long">
+                app:startIconDrawable="@drawable/text_long"
+                app:startIconTint="@color/Custom1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedDescriptionFixed"
@@ -128,7 +134,7 @@
                     app:startIconCheckable="true"
                     app:startIconDrawable="@android:drawable/ic_menu_my_calendar"
                     app:errorEnabled="true"
-                    app:startIconTint="@color/black">
+                    app:startIconTint="@color/Custom1">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/outlinedDateFixed"
@@ -149,7 +155,7 @@
                     android:hint="@string/Time"
                     app:startIconCheckable="true"
                     app:startIconDrawable="@android:drawable/ic_menu_recent_history"
-                    app:startIconTint="@color/black"
+                    app:startIconTint="@color/Custom1"
                     app:errorEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -173,7 +179,8 @@
                 android:layout_marginBottom="8dp"
                 android:hint="@string/Duration"
                 app:errorEnabled="true"
-                app:startIconDrawable="@drawable/timer_sand">
+                app:startIconDrawable="@drawable/timer_sand"
+                app:startIconTint="@color/Custom1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedDurationFixed"
@@ -195,7 +202,7 @@
                 android:hint="@string/Location"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/outline_location_on_24"
-                app:startIconTint="@color/black">
+                app:startIconTint="@color/Custom1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedLocationFixed"
@@ -215,7 +222,7 @@
                 android:hint="@string/emailHint2"
                 app:errorEnabled="true"
                 app:startIconDrawable="@drawable/outline_email_24"
-                app:startIconTint="@color/black">
+                app:startIconTint="@color/Custom1">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/outlinedMailFixed"
@@ -238,7 +245,8 @@
                     android:id="@+id/skillsAutocomplete"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/White"
+                    android:gravity="center_vertical"
+                    android:backgroundTint="?attr/colorSurface"
                     android:inputType="none" />
 
             </com.google.android.material.textfield.TextInputLayout>

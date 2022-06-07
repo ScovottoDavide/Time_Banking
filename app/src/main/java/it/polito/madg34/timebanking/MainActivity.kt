@@ -190,9 +190,11 @@ class MainActivity : AppCompatActivity() {
         val header = navView.getHeaderView(0)
         val name = header?.findViewById<TextView>(R.id.nomecognome)
         val email = header?.findViewById<TextView>(R.id.headerMail)
+        val credit = header?.findViewById<TextView>(R.id.credit)
         val imgProfile = header.findViewById<CircleImageView>(R.id.nav_header_userImg)
         name?.text = profile.fullName
         email?.text = profile.email
+        credit?.text = profile.total_time
         if (!profile.img.isNullOrEmpty()) {
             Glide.with(this).load(profile.img).into(imgProfile)
         } else imgProfile.setImageResource(R.drawable.user)

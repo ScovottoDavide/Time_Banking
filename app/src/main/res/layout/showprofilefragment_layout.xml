@@ -33,24 +33,45 @@
                     android:id="@+id/my_toolbar"
                     style="@style/Widget.MaterialComponents.Toolbar.Primary"
                     android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
+                    android:layout_height="match_parent"
+                    android:layout_marginHorizontal="5dp"
                     app:navigationIcon="@drawable/menu_icon"
                     app:title="@string/app_name"
-                    app:titleCentered="true"/>
+                    app:titleCentered="true"
+                    app:titleTextAppearance="@style/TextAppearance.AppCompat.Display1" />
 
             </com.google.android.material.appbar.AppBarLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/materialDivider5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp"
+                app:dividerColor="#00FFFFFF"
+                tools:visibility="visible" />
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/userImg"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
                 android:layout_weight="1"
                 android:contentDescription="@string/picutureTest"
                 android:src="@drawable/user_icon"
-                app:civ_border_color="#FF000000"
-                app:civ_border_width="1dp" />
+                app:civ_border_color="@color/Custom1"
+                app:civ_border_width="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/toolbarLayout"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintHorizontal_weight="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.498"
+                app:layout_constraintVertical_weight="1" />
 
             <TableRow
                 android:id="@+id/profileRow"
@@ -75,11 +96,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:drawableStart="@drawable/currency_usd"
+                    android:drawableTint="@color/Custom1"
                     android:enabled="false"
                     android:text="TextView"
                     android:textAlignment="textStart"
-                    android:textColor="@color/LimeGreen"
-                    android:textSize="14sp" />
+                    android:textColor="@color/Custom1"
+                    android:textSize="18sp" />
 
             </TableRow>
             <TableRow
@@ -302,17 +324,25 @@
                     android:fontFamily="sans-serif-black"
                     android:text="@string/skills"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="14sp"
+                    android:textSize="18sp"
                     android:textStyle="italic" />
 
                 <LinearLayout
                     android:id="@+id/lastLinear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="100dp"
                     android:layout_marginStart="8dp"
                     android:orientation="vertical">
 
                 </LinearLayout>
+
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/materialDivider3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="5dp" />
             </LinearLayout>
 
         </LinearLayout>

@@ -12,8 +12,8 @@
     app:cardPreventCornerOverlap="true"
     app:cardUseCompatPadding="false"
     app:contentPadding="10dp"
-    app:strokeColor="@color/black"
-    app:strokeWidth="1dp">
+    app:strokeColor="@color/Custom1"
+    app:strokeWidth="3dp">
 
     <!--
         In the above cardview widget
